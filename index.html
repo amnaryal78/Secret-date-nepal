@@ -35,8 +35,7 @@
     </div>
 
     <script type="module">
-        // सच्याइएको लाइन: यहाँबाट डट स्ल्यास (./) हटाइएको छ
-        import { auth } from 'firebase-config.js';
+        import { auth } from './firebase-config.js';
         import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const loginBox = document.getElementById('login-box');
