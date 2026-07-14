@@ -23,11 +23,56 @@
 
             <input type="text" id="district" placeholder="जिल्ला (जस्तै: काठमाडौँ)" required>
             
-            <p style="text-align: left; font-size: 14px; margin-left: 10px;">प्रोफाइल फोटो अपलोड गर्नुहोस्:</p>
-            <input type="file" id="profile-pic" accept="image/*" required>
-
             <button type="submit">प्रोफाइल सेभ गर्नुहोस्</button>
         </form>
     </div>
+
+    <script type="module">
+        import { auth, db } from './firebase-config.js';
+        import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const profileForm = document.getElementById('profile-form');
+        let currentUser = null;
+
+        // लगइन भएको युजर चेक गर्ने
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+            } else {
+                alert("कृपया पहिले लगइन गर्नुहोस्!");
+                window.location.href = 'index.html';
+            }
+        });
+
+        // डेटाबेसमा प्रोफाइल सेभ गर्ने Logic
+        profileForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            if (!currentUser) return;
+
+            const fullName = document.getElementById('full-name').value;
+            const age = document.getElementById('age').value;
+            const gender = document.getElementById('gender').value;
+            const district = document.getElementById('district').value;
+
+            // Firestore Database को 'users' collection मा डेटा राख्ने
+            setDoc(doc(db, "users", currentUser.uid), {
+                name: fullName,
+                age: parseInt(age),
+                gender: gender,
+                district: district,
+                email: currentUser.email,
+                uid: currentUser.uid
+            })
+            .then(() => {
+                alert("प्रोफाइल सफलतापूर्वक सेभ भयो!");
+                // पछि यहाँबाट हामी Facebook जस्तो Feed पेजमा लैजानेछौँ
+            })
+            .catch((error) => {
+                alert("डेटा सेभ गर्न सकिएन: " + error.message);
+            });
+        });
+    </script>
 </body>
 </html>
