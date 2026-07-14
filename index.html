@@ -1,0 +1,91 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secret Date Nepal - Welcome</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="auth-container">
+        <h2>Secret Date Nepal 🤫</h2>
+        
+        <!-- LOGIN FORM -->
+        <div id="login-box">
+            <h3>लगइन गर्नुहोस्</h3>
+            <form id="login-form">
+                <input type="email" id="login-email" placeholder="इमेल" required>
+                <input type="password" id="login-password" placeholder="पासवर्ड" required>
+                <button type="submit">प्रेस गर्नुहोस्</button>
+            </form>
+            <p>खाता छैन? <a href="#" id="go-to-signup">नयाँ खाता बनाउनुहोस्</a></p>
+        </div>
+
+        <!-- SIGNUP FORM (सुरुमा लुकेको हुन्छ) -->
+        <div id="signup-box" style="display: none;">
+            <h3>नयाँ खाता बनाउनुहोस्</h3>
+            <form id="signup-form">
+                <input type="email" id="signup-email" placeholder="इमेल" required>
+                <input type="password" id="signup-password" placeholder="बलियो पासवर्ड (कमतीमा ६ अक्षर)" required>
+                <button type="submit">दर्ता गर्नुहोस्</button>
+            </form>
+            <p>पहिले नै खाता छ? <a href="#" id="go-to-login">यहाँ लगइन गर्नुहोस्</a></p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth } from './firebase-config.js';
+        import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const loginBox = document.getElementById('login-box');
+        const signupBox = document.getElementById('signup-box');
+        
+        document.getElementById('go-to-signup').addEventListener('click', (e) => {
+            e.preventDefault();
+            loginBox.style.display = 'none';
+            signupBox.style.display = 'block';
+        });
+
+        document.getElementById('go-to-login').addEventListener('click', (e) => {
+            e.preventDefault();
+            signupBox.style.display = 'none';
+            loginBox.style.display = 'block';
+        });
+
+        // दर्ता गर्ने (Sign Up) Logic
+        const signupForm = document.getElementById('signup-form');
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    alert("खाता सफलतापूर्वक बन्यो! अब लगइन गर्नुहोस्।");
+                    signupBox.style.display = 'none';
+                    loginBox.style.display = 'block';
+                })
+                .catch((error) => {
+                    alert("दर्ता गर्न सकिएन: " + error.message);
+                });
+        });
+
+        // लगइन गर्ने (Login) Logic
+        const loginForm = document.getElementById('login-form');
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    alert("लगइन सफल भयो! स्वागत छ।");
+                })
+                .catch((error) => {
+                    alert("लगइन असफल: " + error.message);
+                });
+        });
+    </script>
+</body>
+</html>
