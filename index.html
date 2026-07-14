@@ -81,6 +81,7 @@
             signInWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
                     alert("लगइन सफल भयो! स्वागत छ।");
+                    window.location.href = 'profile.html'; // सफल भएपछि प्रोफाइल पेजमा लैजाने
                 })
                 .catch((error) => {
                     alert("लगइन असफल: " + error.message);

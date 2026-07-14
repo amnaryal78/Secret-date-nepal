@@ -1,0 +1,33 @@
+<!-- profile.html -->
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secret Date Nepal - Setup Profile</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="auth-container">
+        <h2>तपाईंको प्रोफाइल 👤</h2>
+        <form id="profile-form">
+            <input type="text" id="full-name" placeholder="पूरा नाम" required>
+            <input type="number" id="age" placeholder="उमेर (१८ वर्ष पुगेको हुनुपर्ने)" min="18" required>
+            
+            <select id="gender" style="width: 95%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;" required>
+                <option value="">लिङ्ग छान्नुहोस्</option>
+                <option value="Male">पुरुष</option>
+                <option value="Female">महिला</option>
+                <option value="Other">अन्य</option>
+            </select>
+
+            <input type="text" id="district" placeholder="जिल्ला (जस्तै: काठमाडौँ)" required>
+            
+            <p style="text-align: left; font-size: 14px; margin-left: 10px;">प्रोफाइल फोटो अपलोड गर्नुहोस्:</p>
+            <input type="file" id="profile-pic" accept="image/*" required>
+
+            <button type="submit">प्रोफाइल सेभ गर्नुहोस्</button>
+        </form>
+    </div>
+</body>
+</html>
