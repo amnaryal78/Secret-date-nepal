@@ -37,16 +37,27 @@
         let currentUser = null;
 
         // Check if user is logged in
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
+                // यदि पहिले नै डेटा सेभ छ भने फारममा आफैं देखिने बनाउने (Auto-fill)
+                const docRef = doc(db, "users", user.uid);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    document.getElementById('username').value = data.username || '';
+                    document.getElementById('full-name').value = data.name || '';
+                    document.getElementById('age').value = data.age || '';
+                    document.getElementById('gender').value = data.gender || '';
+                    document.getElementById('district').value = data.district || '';
+                }
             } else {
                 alert("Please login first!");
                 window.location.href = 'index.html';
             }
         });
 
-        // Save Profile Logic with Username Check
+        // Save Profile Logic with Smart Username Check
         profileForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -58,32 +69,44 @@
             const gender = document.getElementById('gender').value;
             const district = document.getElementById('district').value;
 
-            // १. युजरनेम पहिले नै कसैले लिएको छ कि छैन (Unique Username Check) गर्ने लजिक
-            const usersRef = collection(db, "users");
-            const q = query(usersRef, where("username", "==", username));
-            const querySnapshot = await getDocs(q);
+            try {
+                // १. पहिला युजरको आफ्नै पुरानो डाटा के छ चेक गर्ने
+                const myDocRef = doc(db, "users", currentUser.uid);
+                const myDocSnap = await getDoc(myDocRef);
+                let myOldUsername = "";
+                if (myDocSnap.exists()) {
+                    myOldUsername = myDocSnap.data().username || "";
+                }
 
-            if (!querySnapshot.empty) {
-                alert("This username is already taken! Please choose another one.");
-                return;
-            }
+                // २. यदि युजरनेम नयाँ राख्न खोजेको हो भने मात्र युनिक चेक गर्ने
+                if (username !== myOldUsername) {
+                    const usersRef = collection(db, "users");
+                    const q = query(usersRef, where("username", "==", username));
+                    const querySnapshot = await getDocs(q);
 
-            // २. डेटाबेसमा डेटा सेभ गर्ने
-            setDoc(doc(db, "users", currentUser.uid), {
-                username: username,
-                name: fullName,
-                age: parseInt(age),
-                gender: gender,
-                district: district,
-                email: currentUser.email,
-                uid: currentUser.uid
-            })
-            .then(() => {
+                    if (!querySnapshot.empty) {
+                        alert("This username is already taken! Please choose another one.");
+                        return;
+                    }
+                }
+
+                // ३. डेटाबेस (Firestore) मा प्रोफाइल सेभ गर्ने
+                await setDoc(doc(db, "users", currentUser.uid), {
+                    username: username,
+                    name: fullName,
+                    age: parseInt(age),
+                    gender: gender,
+                    district: district,
+                    email: currentUser.email,
+                    uid: currentUser.uid
+                });
+
                 alert("Profile successfully saved!");
-            })
-            .catch((error) => {
+
+            } catch (error) {
                 alert("Error saving profile: " + error.message);
-            });
+                console.error(error);
+            }
         });
     </script>
 </body>
