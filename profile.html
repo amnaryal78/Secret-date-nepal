@@ -1,6 +1,6 @@
 <!-- profile.html -->
 <!DOCTYPE html>
-<html lang="ne">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,55 +9,68 @@
 </head>
 <body>
     <div class="auth-container">
-        <h2>तपाईंको प्रोफाइल 👤</h2>
+        <h2>Setup Your Profile 👤</h2>
         <form id="profile-form">
-            <input type="text" id="full-name" placeholder="पूरा नाम" required>
-            <input type="number" id="age" placeholder="उमेर (१८ वर्ष पुगेको हुनुपर्ने)" min="18" required>
+            <input type="text" id="username" placeholder="Choose Username (Unique)" required>
+            <input type="text" id="full-name" placeholder="Full Name" required>
+            <input type="number" id="age" placeholder="Age (Must be 18+)" min="18" required>
             
             <select id="gender" style="width: 95%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;" required>
-                <option value="">लिङ्ग छान्नुहोस्</option>
-                <option value="Male">पुरुष</option>
-                <option value="Female">महिला</option>
-                <option value="Other">अन्य</option>
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
             </select>
 
-            <input type="text" id="district" placeholder="जिल्ला (जस्तै: काठमाडौँ)" required>
+            <input type="text" id="district" placeholder="District (e.g. Kathmandu)" required>
             
-            <button type="submit">प्रोफाइल सेभ गर्नुहोस्</button>
+            <button type="submit">Save Profile</button>
         </form>
     </div>
 
     <script type="module">
         import { auth, db } from './firebase-config.js';
-        import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { doc, setDoc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const profileForm = document.getElementById('profile-form');
         let currentUser = null;
 
-        // लगइन भएको युजर चेक गर्ने
+        // Check if user is logged in
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUser = user;
             } else {
-                alert("कृपया पहिले लगइन गर्नुहोस्!");
+                alert("Please login first!");
                 window.location.href = 'index.html';
             }
         });
 
-        // डेटाबेसमा प्रोफाइल सेभ गर्ने Logic
-        profileForm.addEventListener('submit', (e) => {
+        // Save Profile Logic with Username Check
+        profileForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             if (!currentUser) return;
 
+            const username = document.getElementById('username').value.trim().toLowerCase();
             const fullName = document.getElementById('full-name').value;
             const age = document.getElementById('age').value;
             const gender = document.getElementById('gender').value;
             const district = document.getElementById('district').value;
 
-            // Firestore Database को 'users' collection मा डेटा राख्ने
+            // १. युजरनेम पहिले नै कसैले लिएको छ कि छैन (Unique Username Check) गर्ने लजिक
+            const usersRef = collection(db, "users");
+            const q = query(usersRef, where("username", "==", username));
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                alert("This username is already taken! Please choose another one.");
+                return;
+            }
+
+            // २. डेटाबेसमा डेटा सेभ गर्ने
             setDoc(doc(db, "users", currentUser.uid), {
+                username: username,
                 name: fullName,
                 age: parseInt(age),
                 gender: gender,
@@ -66,11 +79,10 @@
                 uid: currentUser.uid
             })
             .then(() => {
-                alert("प्रोफाइल सफलतापूर्वक सेभ भयो!");
-                // पछि यहाँबाट हामी Facebook जस्तो Feed पेजमा लैजानेछौँ
+                alert("Profile successfully saved!");
             })
             .catch((error) => {
-                alert("डेटा सेभ गर्न सकिएन: " + error.message);
+                alert("Error saving profile: " + error.message);
             });
         });
     </script>
