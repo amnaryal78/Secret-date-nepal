@@ -11,7 +11,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: #0f1015; color: #ffffff; min-height: 100vh; padding-bottom: 80px; }
 
-        /* HEADER NAVBAR */
+        /* NAVBAR */
         .fb-header {
             display: flex; justify-content: space-between; align-items: center;
             background: #181920; border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -22,11 +22,15 @@
         .fb-center { display: flex; gap: 10px; }
         .nav-icon-btn { width: 50px; height: 42px; display: flex; justify-content: center; align-items: center; color: #aaa; font-size: 1.2rem; cursor: pointer; border-radius: 10px; transition: 0.2s; position: relative; }
         .nav-icon-btn:hover, .nav-icon-btn.active { color: #ff3366; background: rgba(255, 51, 102, 0.1); }
-        .nav-icon-btn.active::after { content: ''; position: absolute; bottom: -8px; left: 0; width: 100%; height: 3px; background: #ff3366; border-radius: 3px; }
         .fb-right { display: flex; align-items: center; gap: 10px; }
-        .circle-icon-btn { width: 38px; height: 38px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); display: flex; justify-content: center; align-items: center; color: #fff; font-size: 1rem; cursor: pointer; transition: 0.2s; }
-        .circle-icon-btn:hover { background: rgba(255, 51, 102, 0.3); }
+        .circle-icon-btn { width: 38px; height: 38px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); display: flex; justify-content: center; align-items: center; color: #fff; font-size: 1rem; cursor: pointer; }
         .header-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #ff3366; cursor: pointer; }
+
+        .vip-badge-btn {
+            background: linear-gradient(45deg, #f59e0b, #ef4444); color: white; border: none;
+            padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; cursor: pointer;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.5); display: flex; align-items: center; gap: 6px;
+        }
 
         .container { max-width: 680px; margin: 20px auto; padding: 0 15px; }
         .tab-content { display: none; }
@@ -48,15 +52,14 @@
         .card img { width: 85px; height: 85px; border-radius: 50%; object-fit: cover; border: 2px solid #ff3366; margin-bottom: 8px; }
         .msg-btn { width: 100%; background: rgba(255, 51, 102, 0.15); border: 1px solid rgba(255, 51, 102, 0.3); color: white; padding: 8px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; font-size: 0.85rem; }
 
-        /* ADVANCED CHAT & CALL MODAL */
+        /* ADVANCED CHAT MODAL */
         .chat-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); justify-content: center; align-items: center; z-index: 1000; }
         .chat-box { background: #12131a; border: 1px solid rgba(255, 51, 102, 0.3); width: 440px; max-width: 92%; height: 580px; border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         .chat-header { background: #181920; padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
         .chat-header-user { display: flex; align-items: center; gap: 10px; }
         .chat-header-user img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #ff3366; }
         .chat-actions { display: flex; gap: 12px; color: #ff3366; font-size: 1.2rem; }
-        .chat-actions i { cursor: pointer; transition: 0.2s; }
-        .chat-actions i:hover { transform: scale(1.2); }
+        .chat-actions i { cursor: pointer; }
 
         .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
         .message { max-width: 75%; padding: 10px 14px; border-radius: 16px; font-size: 0.88rem; line-height: 1.4; }
@@ -65,21 +68,31 @@
 
         .chat-input-area { display: flex; padding: 12px; background: #181920; gap: 8px; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); }
         .chat-input-area input { flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 10px 15px; border-radius: 20px; color: #fff; outline: none; }
-        .chat-btn-icon { background: rgba(255, 51, 102, 0.2); color: #ff3366; border: none; width: 38px; height: 38px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s; }
-        .chat-btn-icon:hover { background: #ff3366; color: #fff; }
+        .chat-btn-icon { background: rgba(255, 51, 102, 0.2); color: #ff3366; border: none; width: 38px; height: 38px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; }
 
-        /* INCOMING CALL POPUP */
-        .call-popup { display: none; position: fixed; top: 20px; right: 20px; background: #181920; border: 2px solid #ff3366; border-radius: 16px; padding: 15px 20px; z-index: 2000; box-shadow: 0 10px 30px rgba(255,51,102,0.4); text-align: center; width: 280px; }
-        .call-btn-accept { background: #22c55e; color: white; border: none; padding: 8px 16px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-right: 8px; }
-        .call-btn-reject { background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 10px; font-weight: bold; cursor: pointer; }
-
-        /* VIDEO CALL OVERLAY */
+        /* FULLSCREEN VIDEO CALL OVERLAY WITH 59 SEC TIMER */
         .video-call-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 3000; flex-direction: column; justify-content: center; align-items: center; }
-        .video-container { position: relative; width: 100%; max-width: 800px; height: 80vh; background: #111; border-radius: 20px; overflow: hidden; }
+        .video-container { position: relative; width: 100%; max-width: 800px; height: 75vh; background: #111; border-radius: 20px; overflow: hidden; }
         video#remote-video { width: 100%; height: 100%; object-fit: cover; }
-        video#local-video { position: absolute; bottom: 20px; right: 20px; width: 180px; height: 120px; border-radius: 12px; border: 2px solid #ff3366; object-fit: cover; }
-        .call-controls { margin-top: 20px; display: flex; gap: 20px; }
-        .end-call-btn { background: #ef4444; color: white; border: none; padding: 12px 30px; border-radius: 30px; font-weight: bold; font-size: 1rem; cursor: pointer; }
+        video#local-video { position: absolute; bottom: 20px; right: 20px; width: 160px; height: 110px; border-radius: 12px; border: 2px solid #ff3366; object-fit: cover; }
+        
+        .call-timer-box {
+            position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); padding: 8px 20px;
+            border-radius: 20px; border: 1px solid #ff3366; font-size: 1.1rem; font-weight: bold; color: #ff3366;
+        }
+
+        /* RECHARGE / QR CODE PAYMENT MODAL */
+        .recharge-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); justify-content: center; align-items: center; z-index: 4000; }
+        .recharge-box { background: #181920; border: 1px solid rgba(245, 158, 11, 0.4); width: 480px; max-width: 92%; border-radius: 20px; padding: 25px; text-align: center; max-height: 90vh; overflow-y: auto; }
+        
+        .plan-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 15px 0; }
+        .plan-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px; cursor: pointer; transition: 0.2s; }
+        .plan-card:hover, .plan-card.selected { border-color: #f59e0b; background: rgba(245, 158, 11, 0.15); }
+        .plan-card h4 { color: #f59e0b; font-size: 0.95rem; }
+        .plan-card p { font-size: 1.1rem; font-weight: bold; color: #fff; }
+
+        .qr-img { width: 180px; height: 180px; border-radius: 12px; border: 2px solid #f59e0b; margin: 15px 0; padding: 5px; background: #fff; }
     </style>
 </head>
 <body>
@@ -93,6 +106,7 @@
             <div class="nav-icon-btn" id="nav-profile" onclick="switchTab('profile-tab', this)"><i class="fa-solid fa-user"></i></div>
         </div>
         <div class="fb-right">
+            <button class="vip-badge-btn" onclick="openRechargeModal()"><i class="fa-solid fa-crown"></i> Buy VIP</button>
             <div class="circle-icon-btn" onclick="switchTab('matches-tab', document.getElementById('nav-matches'))"><i class="fa-solid fa-comment"></i></div>
             <img id="nav-user-avatar" class="header-avatar" src="https://via.placeholder.com/40" onclick="switchTab('profile-tab', document.getElementById('nav-profile'))" alt="Avatar">
             <div class="circle-icon-btn" id="logout-btn" style="background: rgba(255, 0, 85, 0.2); color: #ff3366;"><i class="fa-solid fa-right-from-bracket"></i></div>
@@ -123,12 +137,13 @@
                 <img id="my-photo" style="width:100px; height:100px; border-radius:50%; border:3px solid #ff3366; object-fit:cover;" src="https://via.placeholder.com/100" alt="Profile">
                 <h3 id="my-name" style="margin-top:10px;">Loading...</h3>
                 <p id="my-sdnp-id" style="color:#ff3366; font-size:0.85rem; font-weight:bold;">SDNP-ID</p>
+                <button class="vip-badge-btn" onclick="openRechargeModal()" style="margin: 10px auto 0 auto;"><i class="fa-solid fa-crown"></i> Upgrade Account</button>
             </div>
             <div id="my-posts-container"></div>
         </div>
     </div>
 
-    <!-- REALTIME CHAT MODAL -->
+    <!-- CHAT MODAL -->
     <div id="chat-modal" class="chat-modal">
         <div class="chat-box">
             <div class="chat-header">
@@ -136,12 +151,12 @@
                     <img id="chat-user-img" src="https://via.placeholder.com/38" alt="User">
                     <div>
                         <h4 id="chat-user-name" style="font-size:0.95rem; color:#fff;">User</h4>
-                        <span style="font-size:0.75rem; color:#22c55e;">Online</span>
+                        <span style="font-size:0.75rem; color:#22c55e;">Online (Free 59s Call)</span>
                     </div>
                 </div>
                 <div class="chat-actions">
-                    <i class="fa-solid fa-phone" title="Audio Call" onclick="startCall('audio')"></i>
-                    <i class="fa-solid fa-video" title="Video Call" onclick="startCall('video')"></i>
+                    <i class="fa-solid fa-phone" title="Audio Call (59 Sec Free)" onclick="startCall('audio')"></i>
+                    <i class="fa-solid fa-video" title="Video Call (59 Sec Free)" onclick="startCall('video')"></i>
                     <i class="fa-solid fa-xmark" onclick="closeChatModal()" style="color:#aaa; margin-left:10px;"></i>
                 </div>
             </div>
@@ -149,35 +164,75 @@
             <div class="chat-messages" id="chat-messages"></div>
 
             <div class="chat-input-area">
-                <button class="chat-btn-icon" id="voice-rec-btn" title="Hold/Click to Record Voice"><i class="fa-solid fa-microphone"></i></button>
-                <input type="text" id="chat-input" placeholder="Type secret message...">
+                <button class="chat-btn-icon" id="voice-rec-btn"><i class="fa-solid fa-microphone"></i></button>
+                <input type="text" id="chat-input" placeholder="Type secret message (Unlimited Text)...">
                 <button class="chat-btn-icon" id="send-msg-btn"><i class="fa-solid fa-paper-plane"></i></button>
             </div>
         </div>
     </div>
 
-    <!-- INCOMING CALL POPUP -->
-    <div id="call-popup" class="call-popup">
-        <h4 style="color:#fff; margin-bottom:5px;">Incoming Call 📲</h4>
-        <p id="caller-name-text" style="color:#ff3366; font-size:0.9rem; margin-bottom:15px;">User is calling you...</p>
-        <button class="call-btn-accept" id="accept-call-btn">Accept</button>
-        <button class="call-btn-reject" id="reject-call-btn">Reject</button>
-    </div>
-
-    <!-- FULLSCREEN VIDEO CALL OVERLAY -->
+    <!-- VIDEO CALL OVERLAY WITH 59 SECOND TIMER -->
     <div id="video-call-overlay" class="video-call-overlay">
         <div class="video-container">
+            <div class="call-timer-box" id="call-timer-display">⏱️ 00:59</div>
             <video id="remote-video" autoplay playsinline></video>
             <video id="local-video" autoplay playsinline muted></video>
         </div>
-        <div class="call-controls">
-            <button class="end-call-btn" id="end-call-btn"><i class="fa-solid fa-phone-slash"></i> End Call</button>
+        <div style="margin-top:20px;">
+            <button style="background:#ef4444; color:white; border:none; padding:12px 30px; border-radius:30px; font-weight:bold; cursor:pointer;" onclick="endCall()"><i class="fa-solid fa-phone-slash"></i> End Call</button>
+        </div>
+    </div>
+
+    <!-- RECHARGE / QR PAYMENT MODAL -->
+    <div id="recharge-modal" class="recharge-modal">
+        <div class="recharge-box">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h3 style="color:#f59e0b;"><i class="fa-solid fa-crown"></i> Secret Date VIP Membership</h3>
+                <span style="cursor:pointer; font-size:1.5rem; color:#aaa;" onclick="closeRechargeModal()">&times;</span>
+            </div>
+            <p style="font-size:0.8rem; color:#ccc; margin-top:5px;">Unlimited Audio & Video Calls to all members!</p>
+
+            <!-- PLANS -->
+            <div class="plan-grid">
+                <div class="plan-card" onclick="selectPlan('1 Day', 50)">
+                    <h4>1 Day VIP</h4>
+                    <p>Rs. 50</p>
+                </div>
+                <div class="plan-card selected" onclick="selectPlan('7 Days', 200)">
+                    <h4>7 Days VIP</h4>
+                    <p>Rs. 200</p>
+                </div>
+                <div class="plan-card" onclick="selectPlan('15 Days', 400)">
+                    <h4>15 Days VIP</h4>
+                    <p>Rs. 400</p>
+                </div>
+                <div class="plan-card" onclick="selectPlan('1 Month', 600)">
+                    <h4>1 Month VIP</h4>
+                    <p>Rs. 600</p>
+                </div>
+                <div class="plan-card" style="grid-column: span 2;" onclick="selectPlan('1 Year', 1220)">
+                    <h4 style="color:#22c55e;">1 Year VIP (Best Value) 🌟</h4>
+                    <p>Rs. 1,220</p>
+                </div>
+            </div>
+
+            <!-- PAYMENT QR CODE -->
+            <p style="font-size:0.85rem; color:#fff; font-weight:bold;">Scan eSewa / Khalti QR to Pay:</p>
+            <img class="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=SecretDateNepalPayment" alt="eSewa QR Code">
+
+            <div style="text-align:left; background:rgba(255,255,255,0.05); padding:10px; border-radius:10px; font-size:0.8rem; color:#ccc;">
+                <p><b>Bank / eSewa Number:</b> 98XXXXXXXX</p>
+                <p><b>Account Name:</b> Secret Date Nepal</p>
+            </div>
+
+            <input type="text" id="txn-id-input" placeholder="Enter Payment Transaction ID / Ref No." style="width:100%; margin-top:12px; padding:10px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2); border-radius:10px; color:#fff; outline:none;">
+            <button style="width:100%; margin-top:10px; background:linear-gradient(45deg, #f59e0b, #ef4444); color:white; border:none; padding:12px; border-radius:10px; font-weight:bold; cursor:pointer;" onclick="submitPayment()">Submit Voucher for Instant Approval 🚀</button>
         </div>
     </div>
 
     <script type="module">
         import { auth, db } from './firebase-config.js';
-        import { doc, getDoc, collection, query, where, getDocs, addDoc, onSnapshot, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { doc, getDoc, collection, query, where, getDocs, addDoc, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         let currentUserId = null;
@@ -185,15 +240,12 @@
         let activeChatUserId = null;
         let unsubscribeChat = null;
 
-        // WebRTC Variables
+        // WebRTC & 59 Sec Timer Variables
         let localStream = null;
         let peerConnection = null;
+        let callTimerInterval = null;
+        let callSecondsLeft = 59;
         const rtcConfig = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
-
-        // Voice Recorder Variables
-        let mediaRecorder = null;
-        let audioChunks = [];
-        let isRecording = false;
 
         window.switchTab = function(tabId, btnElement) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -203,6 +255,8 @@
         };
 
         window.closeChatModal = function() { document.getElementById('chat-modal').style.display = 'none'; };
+        window.openRechargeModal = function() { document.getElementById('recharge-modal').style.display = 'flex'; };
+        window.closeRechargeModal = function() { document.getElementById('recharge-modal').style.display = 'none'; };
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -213,7 +267,6 @@
                     renderHeaderAndProfile();
                     loadMatches(currentUserData.lookingFor);
                     loadPosts();
-                    listenIncomingCalls();
                 } else {
                     window.location.href = 'profile-setup.html';
                 }
@@ -251,19 +304,14 @@
                     const msg = docSnap.data();
                     const msgDiv = document.createElement('div');
                     msgDiv.className = `message ${msg.senderId === currentUserId ? 'sent' : 'received'}`;
-                    
-                    if(msg.type === 'voice') {
-                        msgDiv.innerHTML = `<audio controls src="${msg.audioUrl}" style="max-width:200px;"></audio>`;
-                    } else {
-                        msgDiv.innerText = msg.text;
-                    }
+                    msgDiv.innerText = msg.text;
                     chatMessages.appendChild(msgDiv);
                 });
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             });
         };
 
-        // SEND TEXT MESSAGE
+        // SEND TEXT MESSAGE (UNLIMITED FREE TEXT)
         document.getElementById('send-msg-btn').addEventListener('click', async () => {
             const input = document.getElementById('chat-input');
             const text = input.value.trim();
@@ -271,111 +319,61 @@
             input.value = '';
             const chatId = getChatId(currentUserId, activeChatUserId);
             await addDoc(collection(db, "chats", chatId, "messages"), {
-                text: text, type: 'text', senderId: currentUserId, receiverId: activeChatUserId, createdAt: new Date()
+                text: text, senderId: currentUserId, receiverId: activeChatUserId, createdAt: new Date()
             });
         });
 
-        // VOICE RECORDING & SENDING
-        const voiceBtn = document.getElementById('voice-rec-btn');
-        voiceBtn.addEventListener('click', async () => {
-            if (!isRecording) {
-                try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    mediaRecorder = new MediaRecorder(stream);
-                    audioChunks = [];
-                    mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
-                    mediaRecorder.onstop = async () => {
-                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                        const reader = new FileReader();
-                        reader.readAsDataURL(audioBlob);
-                        reader.onloadend = async () => {
-                            const base64Audio = reader.result;
-                            const chatId = getChatId(currentUserId, activeChatUserId);
-                            await addDoc(collection(db, "chats", chatId, "messages"), {
-                                audioUrl: base64Audio, type: 'voice', senderId: currentUserId, receiverId: activeChatUserId, createdAt: new Date()
-                            });
-                        };
-                    };
-                    mediaRecorder.start();
-                    isRecording = true;
-                    voiceBtn.style.background = '#ef4444';
-                    voiceBtn.style.color = '#fff';
-                } catch(err) { alert("Mic Permission Denied!"); }
-            } else {
-                mediaRecorder.stop();
-                isRecording = false;
-                voiceBtn.style.background = 'rgba(255, 51, 102, 0.2)';
-                voiceBtn.style.color = '#ff3366';
-            }
-        });
-
-        // WEBRTC CALLING SYSTEM
+        // 59 SECOND FREE CALL SYSTEM
         window.startCall = async function(type) {
             if (!activeChatUserId) return;
             document.getElementById('video-call-overlay').style.display = 'flex';
-            localStream = await navigator.mediaDevices.getUserMedia({ video: type === 'video', audio: true });
-            document.getElementById('local-video').srcObject = localStream;
+            
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({ video: type === 'video', audio: true });
+                document.getElementById('local-video').srcObject = localStream;
+            } catch(err) { alert("Camera/Mic Permission Error!"); }
 
-            peerConnection = new RTCPeerConnection(rtcConfig);
-            localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
-
-            peerConnection.ontrack = (event) => {
-                document.getElementById('remote-video').srcObject = event.streams[0];
-            };
-
-            const offer = await peerConnection.createOffer();
-            await peerConnection.setLocalDescription(offer);
-
-            // Save Call Offer in Firestore
-            await addDoc(collection(db, "calls"), {
-                callerId: currentUserId, callerName: currentUserData.fullName || 'User',
-                receiverId: activeChatUserId, offer: offer, type: type, status: 'calling', createdAt: new Date()
-            });
+            // Start 59 Second Countdown Timer
+            callSecondsLeft = 59;
+            clearInterval(callTimerInterval);
+            callTimerInterval = setInterval(() => {
+                callSecondsLeft--;
+                document.getElementById('call-timer-display').innerText = `⏱️ 00:${callSecondsLeft < 10 ? '0' : ''}${callSecondsLeft}`;
+                
+                if (callSecondsLeft <= 0) {
+                    clearInterval(callTimerInterval);
+                    window.endCall();
+                    alert("⏱️ Free 59 Seconds Call Time Ended!\n\nPlease upgrade to VIP for Unlimited Calling.");
+                    openRechargeModal();
+                }
+            }, 1000);
         };
 
-        // LISTEN FOR INCOMING CALLS
-        function listenIncomingCalls() {
-            const q = query(collection(db, "calls"), where("receiverId", "==", currentUserId), where("status", "==", "calling"));
-            onSnapshot(q, (snap) => {
-                snap.forEach((docSnap) => {
-                    const callData = docSnap.data();
-                    document.getElementById('caller-name-text').innerText = `${callData.callerName} is calling...`;
-                    document.getElementById('call-popup').style.display = 'block';
-
-                    document.getElementById('accept-call-btn').onclick = async () => {
-                        document.getElementById('call-popup').style.display = 'none';
-                        document.getElementById('video-call-overlay').style.display = 'flex';
-                        
-                        localStream = await navigator.mediaDevices.getUserMedia({ video: callData.type === 'video', audio: true });
-                        document.getElementById('local-video').srcObject = localStream;
-
-                        peerConnection = new RTCPeerConnection(rtcConfig);
-                        localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
-
-                        peerConnection.ontrack = (e) => {
-                            document.getElementById('remote-video').srcObject = e.streams[0];
-                        };
-
-                        await peerConnection.setRemoteDescription(new RTCSessionDescription(callData.offer));
-                        const answer = await peerConnection.createAnswer();
-                        await peerConnection.setLocalDescription(answer);
-
-                        await updateDoc(doc(db, "calls", docSnap.id), { answer: answer, status: 'accepted' });
-                    };
-
-                    document.getElementById('reject-call-btn').onclick = async () => {
-                        document.getElementById('call-popup').style.display = 'none';
-                        await updateDoc(doc(db, "calls", docSnap.id), { status: 'rejected' });
-                    };
-                });
-            });
-        }
-
-        document.getElementById('end-call-btn').addEventListener('click', () => {
+        window.endCall = function() {
+            clearInterval(callTimerInterval);
             if(peerConnection) peerConnection.close();
             if(localStream) localStream.getTracks().forEach(t => t.stop());
             document.getElementById('video-call-overlay').style.display = 'none';
-        });
+        };
+
+        // RECHARGE / VIP PAYMENT SUBMIT
+        window.submitPayment = async function() {
+            const txn = document.getElementById('txn-id-input').value.trim();
+            if(!txn) return alert("Please enter Transaction Ref ID!");
+            
+            await addDoc(collection(db, "payments"), {
+                userId: currentUserId,
+                userName: currentUserData.fullName || currentUserData.firstName,
+                sdnpId: currentUserData.sdnpId,
+                txnId: txn,
+                status: 'pending',
+                createdAt: new Date()
+            });
+
+            alert("Voucher Submitted Successfully! 🎉\nAdmin will verify your transaction and activate VIP Unlimited Calls shortly.");
+            document.getElementById('txn-id-input').value = '';
+            closeRechargeModal();
+        };
 
         // LOAD MATCHES
         async function loadMatches(lookingFor) {
