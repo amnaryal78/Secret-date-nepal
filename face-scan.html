@@ -9,42 +9,17 @@
     
     <style>
         .scan-card {
-            background: rgba(18, 18, 24, 0.85);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            padding: 25px;
-            border-radius: 20px;
-            width: 400px;
-            max-width: 90%;
-            text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
-            position: relative;
-            z-index: 10;
+            background: rgba(18, 18, 24, 0.85); backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.12); padding: 25px;
+            border-radius: 20px; width: 400px; max-width: 90%; text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7); position: relative; z-index: 10;
         }
-
         .video-box {
-            position: relative;
-            width: 100%;
-            height: 280px;
-            background: #000;
-            border-radius: 15px;
-            overflow: hidden;
-            margin: 15px 0;
-            border: 2px solid #ff3366;
+            position: relative; width: 100%; height: 280px; background: #000;
+            border-radius: 15px; overflow: hidden; margin: 15px 0; border: 2px solid #ff3366;
         }
-
-        video#webcam {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .status-text {
-            font-size: 0.9rem;
-            color: #ff3366;
-            margin-top: 10px;
-            font-weight: 500;
-        }
+        video#webcam { width: 100%; height: 100%; object-fit: cover; }
+        .status-text { font-size: 0.9rem; color: #ff3366; margin-top: 10px; font-weight: 500; }
     </style>
 </head>
 <body>
@@ -61,9 +36,8 @@
             <video id="webcam" autoplay playsinline muted></video>
         </div>
 
-        <p class="status-text" id="status">Loading Google AI Model... Please wait.</p>
-
-        <button id="scan-btn" disabled style="opacity: 0.6;">Scan Face & Verify</button>
+        <p class="status-text" id="status">Loading AI Biometrics... Please wait.</p>
+        <button id="scan-btn" disabled style="opacity: 0.6; background:#ff3366; color:#fff; padding:10px 20px; border:none; border-radius:10px; cursor:pointer;">Scan Face & Verify</button>
     </div>
 
     <script type="module">
@@ -71,17 +45,15 @@
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { doc, getDoc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         
-        // Import MediaPipe directly inside JS Module
-        import { FaceLandmarker, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3";
+        // DIRECT ESM IMPORT OF FACE-API (NO UNDEFINED ERRORS!)
+        import * as faceapi from 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/dist/face-api.esm.js';
 
         const webcam = document.getElementById('webcam');
         const statusText = document.getElementById('status');
         const scanBtn = document.getElementById('scan-btn');
 
         let currentUser = null;
-        let faceLandmarker = null;
 
-        // Check Auth Status
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
@@ -89,36 +61,28 @@
                 if (userDoc.exists() && userDoc.data().faceVerified) {
                     window.location.href = 'profile-setup.html';
                 } else {
-                    initMediaPipe();
+                    initFaceAPI();
                 }
             } else {
                 window.location.href = 'index.html';
             }
         });
 
-        // Initialize Google MediaPipe Face Landmarker
-        async function initMediaPipe() {
+        async function initFaceAPI() {
             try {
-                statusText.innerText = "Connecting Google AI vision engine...";
+                statusText.innerText = "Downloading AI Recognition Models...";
+                const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/model/';
                 
-                const vision = await FilesetResolver.forVisionTasks(
-                    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
-                );
-                
-                faceLandmarker = await FaceLandmarker.createFromOptions(vision, {
-                    baseOptions: {
-                        modelAssetPath: "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",
-                        delegate: "GPU"
-                    },
-                    runningMode: "IMAGE",
-                    numFaces: 1
-                });
+                await Promise.all([
+                    faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
+                    faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
+                    faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)
+                ]);
 
-                statusText.innerText = "Starting Camera...";
+                statusText.innerText = "Models Loaded! Starting Camera...";
                 startCamera();
             } catch (err) {
-                console.error(err);
-                statusText.innerText = "Error loading Google AI: " + err.message;
+                statusText.innerText = "Error: " + err.message;
             }
         }
 
@@ -126,92 +90,74 @@
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(stream => {
                     webcam.srcObject = stream;
-                    statusText.innerText = "Align your face clearly & click Scan!";
+                    statusText.innerText = "Look directly at the camera & Click Scan!";
                     scanBtn.disabled = false;
                     scanBtn.style.opacity = "1";
                 })
                 .catch(err => {
-                    statusText.innerText = "Camera access denied: " + err.message;
+                    statusText.innerText = "Camera access denied.";
                 });
         }
 
-        // Normalize & compare biometric landmarks
-        function calculateDistance(pointsA, pointsB) {
-            let sum = 0;
-            const count = Math.min(pointsA.length, pointsB.length);
-            for (let i = 0; i < count; i++) {
-                const dx = pointsA[i].x - pointsB[i].x;
-                const dy = pointsA[i].y - pointsB[i].y;
-                const dz = (pointsA[i].z || 0) - (pointsB[i].z || 0);
-                sum += Math.sqrt(dx * dx + dy * dy + dz * dz);
-            }
-            return sum / count;
-        }
-
-        // Compare face landmarks with existing Database users
-        async function checkDuplicateFace(newLandmarks) {
-            statusText.innerText = "Checking biometric database for duplicates...";
+        // BIOMETRIC DUPLICATE CHECK
+        async function checkDuplicateFace(newDescriptor) {
+            statusText.innerText = "Checking entire database for your face...";
             const querySnapshot = await getDocs(collection(db, "users"));
             let isDuplicate = false;
 
             querySnapshot.forEach((docSnap) => {
                 const data = docSnap.data();
-                if (data.faceLandmarks && docSnap.id !== currentUser.uid) {
-                    const distance = calculateDistance(newLandmarks, data.faceLandmarks);
-                    if (distance <= 0.08) {
+                // Compare with valid existing descriptors
+                if (data.faceDescriptor && docSnap.id !== currentUser.uid && Array.isArray(data.faceDescriptor) && data.faceDescriptor.length === 128) {
+                    const existingDescriptor = new Float32Array(data.faceDescriptor);
+                    const distance = faceapi.euclideanDistance(newDescriptor, existingDescriptor);
+                    
+                    // The distance threshold for same person (Lower is stricter)
+                    if (distance <= 0.45) {
                         isDuplicate = true;
                     }
                 }
             });
-
             return isDuplicate;
         }
 
-        // Scan Face Trigger
         scanBtn.addEventListener('click', async () => {
-            if (!faceLandmarker) return;
-
             scanBtn.disabled = true;
-            scanBtn.innerText = "Scanning...";
-            statusText.innerText = "Analyzing facial structure...";
+            scanBtn.innerText = "Scanning Biometrics...";
+            statusText.innerText = "Extracting facial features...";
 
             try {
-                const result = faceLandmarker.detect(webcam);
+                const detection = await faceapi.detectSingleFace(webcam)
+                    .withFaceLandmarks()
+                    .withFaceDescriptor();
 
-                if (!result.faceLandmarks || result.faceLandmarks.length === 0) {
-                    alert("No face detected! Please position your face clearly in the camera.");
+                if (!detection) {
+                    alert("No face detected! Please ensure good lighting and look straight.");
                     statusText.innerText = "Scan failed. Try again!";
                     scanBtn.disabled = false;
                     scanBtn.innerText = "Scan Face & Verify";
                     return;
                 }
 
-                const currentLandmarks = result.faceLandmarks[0];
-
-                // Strict One Person = One ID Check
-                const duplicateFound = await checkDuplicateFace(currentLandmarks);
+                // Strict Identity Check
+                const duplicateFound = await checkDuplicateFace(detection.descriptor);
 
                 if (duplicateFound) {
-                    alert("⛔ REJECTED: An account with this face ALREADY EXISTS in Secret Date Nepal!\n\nMultiple accounts are NOT allowed. Please login with your original account.");
-                    statusText.innerText = "Duplicate Account Detected! Blocked.";
-                    scanBtn.innerText = "Account Blocked";
+                    alert("⛔ SECURITY ALERT: An account with your exact face ALREADY EXISTS in the system!\n\nCreating duplicate accounts is strictly blocked. Please login to your original account.");
+                    statusText.innerText = "Duplicate Blocked!";
+                    scanBtn.innerText = "Blocked";
                     return;
                 }
 
-                // Clean & save simplified landmarks array
-                const simplifiedLandmarks = currentLandmarks.map(pt => ({
-                    x: Number(pt.x.toFixed(4)),
-                    y: Number(pt.y.toFixed(4)),
-                    z: Number((pt.z || 0).toFixed(4))
-                }));
-
+                // Save Identity Descriptor Array
+                const faceDescriptorArray = Array.from(detection.descriptor);
                 await setDoc(doc(db, "users", currentUser.uid), {
                     faceVerified: true,
-                    faceLandmarks: simplifiedLandmarks,
+                    faceDescriptor: faceDescriptorArray,
                     updatedAt: new Date()
                 }, { merge: true });
 
-                alert("Face Verification Successful! 🎉");
+                alert("Face Verified! Identity secured. 🎉");
                 window.location.href = 'profile-setup.html';
             } catch (err) {
                 alert("Scan Error: " + err.message);
