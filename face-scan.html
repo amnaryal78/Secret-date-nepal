@@ -26,7 +26,7 @@
 
     <div class="scan-card">
         <h2>Face Verification 👤</h2>
-        <p style="font-size: 0.8rem; color: #ccc;">Strict Identity Verification (1 Person = 1 Account Only)</p>
+        <p style="font-size: 0.8rem; color: #ccc;">Strict Identity Lock (1 Person = 1 Account Only)</p>
 
         <div class="video-box">
             <video id="webcam" autoplay playsinline muted></video>
@@ -40,8 +40,6 @@
         import { auth, db } from './firebase-config.js';
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { doc, getDoc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        
-        // DIRECT ESM IMPORT
         import * as faceapi from 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/dist/face-api.esm.js';
 
         const webcam = document.getElementById('webcam');
@@ -66,58 +64,44 @@
 
         async function initFaceAPI() {
             try {
-                statusText.innerText = "Loading Security AI Models...";
+                statusText.innerText = "Loading AI Models...";
                 const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/model/';
-                
                 await Promise.all([
                     faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
                     faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
                     faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)
                 ]);
-
-                statusText.innerText = "Models Loaded! Turn on camera and click Scan.";
+                statusText.innerText = "Look straight at the camera and click Scan!";
                 startCamera();
-            } catch (err) {
-                statusText.innerText = "Error loading AI: " + err.message;
-            }
+            } catch (err) { statusText.innerText = "AI Error: " + err.message; }
         }
 
         function startCamera() {
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(stream => {
                     webcam.srcObject = stream;
-                    statusText.innerText = "Look directly into the camera & click Scan!";
                     scanBtn.disabled = false;
                     scanBtn.style.opacity = "1";
                 })
-                .catch(err => {
-                    statusText.innerText = "Camera access denied or not available!";
-                });
+                .catch(err => { statusText.innerText = "Camera Permission Denied!"; });
         }
 
-        // ULTRA-STRICT DUPLICATE FACE DETECTOR
         async function checkDuplicateFace(newDescriptor) {
-            statusText.innerText = "Checking system database for face match...";
+            statusText.innerText = "Checking Database for Face Match...";
             const querySnapshot = await getDocs(collection(db, "users"));
             let isDuplicate = false;
 
             querySnapshot.forEach((docSnap) => {
                 const data = docSnap.data();
-                // Compare with all verified users in Database
                 if (data.faceDescriptor && docSnap.id !== currentUser.uid) {
-                    let existingDescriptor;
-                    if (Array.isArray(data.faceDescriptor)) {
-                        existingDescriptor = new Float32Array(data.faceDescriptor);
-                    } else if (typeof data.faceDescriptor === 'object') {
-                        existingDescriptor = new Float32Array(Object.values(data.faceDescriptor));
-                    }
-
-                    if (existingDescriptor && existingDescriptor.length === 128) {
+                    let existingArr = Object.values(data.faceDescriptor);
+                    if (existingArr.length === 128) {
+                        const existingDescriptor = new Float32Array(existingArr);
                         const distance = faceapi.euclideanDistance(newDescriptor, existingDescriptor);
-                        console.log("Calculated Face Distance:", distance);
+                        console.log("Face Match Distance:", distance);
                         
-                        // ULTRA-STRICT LIMIT (0.30 - Strict Match Block)
-                        if (distance <= 0.30) {
+                        // Strict threshold (0.40)
+                        if (distance <= 0.40) {
                             isDuplicate = true;
                         }
                     }
@@ -128,44 +112,38 @@
 
         scanBtn.addEventListener('click', async () => {
             scanBtn.disabled = true;
-            scanBtn.innerText = "Scanning Face Biometrics...";
-            statusText.innerText = "Extracting facial features...";
+            scanBtn.innerText = "Scanning Biometrics...";
 
             try {
-                const detection = await faceapi.detectSingleFace(webcam)
-                    .withFaceLandmarks()
-                    .withFaceDescriptor();
+                const detection = await faceapi.detectSingleFace(webcam).withFaceLandmarks().withFaceDescriptor();
 
                 if (!detection) {
-                    alert("No face detected! Please ensure proper light and look straight at the camera.");
-                    statusText.innerText = "Scan failed. Please try again!";
+                    alert("No face detected! Look directly into camera.");
                     scanBtn.disabled = false;
                     scanBtn.innerText = "Scan & Verify Face 🚀";
                     return;
                 }
 
-                // Check Database
                 const duplicateFound = await checkDuplicateFace(detection.descriptor);
 
                 if (duplicateFound) {
-                    alert("⛔ SECURITY BLOCK!\n\nAn account with your exact face ALREADY EXISTS in Secret Date Nepal.\n\nCreating duplicate accounts to bypass 59-second call limits is strictly prohibited!");
-                    statusText.innerText = "Duplicate Account Creation Blocked!";
-                    scanBtn.innerText = "Account Permanently Blocked";
+                    alert("⛔ SECURITY BLOCK: Account with your face ALREADY EXISTS!\nMultiple IDs per person are forbidden.");
+                    statusText.innerText = "Duplicate Account Blocked!";
+                    scanBtn.innerText = "Permanently Blocked";
                     return;
                 }
 
-                // Save Biometric Descriptor if unique
-                const faceDescriptorArray = Array.from(detection.descriptor);
+                const faceArray = Array.from(detection.descriptor);
                 await setDoc(doc(db, "users", currentUser.uid), {
                     faceVerified: true,
-                    faceDescriptor: faceDescriptorArray,
+                    faceDescriptor: faceArray,
                     updatedAt: new Date()
                 }, { merge: true });
 
-                alert("Face Verified Successfully! Your Identity is Locked to this Account. 🎉");
+                alert("Face Verified Successfully! 🎉");
                 window.location.href = 'profile-setup.html';
             } catch (err) {
-                alert("Scan Error: " + err.message);
+                alert("Error: " + err.message);
                 scanBtn.disabled = false;
                 scanBtn.innerText = "Scan & Verify Face 🚀";
             }
