@@ -57,8 +57,21 @@
             width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); 
             color: #fff; padding: 12px; border-radius: 12px; font-weight: 600; cursor: pointer; 
             margin-bottom: 10px; text-align: left; transition: 0.3s; display:flex; gap:10px; align-items:center;
+            text-decoration: none;
         }
-        .game-btn:hover { background: linear-gradient(45deg, #ff3366, #a855f7); border-color: transparent; }
+        .game-btn:hover { background: linear-gradient(45deg, #ff3366, #a855f7); border-color: transparent; color: #fff; }
+
+        /* SPECIAL LUDO VIP HIGHLIGHT BUTTON */
+        .ludo-special-btn {
+            background: linear-gradient(45deg, #ff3366, #a855f7, #00e5ff) !important;
+            box-shadow: 0 4px 15px rgba(255, 51, 102, 0.4);
+            animation: pulseGlow 2s infinite alternate;
+        }
+        @keyframes pulseGlow {
+            0% { transform: scale(1); box-shadow: 0 4px 15px rgba(255, 51, 102, 0.4); }
+            100% { transform: scale(1.03); box-shadow: 0 6px 20px rgba(0, 229, 255, 0.6); }
+        }
+
         .game-output { font-size: 0.85rem; color: #00e5ff; margin: 5px 0 15px 0; font-weight: bold; text-align: center; min-height:20px;}
 
         /* LOVE & CARE BANNER (LEFT) */
@@ -102,6 +115,9 @@
             <div class="nav-icon-btn" id="nav-profile" onclick="switchTab('profile-tab', this)"><i class="fa-solid fa-user"></i></div>
         </div>
         <div class="fb-right">
+            <a href="ludo.html" class="circle-icon-btn" style="background:rgba(255, 51, 102, 0.2); color:#ff3366;" title="Play Secret Ludo">
+                <i class="fa-solid fa-gamepad"></i>
+            </a>
             <div class="circle-icon-btn" onclick="switchTab('matches-tab', document.getElementById('nav-matches'))"><i class="fa-solid fa-comment"></i></div>
             <img id="nav-user-avatar" class="header-avatar" src="https://via.placeholder.com/40" onclick="switchTab('profile-tab', document.getElementById('nav-profile'))" alt="Avatar">
             <div class="circle-icon-btn" id="logout-btn" style="background: rgba(255, 0, 85, 0.2); color: #ff3366;"><i class="fa-solid fa-right-from-bracket"></i></div>
@@ -113,8 +129,14 @@
         <!-- 1. LEFT SIDEBAR (GAMES & ROMANTIC VIBES) -->
         <aside class="left-sidebar">
             <div class="sidebar-card">
-                <div class="sidebar-title"><i class="fa-solid fa-gamepad" style="color:#a855f7;"></i> Mini Love Games</div>
+                <div class="sidebar-title"><i class="fa-solid fa-gamepad" style="color:#a855f7;"></i> Mini Games & Ludo</div>
                 
+                <!-- SECRET COUPLE LUDO LINK BUTTON -->
+                <a href="ludo.html" class="game-btn ludo-special-btn">
+                    <i class="fa-solid fa-dice" style="font-size:1.3rem;"></i> 
+                    <span>Secret Couple Ludo 🎲</span>
+                </a>
+
                 <!-- Game 1: Love Calculator -->
                 <button class="game-btn" onclick="playCalc()"><i class="fa-solid fa-heart-pulse" style="color:#ff3366;"></i> Love Calculator</button>
                 <div id="out-calc" class="game-output"></div>
@@ -126,10 +148,6 @@
                 <!-- Game 3: Truth or Dare -->
                 <button class="game-btn" onclick="playToD()"><i class="fa-solid fa-masks-theater" style="color:#f59e0b;"></i> Couple Truth or Dare</button>
                 <div id="out-tod" class="game-output"></div>
-
-                <!-- Game 4: Daily Love Task -->
-                <button class="game-btn" onclick="playTask()"><i class="fa-solid fa-gift" style="color:#22c55e;"></i> Daily Romantic Task</button>
-                <div id="out-task" class="game-output"></div>
             </div>
 
             <!-- LOVE, CARE & RESPECT BANNER -->
@@ -189,7 +207,7 @@
 
     </div>
 
-    <!-- SIMPLE JS FOR GAMES & TABS -->
+    <!-- JAVASCRIPT -->
     <script type="module">
         import { auth, db } from './firebase-config.js';
         import { doc, getDoc, collection, query, where, getDocs, addDoc, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -217,10 +235,6 @@
         window.playToD = () => {
             const dares = ["Truth: What's your wildest secret?", "Dare: Send a 💋 sticker to your match!", "Truth: Who was your first crush?", "Dare: Post a romantic quote!"];
             document.getElementById('out-tod').innerText = `🎭 ${dares[Math.floor(Math.random() * dares.length)]}`;
-        };
-        window.playTask = () => {
-            const tasks = ["Compliment someone today! ✨", "Smile, you're beautiful! 😊", "Listen to a romantic song. 🎶"];
-            document.getElementById('out-task').innerText = `🎁 ${tasks[Math.floor(Math.random() * tasks.length)]}`;
         };
         window.votePoll = (opt) => alert(`You voted for "${opt}". Thanks! 💕`);
 
