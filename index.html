@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secret Date Nepal - Welcome</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
@@ -14,13 +14,14 @@
 </head>
 <body>
 
-<!-- Video Background -->
-<video autoplay muted loop id="bg-video">
-    <source src="bg-video.mp4" type="video/mp4">
-</video>
+    <!-- Background Video (Autoplay, Muted, Loop) -->
+    <video autoplay muted loop id="bg-video">
+        <source src="bg-video.mp4" type="video/mp4">
+    </video>
 
     <div class="auth-container">
         <h2>Secret Date Nepal 🤫</h2>
+        <p class="subtitle">Find your authentic & secret connection</p>
         
         <!-- LOGIN FORM -->
         <div id="login-box">
@@ -35,13 +36,22 @@
 
                 <button type="submit">Login</button>
             </form>
-            <p><a href="#" id="forgot-password-link">Forgot Password?</a></p>
-            <p>Don't have an account? <a href="#" id="go-to-signup">Sign Up Here</a></p>
+            
+            <div class="form-footer">
+                <p><a href="#" id="forgot-password-link">Forgot Password? Recover Account</a></p>
+                <p>Don't have an account? <a href="#" id="go-to-signup">Sign Up Here</a></p>
+            </div>
         </div>
 
         <!-- SIGNUP FORM -->
         <div id="signup-box" style="display: none;">
             <h3>Create New Account</h3>
+            
+            <!-- Spam Warning Banner Before Signup -->
+            <div class="spam-notice">
+                📬 <b>Important Notice:</b> OTP codes & Password Reset links are sent via Email. Please check your <b>Spam / Junk folder</b> if you don't see them in your Inbox!
+            </div>
+
             <form id="signup-form">
                 <input type="email" id="signup-email" placeholder="Email Address" required>
                 <input type="password" id="signup-password" placeholder="Password (Min. 6 chars)" required>
@@ -52,7 +62,10 @@
 
                 <button type="submit" id="signup-btn">Send OTP Code</button>
             </form>
-            <p>Already have an account? <a href="#" id="go-to-login">Login Here</a></p>
+            
+            <div class="form-footer">
+                <p>Already have an account? <a href="#" id="go-to-login">Login Here</a></p>
+            </div>
         </div>
 
         <!-- OTP VERIFICATION BOX -->
@@ -61,16 +74,20 @@
             <p style="font-size:0.85rem; color:#ccc;">We sent a 6-digit OTP code to your email.</p>
 
             <form id="otp-form">
-                <input type="text" id="otp-input" placeholder="6-Digit OTP" maxlength="6" required style="text-align:center; letter-spacing: 5px; font-size: 1.2rem;">
+                <input type="text" id="otp-input" placeholder="6-Digit OTP" maxlength="6" required style="text-align:center; letter-spacing: 5px; font-size: 1.3rem;">
                 
-                <!-- Spam Warning Box -->
+                <!-- Spam Warning Notice -->
                 <div class="spam-notice">
-                    ⚠️ <b>Note:</b> If you don't see the OTP in your Inbox, please check your <b>Spam or Junk folder!</b>
+                    ⚠️ <b>OTP not received?</b> Please check your <b>Spam or Junk email folder!</b>
                 </div>
 
                 <button type="submit" id="verify-otp-btn">Verify & Continue</button>
             </form>
-            <p><a href="#" id="resend-otp">Resend OTP Code</a></p>
+            
+            <div class="form-footer">
+                <p><a href="#" id="resend-otp">Resend OTP Code</a></p>
+                <p><a href="#" id="back-to-signup">Change Email</a></p>
+            </div>
         </div>
     </div>
 
@@ -91,7 +108,7 @@
         let tempUserEmail = "";
         let tempUserPassword = "";
 
-        // Toggle Passwords
+        // Password Show/Hide Toggle
         document.getElementById('toggle-login-pass').addEventListener('change', (e) => {
             document.getElementById('login-password').type = e.target.checked ? 'text' : 'password';
         });
@@ -99,7 +116,7 @@
             document.getElementById('signup-password').type = e.target.checked ? 'text' : 'password';
         });
 
-        // Switch Forms
+        // Switch Forms Navigation
         document.getElementById('go-to-signup').addEventListener('click', (e) => {
             e.preventDefault();
             loginBox.style.display = 'none';
@@ -113,13 +130,19 @@
             loginBox.style.display = 'block';
         });
 
-        // Forgot Password
+        document.getElementById('back-to-signup').addEventListener('click', (e) => {
+            e.preventDefault();
+            otpBox.style.display = 'none';
+            signupBox.style.display = 'block';
+        });
+
+        // Forgot Password Recovery Link
         document.getElementById('forgot-password-link').addEventListener('click', (e) => {
             e.preventDefault();
-            const email = prompt("Please enter your registered email address:");
+            const email = prompt("Enter your registered email to reset password:");
             if (email) {
                 sendPasswordResetEmail(auth, email)
-                    .then(() => alert("Password reset link sent! Check Inbox and Spam folder."))
+                    .then(() => alert("Password reset email sent! Check your Inbox and Spam folder."))
                     .catch((err) => alert("Error: " + err.message));
             }
         });
@@ -132,10 +155,10 @@
             return emailjs.send('service_e4qw80t', 'template_pf3avf8', { to_email: email, otp_code: otp });
         }
 
-        // Sign Up
+        // Handle Signup
         document.getElementById('signup-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            tempUserEmail = document.getElementById('signup-email').value;
+            tempUserEmail = document.getElementById('signup-email').value.trim();
             tempUserPassword = document.getElementById('signup-password').value;
             
             const btn = document.getElementById('signup-btn');
@@ -146,7 +169,7 @@
 
             try {
                 await sendOTPEmail(tempUserEmail, generatedOTP);
-                alert("6-Digit OTP sent! Check your Inbox or Spam folder.");
+                alert("OTP Sent! Check your Inbox or Spam folder.");
                 signupBox.style.display = 'none';
                 otpBox.style.display = 'block';
             } catch (error) {
@@ -157,7 +180,21 @@
             }
         });
 
-        // Verify OTP
+        // Resend OTP
+        document.getElementById('resend-otp').addEventListener('click', async (e) => {
+            e.preventDefault();
+            if (!tempUserEmail) return;
+            generatedOTP = generate6DigitOTP();
+            alert("Resending OTP...");
+            try {
+                await sendOTPEmail(tempUserEmail, generatedOTP);
+                alert("New OTP code sent! Check Inbox or Spam folder.");
+            } catch (err) {
+                alert("Resend failed: " + err.message);
+            }
+        });
+
+        // Verify OTP & Proceed
         document.getElementById('otp-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const userEnteredOTP = document.getElementById('otp-input').value.trim();
@@ -177,7 +214,7 @@
                         createdAt: new Date()
                     }, { merge: true });
 
-                    alert("Verified! Redirecting to Face Scan...");
+                    alert("Verified! Redirecting to Face Verification...");
                     window.location.href = 'face-scan.html';
                 } catch (error) {
                     alert("Account Creation Failed: " + error.message);
@@ -185,19 +222,18 @@
                     btn.innerText = "Verify & Continue";
                 }
             } else {
-                alert("Invalid OTP Code! Check your email again.");
+                alert("Invalid OTP Code! Please check again.");
             }
         });
 
-        // Login
+        // Handle Login
         document.getElementById('login-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            const email = document.getElementById('login-email').value;
+            const email = document.getElementById('login-email').value.trim();
             const password = document.getElementById('login-password').value;
 
             signInWithEmailAndPassword(auth, email, password)
                 .then(() => {
-                    alert("Login Successful!");
                     window.location.href = 'face-scan.html';
                 })
                 .catch((error) => {
