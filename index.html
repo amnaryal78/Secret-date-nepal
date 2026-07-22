@@ -5,41 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secret Date Nepal - Welcome</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
         emailjs.init("zMb5_t4JWR3_hV5as"); 
     </script>
-    <style>
-        .show-pass-container {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 8px;
-            margin: 8px 0 12px 0;
-            font-size: 0.85rem;
-            color: #ccc;
-            cursor: pointer;
-        }
-        .show-pass-container input[type="checkbox"] {
-            width: auto;
-            margin: 0;
-            cursor: pointer;
-        }
-    </style>
 </head>
 <body>
+
+    <!-- Zoom Background Image -->
+    <div class="bg-animation"></div>
+
     <div class="auth-container">
         <h2>Secret Date Nepal 🤫</h2>
         
         <!-- LOGIN FORM -->
         <div id="login-box">
-            <h3>Login to Your Account</h3>
+            <h3>Welcome Back</h3>
             <form id="login-form">
                 <input type="email" id="login-email" placeholder="Email Address" required>
                 <input type="password" id="login-password" placeholder="Password" required>
                 
-                <!-- Show Password Checkbox (Login) -->
                 <label class="show-pass-container">
                     <input type="checkbox" id="toggle-login-pass"> Show Password
                 </label>
@@ -55,9 +42,8 @@
             <h3>Create New Account</h3>
             <form id="signup-form">
                 <input type="email" id="signup-email" placeholder="Email Address" required>
-                <input type="password" id="signup-password" placeholder="Password (Min. 6 characters)" required>
+                <input type="password" id="signup-password" placeholder="Password (Min. 6 chars)" required>
                 
-                <!-- Show Password Checkbox (Sign Up) -->
                 <label class="show-pass-container">
                     <input type="checkbox" id="toggle-signup-pass"> Show Password
                 </label>
@@ -70,12 +56,19 @@
         <!-- OTP VERIFICATION BOX -->
         <div id="otp-box" style="display: none;">
             <h3>Enter Verification Code</h3>
-            <p style="font-size:0.85rem; color:#aaa;">We sent a 6-digit code to your email.</p>
+            <p style="font-size:0.85rem; color:#ccc;">We sent a 6-digit OTP code to your email.</p>
+
             <form id="otp-form">
-                <input type="text" id="otp-input" placeholder="6-Digit OTP Code" maxlength="6" required style="text-align:center; letter-spacing: 5px; font-size: 1.2rem;">
+                <input type="text" id="otp-input" placeholder="6-Digit OTP" maxlength="6" required style="text-align:center; letter-spacing: 5px; font-size: 1.2rem;">
+                
+                <!-- Spam Warning Box -->
+                <div class="spam-notice">
+                    ⚠️ <b>Note:</b> If you don't see the OTP in your Inbox, please check your <b>Spam or Junk folder!</b>
+                </div>
+
                 <button type="submit" id="verify-otp-btn">Verify & Continue</button>
             </form>
-            <p><a href="#" id="resend-otp">Resend OTP</a></p>
+            <p><a href="#" id="resend-otp">Resend OTP Code</a></p>
         </div>
     </div>
 
@@ -96,17 +89,12 @@
         let tempUserEmail = "";
         let tempUserPassword = "";
 
-        // TOGGLE SHOW/HIDE PASSWORD LOGIC
-        const loginPassInput = document.getElementById('login-password');
-        const toggleLoginPass = document.getElementById('toggle-login-pass');
-        toggleLoginPass.addEventListener('change', () => {
-            loginPassInput.type = toggleLoginPass.checked ? 'text' : 'password';
+        // Toggle Passwords
+        document.getElementById('toggle-login-pass').addEventListener('change', (e) => {
+            document.getElementById('login-password').type = e.target.checked ? 'text' : 'password';
         });
-
-        const signupPassInput = document.getElementById('signup-password');
-        const toggleSignupPass = document.getElementById('toggle-signup-pass');
-        toggleSignupPass.addEventListener('change', () => {
-            signupPassInput.type = toggleSignupPass.checked ? 'text' : 'password';
+        document.getElementById('toggle-signup-pass').addEventListener('change', (e) => {
+            document.getElementById('signup-password').type = e.target.checked ? 'text' : 'password';
         });
 
         // Switch Forms
@@ -123,32 +111,26 @@
             loginBox.style.display = 'block';
         });
 
-        // Forgot Password Logic
+        // Forgot Password
         document.getElementById('forgot-password-link').addEventListener('click', (e) => {
             e.preventDefault();
             const email = prompt("Please enter your registered email address:");
             if (email) {
                 sendPasswordResetEmail(auth, email)
-                    .then(() => alert("Password reset link sent to your email!"))
+                    .then(() => alert("Password reset link sent! Check Inbox and Spam folder."))
                     .catch((err) => alert("Error: " + err.message));
             }
         });
 
-        // Generate 6-Digit Code
         function generate6DigitOTP() {
             return Math.floor(100000 + Math.random() * 900000).toString();
         }
 
-        // Send OTP via EmailJS
         async function sendOTPEmail(email, otp) {
-            const templateParams = {
-                to_email: email,
-                otp_code: otp
-            };
-            return emailjs.send('service_e4qw80t', 'template_pf3avf8', templateParams);
+            return emailjs.send('service_e4qw80t', 'template_pf3avf8', { to_email: email, otp_code: otp });
         }
 
-        // Sign Up Submit (Sends OTP)
+        // Sign Up
         document.getElementById('signup-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             tempUserEmail = document.getElementById('signup-email').value;
@@ -162,7 +144,7 @@
 
             try {
                 await sendOTPEmail(tempUserEmail, generatedOTP);
-                alert("6-Digit OTP Code sent to " + tempUserEmail);
+                alert("6-Digit OTP sent! Check your Inbox or Spam folder.");
                 signupBox.style.display = 'none';
                 otpBox.style.display = 'block';
             } catch (error) {
@@ -173,19 +155,7 @@
             }
         });
 
-        // Resend OTP Link
-        document.getElementById('resend-otp').addEventListener('click', async (e) => {
-            e.preventDefault();
-            generatedOTP = generate6DigitOTP();
-            try {
-                await sendOTPEmail(tempUserEmail, generatedOTP);
-                alert("New OTP Code sent to " + tempUserEmail);
-            } catch (error) {
-                alert("Resend failed: " + JSON.stringify(error));
-            }
-        });
-
-        // Verify OTP Box and Create Firebase Account
+        // Verify OTP
         document.getElementById('otp-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const userEnteredOTP = document.getElementById('otp-input').value.trim();
@@ -205,7 +175,7 @@
                         createdAt: new Date()
                     }, { merge: true });
 
-                    alert("Verification Successful! Redirecting to Face Scan...");
+                    alert("Verified! Redirecting to Face Scan...");
                     window.location.href = 'face-scan.html';
                 } catch (error) {
                     alert("Account Creation Failed: " + error.message);
@@ -213,11 +183,11 @@
                     btn.innerText = "Verify & Continue";
                 }
             } else {
-                alert("Invalid OTP Code! Please check your email again.");
+                alert("Invalid OTP Code! Check your email again.");
             }
         });
 
-        // Login Submit
+        // Login
         document.getElementById('login-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const email = document.getElementById('login-email').value;
