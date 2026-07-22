@@ -100,7 +100,7 @@
                 });
         });
 
-        // Login Logic (Fixed Redirect to face-scan.html)
+        // Login Logic (Redirects to face-scan.html)
         const loginForm = document.getElementById('login-form');
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -113,7 +113,7 @@
 
                     if (user.emailVerified) {
                         alert("Login successful! Redirecting to Face Scan...");
-                        window.location.href = 'face-scan.html'; // Fixed link!
+                        window.location.href = 'face-scan.html';
                     } else {
                         alert("Please verify your email first! Check your inbox for the verification link.");
                         signOut(auth);
