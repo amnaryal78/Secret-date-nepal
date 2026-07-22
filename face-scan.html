@@ -6,8 +6,10 @@
     <title>Face Verification - Secret Date Nepal</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <!-- Face-API.js Models -->
-    <script defer src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.min.js"></script>
+    
+    <!-- Face API JS Reliable CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js"></script>
+
     <style>
         .scan-card {
             background: rgba(18, 18, 24, 0.85);
@@ -59,7 +61,7 @@
         <p style="font-size: 0.85rem; color: #ccc;">One Person = One Account strictly enforced!</p>
 
         <div class="video-box">
-            <video id="webcam" autoplay playsinline></video>
+            <video id="webcam" autoplay playsinline muted></video>
         </div>
 
         <p class="status-text" id="status">Loading AI Models... Please wait.</p>
@@ -77,7 +79,6 @@
         const scanBtn = document.getElementById('scan-btn');
 
         let currentUser = null;
-        let faceMatcher = null;
 
         // Check Auth Status
         onAuthStateChanged(auth, async (user) => {
@@ -97,7 +98,13 @@
         // Initialize Face-API Models & Camera
         async function initFaceAPI() {
             try {
-                const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/';
+                if (typeof faceapi === 'undefined') {
+                    throw new Error("faceapi JS library failed to load. Please refresh.");
+                }
+
+                // Official Face-API GitHub CDN Models Path
+                const MODEL_URL = 'https://raw.githubusercontent.com/justadudewhohacks/face-api.js/master/weights';
+                
                 await Promise.all([
                     faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
                     faceapi.nets.faceLandmark64Net.loadFromUri(MODEL_URL),
@@ -112,10 +119,10 @@
         }
 
         function startCamera() {
-            navigator.mediaDevices.getUserMedia({ video: {} })
+            navigator.mediaDevices.getUserMedia({ video: true })
                 .then(stream => {
                     webcam.srcObject = stream;
-                    statusText.innerText = "Align your face in the camera & click Scan!";
+                    statusText.innerText = "Align your face clearly & click Scan!";
                     scanBtn.disabled = false;
                     scanBtn.style.opacity = "1";
                 })
@@ -126,9 +133,8 @@
 
         // Compare Face Descriptor with Existing Database Users
         async function checkDuplicateFace(newDescriptor) {
-            statusText.innerText = "Checking biometric database for duplicates...";
+            statusText.innerText = "Checking database for duplicate faces...";
             const querySnapshot = await getDocs(collection(db, "users"));
-            
             let isDuplicate = false;
 
             querySnapshot.forEach((docSnap) => {
@@ -136,8 +142,6 @@
                 if (data.faceDescriptor && docSnap.id !== currentUser.uid) {
                     const existingDescriptor = new Float32Array(data.faceDescriptor);
                     const distance = faceapi.euclideanDistance(newDescriptor, existingDescriptor);
-                    
-                    // Distance threshold <= 0.45 means match (Same Person)
                     if (distance <= 0.45) {
                         isDuplicate = true;
                     }
@@ -153,32 +157,32 @@
             scanBtn.innerText = "Scanning...";
             statusText.innerText = "Detecting face landmarks...";
 
-            const detection = await faceapi.detectSingleFace(webcam)
-                .withFaceLandmarks()
-                .withFaceDescriptor();
-
-            if (!detection) {
-                alert("No face detected! Please position your face clearly in light.");
-                statusText.innerText = "Scan failed. Try again!";
-                scanBtn.disabled = false;
-                scanBtn.innerText = "Scan Face & Verify";
-                return;
-            }
-
-            const faceDescriptorArray = Array.from(detection.descriptor);
-
-            // Strict One Person = One ID Check
-            const duplicateFound = await checkDuplicateFace(detection.descriptor);
-
-            if (duplicateFound) {
-                alert("⛔ REJECTED: An account with this face ALREADY EXISTS in Secret Date Nepal!\n\nMultiple accounts are NOT allowed. Please login with your original email.");
-                statusText.innerText = "Duplicate Account Detected! Blocked.";
-                scanBtn.innerText = "Account Blocked";
-                return;
-            }
-
-            // Save Face Descriptor & Mark Verified
             try {
+                const detection = await faceapi.detectSingleFace(webcam)
+                    .withFaceLandmarks()
+                    .withFaceDescriptor();
+
+                if (!detection) {
+                    alert("No face detected! Please sit in good light and face the camera directly.");
+                    statusText.innerText = "Scan failed. Try again!";
+                    scanBtn.disabled = false;
+                    scanBtn.innerText = "Scan Face & Verify";
+                    return;
+                }
+
+                const faceDescriptorArray = Array.from(detection.descriptor);
+
+                // Strict One Person = One ID Check
+                const duplicateFound = await checkDuplicateFace(detection.descriptor);
+
+                if (duplicateFound) {
+                    alert("⛔ REJECTED: An account with this face ALREADY EXISTS in Secret Date Nepal!\n\nMultiple accounts are NOT allowed. Please login with your original account.");
+                    statusText.innerText = "Duplicate Account Detected! Blocked.";
+                    scanBtn.innerText = "Account Blocked";
+                    return;
+                }
+
+                // Save Face Descriptor & Mark Verified
                 await setDoc(doc(db, "users", currentUser.uid), {
                     faceVerified: true,
                     faceDescriptor: faceDescriptorArray,
@@ -188,7 +192,7 @@
                 alert("Face Verification Successful! 🎉");
                 window.location.href = 'profile-setup.html';
             } catch (err) {
-                alert("Database Error: " + err.message);
+                alert("Scan Error: " + err.message);
                 scanBtn.disabled = false;
                 scanBtn.innerText = "Scan Face & Verify";
             }
