@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -169,7 +169,7 @@
         .chat-input-area input { flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); padding: 10px 15px; border-radius: 20px; color: #fff; outline: none; }
         .chat-input-area button { background: #ff3366; border: none; color: white; padding: 8px 18px; border-radius: 20px; font-weight: 600; cursor: pointer; }
 
-        .profile-card { background: rgba(22, 22, 32, 0.8); border: 1px solid rgba(255, 51, 102, 0.2); border-radius: 20px; overflow: hidden; text-align: center; padding-bottom: 25px; }
+        .profile-card { background: rgba(22, 22, 32, 0.8); border: 1px solid rgba(255, 51, 102, 0.2); border-radius: 20px; overflow: hidden; text-align: center; padding-bottom: 25px; margin-bottom: 25px; }
         .cover-img { width: 100%; height: 180px; object-fit: cover; }
         .profile-img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid #ff3366; margin-top: -60px; }
     </style>
@@ -241,6 +241,12 @@
                     </label>
                 </div>
             </div>
+
+            <!-- MY POSTS SECTION -->
+            <h3 style="color:#ff3366; margin-bottom: 15px; font-size:1.2rem;">📸 My Published Posts</h3>
+            <div id="my-posts-container">
+                <!-- User's own posts will be rendered here -->
+            </div>
         </div>
 
     </div>
@@ -302,6 +308,7 @@
                 if (userDoc.exists()) {
                     currentUserData = userDoc.data();
                     renderProfileTab();
+                    loadMyPosts();
                     loadMatches(currentUserData.lookingFor);
                     loadPosts();
                 } else {
@@ -332,7 +339,6 @@
             if(file) document.getElementById('file-name-display').innerText = `Selected: ${file.name}`;
         });
 
-        // HIGH EFFICIENCY COMPRESSION (Max 500px, 60% quality) PREVENTS FIRESTORE BLOCKS
         function compressImage(file) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
@@ -482,7 +488,7 @@
             });
         }
 
-        // PUBLISH POST FIX (SUPER FAST COMPRESSION & INSTANT PUBLISH)
+        // PUBLISH POST
         document.getElementById('publish-post-btn').addEventListener('click', async () => {
             const text = document.getElementById('post-text').value.trim();
             const photoFile = document.getElementById('post-photo-upload').files[0];
@@ -518,7 +524,6 @@
                 document.getElementById('file-name-display').innerText = '';
                 
                 alert("Post Published Successfully! 🎉");
-                loadPosts();
             } catch (err) {
                 alert("Error Publishing Post: " + err.message);
             } finally {
@@ -527,7 +532,7 @@
             }
         });
 
-        // REALTIME POST LISTENER (Auto Refresh Posts)
+        // REALTIME POST LISTENER (GLOBAL FEED)
         function loadPosts() {
             const container = document.getElementById('feed-posts-container');
             const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
@@ -561,6 +566,37 @@
                         adCard.innerHTML = `📢 <b>Sponsored Advertisement Space</b>`;
                         container.appendChild(adCard);
                     }
+                });
+            });
+        }
+
+        // REALTIME MY POSTS LISTENER (USER PROFILE SECTION)
+        function loadMyPosts() {
+            const container = document.getElementById('my-posts-container');
+            const q = query(collection(db, "posts"), where("userId", "==", currentUserId), orderBy("createdAt", "desc"));
+            
+            onSnapshot(q, (snapshot) => {
+                container.innerHTML = "";
+                if(snapshot.empty) {
+                    container.innerHTML = "<p style='color:#aaa; text-align:center;'>You haven't posted anything yet.</p>";
+                    return;
+                }
+                snapshot.forEach((docSnap) => {
+                    const p = docSnap.data();
+                    const card = document.createElement('div');
+                    card.className = 'post-card';
+                    card.innerHTML = `
+                        <div class="post-header">
+                            <img src="${p.userPhoto || 'https://via.placeholder.com/48'}" alt="User">
+                            <div>
+                                <h4>${p.userName}</h4>
+                                <span>${p.sdnpId || 'SDNP'}</span>
+                            </div>
+                        </div>
+                        ${p.text ? `<p class="post-text">${p.text}</p>` : ''}
+                        ${p.photoUrl ? `<img src="${p.photoUrl}" class="post-img">` : ''}
+                    `;
+                    container.appendChild(card);
                 });
             });
         }
