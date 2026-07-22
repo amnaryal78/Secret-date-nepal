@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secret Date Nepal - Welcome</title>
     <link rel="stylesheet" href="style.css">
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        // Your Public Key Added
+        emailjs.init("zMb5_t4JWR3_hV5as"); 
+    </script>
 </head>
 <body>
     <div class="auth-container">
@@ -27,27 +33,42 @@
             <h3>Create New Account</h3>
             <form id="signup-form">
                 <input type="email" id="signup-email" placeholder="Email Address" required>
-                <input type="password" id="signup-password" placeholder="Strong Password (Min. 6 characters)" required>
-                <button type="submit">Register</button>
+                <input type="password" id="signup-password" placeholder="Password (Min. 6 characters)" required>
+                <button type="submit" id="signup-btn">Send OTP Code</button>
             </form>
             <p>Already have an account? <a href="#" id="go-to-login">Login Here</a></p>
+        </div>
+
+        <!-- OTP VERIFICATION BOX -->
+        <div id="otp-box" style="display: none;">
+            <h3>Enter Verification Code</h3>
+            <p style="font-size:0.85rem; color:#aaa;">We sent a 6-digit code to your email.</p>
+            <form id="otp-form">
+                <input type="text" id="otp-input" placeholder="6-Digit OTP Code" maxlength="6" required style="text-align:center; letter-spacing: 5px; font-size: 1.2rem;">
+                <button type="submit" id="verify-otp-btn">Verify & Continue</button>
+            </form>
+            <p><a href="#" id="resend-otp">Resend OTP</a></p>
         </div>
     </div>
 
     <script type="module">
-        import { auth } from './firebase-config.js';
+        import { auth, db } from './firebase-config.js';
         import { 
             signInWithEmailAndPassword, 
             createUserWithEmailAndPassword,
-            sendPasswordResetEmail,
-            sendEmailVerification,
-            signOut
+            sendPasswordResetEmail
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const loginBox = document.getElementById('login-box');
         const signupBox = document.getElementById('signup-box');
-        
-        // Switch between login and signup
+        const otpBox = document.getElementById('otp-box');
+
+        let generatedOTP = null;
+        let tempUserEmail = "";
+        let tempUserPassword = "";
+
+        // Switch Forms
         document.getElementById('go-to-signup').addEventListener('click', (e) => {
             e.preventDefault();
             loginBox.style.display = 'none';
@@ -57,6 +78,7 @@
         document.getElementById('go-to-login').addEventListener('click', (e) => {
             e.preventDefault();
             signupBox.style.display = 'none';
+            otpBox.style.display = 'none';
             loginBox.style.display = 'block';
         });
 
@@ -66,61 +88,110 @@
             const email = prompt("Please enter your registered email address:");
             if (email) {
                 sendPasswordResetEmail(auth, email)
-                    .then(() => {
-                        alert("Password reset email sent! Please check your inbox or spam folder.");
-                    })
-                    .catch((error) => {
-                        alert("Error sending reset email: " + error.message);
-                    });
+                    .then(() => alert("Password reset link sent to your email!"))
+                    .catch((err) => alert("Error: " + err.message));
             }
         });
 
-        // Sign Up with Email Verification Logic
-        const signupForm = document.getElementById('signup-form');
-        signupForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('signup-email').value;
-            const password = document.getElementById('signup-password').value;
+        // Generate 6-Digit Code
+        function generate6DigitOTP() {
+            return Math.floor(100000 + Math.random() * 900000).toString();
+        }
 
-            createUserWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    const user = userCredential.user;
-                    
-                    sendEmailVerification(user)
-                        .then(() => {
-                            alert("Account created successfully! A verification link has been sent to your email. Please verify your email before logging in.");
-                            signOut(auth).then(() => {
-                                signupBox.style.display = 'none';
-                                loginBox.style.display = 'block';
-                            });
-                        });
-                })
-                .catch((error) => {
-                    alert("Registration failed: " + error.message);
-                });
+        // Send OTP via EmailJS
+        async function sendOTPEmail(email, otp) {
+            const templateParams = {
+                to_email: email,
+                otp_code: otp
+            };
+            
+            // Your Service ID: service_e4qw80t & Template ID: template_pf3avf8
+            return emailjs.send('service_e4qw80t', 'template_pf3avf8', templateParams);
+        }
+
+        // Sign Up Submit (Sends OTP first)
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            tempUserEmail = document.getElementById('signup-email').value;
+            tempUserPassword = document.getElementById('signup-password').value;
+            
+            const btn = document.getElementById('signup-btn');
+            btn.disabled = true;
+            btn.innerText = "Sending Code...";
+
+            generatedOTP = generate6DigitOTP();
+
+            try {
+                await sendOTPEmail(tempUserEmail, generatedOTP);
+                alert("6-Digit OTP Code sent to " + tempUserEmail);
+                signupBox.style.display = 'none';
+                otpBox.style.display = 'block';
+            } catch (error) {
+                alert("Failed to send OTP: " + JSON.stringify(error));
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Send OTP Code";
+            }
         });
 
-        // Login Logic (Redirects to face-scan.html)
-        const loginForm = document.getElementById('login-form');
-        loginForm.addEventListener('submit', (e) => {
+        // Resend OTP Link
+        document.getElementById('resend-otp').addEventListener('click', async (e) => {
+            e.preventDefault();
+            generatedOTP = generate6DigitOTP();
+            try {
+                await sendOTPEmail(tempUserEmail, generatedOTP);
+                alert("New OTP Code sent to " + tempUserEmail);
+            } catch (error) {
+                alert("Resend failed: " + JSON.stringify(error));
+            }
+        });
+
+        // Verify OTP Box and Create Firebase Account
+        document.getElementById('otp-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const userEnteredOTP = document.getElementById('otp-input').value.trim();
+
+            if (userEnteredOTP === generatedOTP) {
+                const btn = document.getElementById('verify-otp-btn');
+                btn.disabled = true;
+                btn.innerText = "Creating Account...";
+
+                try {
+                    const userCredential = await createUserWithEmailAndPassword(auth, tempUserEmail, tempUserPassword);
+                    const user = userCredential.user;
+
+                    // Store verification status in Firestore
+                    await setDoc(doc(db, "users", user.uid), {
+                        email: tempUserEmail,
+                        emailVerified: true,
+                        createdAt: new Date()
+                    }, { merge: true });
+
+                    alert("Verification Successful! Redirecting to Face Scan...");
+                    window.location.href = 'face-scan.html';
+                } catch (error) {
+                    alert("Account Creation Failed: " + error.message);
+                    btn.disabled = false;
+                    btn.innerText = "Verify & Continue";
+                }
+            } else {
+                alert("Invalid OTP Code! Please check your email again.");
+            }
+        });
+
+        // Login Submit
+        document.getElementById('login-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
 
             signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    const user = userCredential.user;
-
-                    if (user.emailVerified) {
-                        alert("Login successful! Redirecting to Face Scan...");
-                        window.location.href = 'face-scan.html';
-                    } else {
-                        alert("Please verify your email first! Check your inbox for the verification link.");
-                        signOut(auth);
-                    }
+                .then(() => {
+                    alert("Login Successful!");
+                    window.location.href = 'face-scan.html';
                 })
                 .catch((error) => {
-                    alert("Login failed: " + error.message);
+                    alert("Login Failed: " + error.message);
                 });
         });
     </script>
