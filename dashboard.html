@@ -7,122 +7,176 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: #0b0c10; color: #ffffff; min-height: 100vh; padding-bottom: 80px; }
+        
+        body { 
+            background: #090a0f; 
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(255, 51, 102, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(122, 0, 255, 0.15) 0px, transparent 50%);
+            color: #ffffff; 
+            min-height: 100vh; 
+            padding-bottom: 80px; 
+        }
 
-        /* Top Bar Navigation */
+        /* VIBRANT NAVBAR */
         .navbar {
             display: flex; justify-content: space-between; align-items: center;
-            background: rgba(18, 18, 24, 0.9); backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 12px 25px; sticky: top; top: 0; z-index: 100;
+            background: rgba(18, 18, 28, 0.85); backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 51, 102, 0.2);
+            padding: 14px 30px; position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
-        .navbar h2 { color: #ff3366; font-size: 1.4rem; font-weight: 700; }
-        .nav-links { display: flex; gap: 15px; }
+        .navbar h2 { 
+            background: linear-gradient(45deg, #ff3366, #ff6b81, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.5rem; font-weight: 700; 
+        }
+        .nav-links { display: flex; gap: 12px; }
         .nav-btn {
-            background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);
-            color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 0.85rem;
-            cursor: pointer; transition: 0.3s;
+            background: rgba(255, 255, 255, 0.05); 
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff; padding: 8px 18px; border-radius: 20px; font-size: 0.88rem;
+            font-weight: 500; cursor: pointer; transition: 0.3s;
         }
-        .nav-btn.active, .nav-btn:hover { background: #ff3366; border-color: #ff3366; }
+        .nav-btn.active, .nav-btn:hover { 
+            background: linear-gradient(45deg, #ff3366, #ff0055); 
+            border-color: #ff3366; 
+            box-shadow: 0 0 15px rgba(255, 51, 102, 0.5);
+        }
 
-        /* AD SPACE BANNER TOP */
+        /* AD SPACE BANNER */
         .ad-banner-top {
-            background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 255, 255, 0.2);
-            margin: 15px auto; max-width: 800px; text-align: center; padding: 15px;
-            color: #777; font-size: 0.8rem; border-radius: 12px;
+            background: rgba(255, 51, 102, 0.05); 
+            border: 1px dashed rgba(255, 51, 102, 0.3);
+            margin: 20px auto; max-width: 800px; text-align: center; padding: 12px;
+            color: #ff6b81; font-size: 0.85rem; border-radius: 12px;
         }
 
-        .container { max-width: 900px; margin: 0 auto; padding: 0 15px; }
-        .tab-content { display: none; margin-top: 20px; }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 15px; }
+        .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* SEARCH BAR */
-        .search-box {
-            display: flex; gap: 10px; margin-bottom: 20px;
+        /* VIBRANT CREATE POST CARD */
+        .create-post {
+            background: rgba(22, 22, 32, 0.8); 
+            border: 1px solid rgba(255, 51, 102, 0.25);
+            backdrop-filter: blur(15px);
+            padding: 22px; border-radius: 20px; margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
         }
-        .search-box input {
-            flex: 1; padding: 12px 15px; background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 12px; color: #fff; outline: none;
+        .create-post h3 {
+            font-size: 1.1rem; color: #ff3366; margin-bottom: 12px;
+            display: flex; align-items: center; gap: 8px;
         }
-        .search-box button {
-            background: #ff3366; border: none; color: white; padding: 0 20px; border-radius: 12px; font-weight: 600; cursor: pointer;
+        .create-post textarea {
+            width: 100%; padding: 14px; margin-bottom: 12px; 
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12); 
+            border-radius: 14px; color: #fff; outline: none; font-size: 0.95rem;
+            transition: 0.3s;
+        }
+        .create-post textarea:focus {
+            border-color: #ff3366; box-shadow: 0 0 10px rgba(255, 51, 102, 0.3);
+        }
+        .post-file-label {
+            display: inline-block; background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2); padding: 8px 16px;
+            border-radius: 12px; color: #ccc; font-size: 0.85rem; cursor: pointer;
+            transition: 0.3s; margin-bottom: 12px;
+        }
+        .post-file-label:hover { background: rgba(255, 51, 102, 0.2); color: #fff; }
+
+        .create-post button {
+            width: 100%;
+            background: linear-gradient(45deg, #ff3366, #ff0055); 
+            border: none; color: white; padding: 12px; border-radius: 14px; 
+            font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 51, 102, 0.4);
+        }
+        .create-post button:hover {
+            transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 51, 102, 0.6);
         }
 
-        /* GRID CARDS */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        /* VIBRANT POST CARD */
+        .post-card {
+            background: rgba(22, 22, 32, 0.75); 
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px; padding: 20px; margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); transition: 0.3s;
+        }
+        .post-card:hover {
+            border-color: rgba(255, 51, 102, 0.4);
+        }
+        .post-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .post-header img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid #ff3366; }
+        .post-header h4 { font-size: 1rem; color: #fff; }
+        .post-header span { font-size: 0.78rem; color: #ff3366; font-weight: 600; }
+        .post-text { font-size: 0.95rem; color: #e0e0e0; line-height: 1.5; margin-bottom: 10px; }
+        .post-card img.post-img { width: 100%; max-height: 420px; object-fit: cover; border-radius: 14px; margin-top: 10px; }
+
+        /* SEARCH BAR & GRID CARDS */
+        .search-box { display: flex; gap: 10px; margin-bottom: 20px; }
+        .search-box input {
+            flex: 1; padding: 12px 16px; background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 14px; color: #fff; outline: none;
+        }
+        .search-box button {
+            background: linear-gradient(45deg, #ff3366, #ff0055); border: none; color: white; 
+            padding: 0 22px; border-radius: 14px; font-weight: 600; cursor: pointer;
+        }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
         .card {
-            background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(22, 22, 32, 0.8); border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px; padding: 20px; text-align: center; position: relative; transition: 0.3s;
         }
-        .card:hover { transform: translateY(-5px); border-color: #ff3366; }
+        .card:hover { transform: translateY(-5px); border-color: #ff3366; box-shadow: 0 10px 25px rgba(255, 51, 102, 0.2); }
         .card img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #ff3366; margin-bottom: 10px; }
-        .card h4 { font-size: 1.1rem; }
-        .card-id { font-size: 0.75rem; color: #ff3366; font-weight: 600; margin-bottom: 5px; }
+        .card-id { font-size: 0.8rem; color: #ff3366; font-weight: 600; }
         .msg-btn {
-            width: 100%; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white; padding: 8px; border-radius: 12px; font-weight: 500; cursor: pointer; margin-top: 10px; position: relative;
+            width: 100%; background: rgba(255, 51, 102, 0.15); border: 1px solid rgba(255, 51, 102, 0.3);
+            color: white; padding: 10px; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 12px; transition: 0.3s;
         }
         .msg-btn:hover { background: #ff3366; }
 
-        /* UNREAD BADGE */
         .unread-badge {
             position: absolute; top: -5px; right: -5px; background: #ff0055; color: white;
-            font-size: 0.75rem; font-weight: 700; width: 20px; height: 20px; border-radius: 50%;
+            font-size: 0.75rem; font-weight: 700; width: 22px; height: 22px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px rgba(255,0,85,0.8);
         }
 
-        /* FEED SECTION */
-        .create-post {
-            background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 20px; border-radius: 16px; margin-bottom: 25px;
-        }
-        .create-post input, .create-post textarea {
-            width: 100%; padding: 10px; margin-bottom: 10px; background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; color: #fff; outline: none;
-        }
-        .create-post button {
-            background: #ff3366; border: none; color: white; padding: 8px 20px; border-radius: 10px; font-weight: 600; cursor: pointer;
-        }
-
-        .post-card {
-            background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px; padding: 20px; margin-bottom: 20px;
-        }
-        .post-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-        .post-header img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
-        .post-content img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 12px; margin: 12px 0; }
-        .post-actions { display: flex; gap: 20px; font-size: 0.9rem; color: #ccc; cursor: pointer; }
-
-        /* RAINBOW CHAT MODAL */
+        /* RAINBOW REALTIME CHAT MODAL */
         .chat-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.82); backdrop-filter: blur(12px);
             justify-content: center; align-items: center; z-index: 1000;
         }
         .chat-box {
-            background: #121218; border: 2px solid; border-image: linear-gradient(45deg, #ff0055, #7a00ff, #00e5ff) 1;
+            background: #101118; border: 2px solid; border-image: linear-gradient(45deg, #ff0055, #7a00ff, #00e5ff) 1;
             width: 420px; max-width: 92%; height: 560px; border-radius: 20px; display: flex; flex-direction: column;
-            box-shadow: 0 0 30px rgba(255, 51, 102, 0.3); overflow: hidden;
+            box-shadow: 0 0 35px rgba(255, 51, 102, 0.35); overflow: hidden;
         }
         .chat-header {
-            background: rgba(255, 255, 255, 0.05); padding: 15px; display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255, 255, 255, 0.05); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;
         }
         .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .message { max-width: 75%; padding: 10px 15px; border-radius: 16px; font-size: 0.9rem; }
-        .message.sent { align-self: flex-end; background: linear-gradient(135deg, #ff3366, #b026ff); color: #fff; }
-        .message.received { align-self: flex-start; background: rgba(255, 255, 255, 0.1); color: #fff; }
+        .message { max-width: 75%; padding: 10px 16px; border-radius: 16px; font-size: 0.9rem; line-height: 1.4; }
+        .message.sent { align-self: flex-end; background: linear-gradient(135deg, #ff3366, #b026ff); color: #fff; box-shadow: 0 4px 12px rgba(255, 51, 102, 0.3); }
+        .message.received { align-self: flex-start; background: rgba(255, 255, 255, 0.08); color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); }
         .sticker-msg { font-size: 2.2rem; background: none !important; box-shadow: none !important; }
 
-        .sticker-bar { display: flex; gap: 8px; padding: 8px 15px; background: rgba(255,255,255,0.03); overflow-x: auto; }
-        .sticker-item { font-size: 1.4rem; cursor: pointer; transition: 0.2s; }
+        .sticker-bar { display: flex; gap: 10px; padding: 10px 15px; background: rgba(255,255,255,0.03); overflow-x: auto; }
+        .sticker-item { font-size: 1.5rem; cursor: pointer; transition: 0.2s; }
         .sticker-item:hover { transform: scale(1.3); }
 
         .chat-input-area { display: flex; padding: 12px; background: rgba(255,255,255,0.05); gap: 8px; }
         .chat-input-area input { flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); padding: 10px 15px; border-radius: 20px; color: #fff; outline: none; }
-        .chat-input-area button { background: #ff3366; border: none; color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600; cursor: pointer; }
+        .chat-input-area button { background: #ff3366; border: none; color: white; padding: 8px 18px; border-radius: 20px; font-weight: 600; cursor: pointer; }
 
-        /* PROFILE TAB */
-        .profile-card { background: rgba(255, 255, 255, 0.04); border-radius: 20px; overflow: hidden; text-align: center; padding-bottom: 25px; }
+        /* PROFILE CARD */
+        .profile-card { background: rgba(22, 22, 32, 0.8); border: 1px solid rgba(255, 51, 102, 0.2); border-radius: 20px; overflow: hidden; text-align: center; padding-bottom: 25px; }
         .cover-img { width: 100%; height: 180px; object-fit: cover; }
         .profile-img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid #ff3366; margin-top: -60px; }
     </style>
@@ -136,13 +190,13 @@
             <button class="nav-btn active" onclick="switchTab('feed-tab', this)">🏠 Feed</button>
             <button class="nav-btn" onclick="switchTab('matches-tab', this)">💕 Matches</button>
             <button class="nav-btn" onclick="switchTab('profile-tab', this)">👤 Profile</button>
-            <button class="nav-btn" id="logout-btn" style="background:#333;">Logout</button>
+            <button class="nav-btn" id="logout-btn" style="background:#222;">Logout</button>
         </div>
     </div>
 
     <!-- TOP AD BANNER PLACEHOLDER -->
     <div class="ad-banner-top">
-        📢 <b>Advertisement Space (728x90 Banner)</b>
+        📢 <b>Sponsored Advertisement Space (728x90 Banner)</b>
     </div>
 
     <div class="container">
@@ -151,8 +205,15 @@
         <div id="feed-tab" class="tab-content active">
             <div class="create-post">
                 <h3>Create New Post 📸</h3>
-                <textarea id="post-text" rows="2" placeholder="Share your secret thoughts or romantic vibe..."></textarea>
-                <input type="url" id="post-photo" placeholder="Photo/Image URL (optional)">
+                <textarea id="post-text" rows="3" placeholder="Share your secret thoughts or romantic vibe..."></textarea>
+                
+                <!-- ONLY DIRECT FILE UPLOAD (NO URL LINK) -->
+                <label class="post-file-label">
+                    📷 Upload Photo from Device
+                    <input type="file" id="post-photo-upload" accept="image/*" style="display:none;">
+                </label>
+                <span id="file-name-display" style="font-size:0.8rem; color:#ff3366; margin-left:10px;"></span>
+
                 <button id="publish-post-btn">Publish Post 🚀</button>
             </div>
 
@@ -164,7 +225,7 @@
         <!-- 2. MATCHES TAB -->
         <div id="matches-tab" class="tab-content">
             <div class="search-box">
-                <input type="text" id="search-id-input" placeholder="Search by SDNP ID (Example: SDNP-Aman)...">
+                <input type="text" id="search-id-input" placeholder="Search by Username (Example: SDNPnamita)...">
                 <button id="search-btn">Search</button>
             </div>
 
@@ -180,11 +241,11 @@
                 <img id="my-photo" class="profile-img" src="https://via.placeholder.com/120" alt="Profile">
                 <h3 id="my-name" style="margin-top: 10px;">Loading...</h3>
                 <p id="my-sdnp-id" class="card-id">SDNP-ID</p>
-                <p id="my-location" style="font-size:0.85rem; color:#ccc;">📍 Nepal</p>
+                <p id="my-location" style="font-size:0.85rem; color:#ccc; margin-top:4px;">📍 Nepal</p>
                 <p id="my-bio" style="margin: 15px 0; color:#aaa;">"No bio yet."</p>
 
-                <div style="margin-top: 20px;">
-                    <label style="cursor: pointer; background: rgba(255,255,255,0.08); padding: 10px 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);">
+                <div>
+                    <label style="cursor: pointer; background: rgba(255,255,255,0.08); padding: 10px 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); font-size:0.85rem;">
                         👁️ Invisible Mode (Hide Online Status): 
                         <input type="checkbox" id="invisible-toggle">
                     </label>
@@ -198,10 +259,10 @@
     <div id="chat-modal" class="chat-modal">
         <div class="chat-box">
             <div class="chat-header">
-                <h4 id="chat-user-name">Chatting...</h4>
+                <h4 id="chat-user-name" style="color:#ff3366;">Chatting...</h4>
                 <div>
                     <button id="block-user-btn" style="background:#ff0055; border:none; color:white; padding:4px 10px; border-radius:10px; font-size:0.75rem; cursor:pointer;">Block User</button>
-                    <span id="close-chat-btn" style="cursor:pointer; font-size:1.5rem; margin-left:10px;">&times;</span>
+                    <span id="close-chat-btn" style="cursor:pointer; font-size:1.5rem; margin-left:10px; color:#fff;">&times;</span>
                 </div>
             </div>
 
@@ -230,7 +291,7 @@
 
     <script type="module">
         import { auth, db } from './firebase-config.js';
-        import { doc, getDoc, collection, query, where, getDocs, addDoc, onSnapshot, orderBy, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { doc, getDoc, collection, query, where, getDocs, addDoc, onSnapshot, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         let currentUserId = null;
@@ -279,6 +340,33 @@
             });
         }
 
+        // Display Uploaded Photo File Name
+        document.getElementById('post-photo-upload').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if(file) document.getElementById('file-name-display').innerText = `Selected: ${file.name}`;
+        });
+
+        // Image Compression
+        function compressImage(file, maxWidth) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const ratio = maxWidth / img.width;
+                        canvas.width = maxWidth;
+                        canvas.height = img.height * ratio;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        resolve(canvas.toDataURL('image/jpeg', 0.8));
+                    };
+                };
+            });
+        }
+
         // LOAD MATCHES
         async function loadMatches(lookingFor) {
             const matchesGrid = document.getElementById('matches-grid');
@@ -295,7 +383,7 @@
                         <img src="${profile.photoUrl || 'https://via.placeholder.com/100'}" alt="User">
                         <h4>${profile.fullName}, ${profile.age}</h4>
                         <p class="card-id">${profile.sdnpId || 'SDNP'}</p>
-                        <p style="font-size:0.8rem; color:#aaa;">📍 ${profile.city}, ${profile.country}</p>
+                        <p style="font-size:0.8rem; color:#aaa; margin-top:4px;">📍 ${profile.city}, ${profile.country}</p>
                         <button class="msg-btn" onclick="openChatBox('${docSnap.id}', '${profile.fullName}')">
                             Chat 💬 <span class="unread-badge" id="unread-${docSnap.id}" style="display:none;">0</span>
                         </button>
@@ -327,7 +415,7 @@
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.innerHTML = `
-                    <img src="${profile.photoUrl}" alt="User">
+                    <img src="${profile.photoUrl || 'https://via.placeholder.com/100'}" alt="User">
                     <h4>${profile.fullName}, ${profile.age}</h4>
                     <p class="card-id">${profile.sdnpId}</p>
                     <button class="msg-btn" onclick="openChatBox('${docSnap.id}', '${profile.fullName}')">Chat 💬</button>
@@ -400,15 +488,29 @@
         // CREATE POST & FEED
         document.getElementById('publish-post-btn').addEventListener('click', async () => {
             const text = document.getElementById('post-text').value.trim();
-            const photo = document.getElementById('post-photo').value.trim();
-            if(!text && !photo) return;
+            const photoFile = document.getElementById('post-photo-upload').files[0];
+            
+            if(!text && !photoFile) return;
+
+            const btn = document.getElementById('publish-post-btn');
+            btn.disabled = true;
+            btn.innerText = "Publishing Post...";
+
+            let photoUrl = "";
+            if (photoFile) {
+                photoUrl = await compressImage(photoFile, 700);
+            }
 
             await addDoc(collection(db, "posts"), {
                 userId: currentUserId, userName: currentUserData.fullName, userPhoto: currentUserData.photoUrl,
-                sdnpId: currentUserData.sdnpId, text: text, photoUrl: photo, likes: [], createdAt: new Date()
+                sdnpId: currentUserData.sdnpId, text: text, photoUrl: photoUrl, likes: [], createdAt: new Date()
             });
+
             document.getElementById('post-text').value = '';
-            document.getElementById('post-photo').value = '';
+            document.getElementById('post-photo-upload').value = '';
+            document.getElementById('file-name-display').innerText = '';
+            btn.disabled = false;
+            btn.innerText = "Publish Post 🚀";
             loadPosts();
         });
 
@@ -426,23 +528,22 @@
                 card.className = 'post-card';
                 card.innerHTML = `
                     <div class="post-header">
-                        <img src="${p.userPhoto || 'https://via.placeholder.com/45'}" alt="User">
+                        <img src="${p.userPhoto || 'https://via.placeholder.com/48'}" alt="User">
                         <div>
                             <h4>${p.userName}</h4>
-                            <span style="font-size:0.75rem; color:#ff3366;">${p.sdnpId || 'SDNP'}</span>
+                            <span>${p.sdnpId || 'SDNP'}</span>
                         </div>
                     </div>
-                    <p>${p.text}</p>
-                    ${p.photoUrl ? `<img src="${p.photoUrl}" style="width:100%; border-radius:12px; margin-top:10px;">` : ''}
+                    ${p.text ? `<p class="post-text">${p.text}</p>` : ''}
+                    ${p.photoUrl ? `<img src="${p.photoUrl}" class="post-img">` : ''}
                 `;
                 container.appendChild(card);
 
-                // Insert In-Feed Ad Placeholder every 3 posts
                 if (count % 3 === 0) {
                     const adCard = document.createElement('div');
                     adCard.className = 'post-card';
                     adCard.style.textAlign = 'center';
-                    adCard.style.color = '#777';
+                    adCard.style.color = '#ff6b81';
                     adCard.innerHTML = `📢 <b>Sponsored Advertisement Space</b>`;
                     container.appendChild(adCard);
                 }
