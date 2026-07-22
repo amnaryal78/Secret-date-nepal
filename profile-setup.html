@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Setup - Secret Date Nepal</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .profile-img-container {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 15px auto;
+        }
+        .profile-img-container img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #e91e63;
+        }
+        .file-input-btn {
+            margin-top: 5px;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <h2>Setup Profile 👤</h2>
+        <form id="profile-form">
+            <!-- Profile Photo Preview -->
+            <div class="profile-img-container">
+                <img id="profile-preview" src="https://via.placeholder.com/110" alt="Profile Picture">
+            </div>
+            <label style="font-size:0.85rem; color:#aaa;">Upload Profile Picture:</label>
+            <input type="file" id="profile-pic-input" accept="image/*" class="file-input-btn" required>
+
+            <input type="text" id="full-name" placeholder="Full Name" required>
+            <div style="display: flex; gap: 10px;">
+                <input type="number" id="age" placeholder="Age" min="18" required style="width: 50%;">
+                <select id="gender" required style="width: 50%;">
+                    <option value="">Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            <input type="text" id="country" placeholder="Country (e.g. Nepal)" required>
+            <input type="text" id="city" placeholder="City (e.g. Kathmandu)" required>
+            <select id="looking-for" required>
+                <option value="">I am Looking For...</option>
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+            </select>
+            <textarea id="bio" placeholder="Short Bio..." rows="3" required></textarea>
+            <button type="submit" id="save-btn">Save Profile & Continue</button>
+        </form>
+    </div>
+
+    <script type="module">
+        import { auth, db } from './firebase-config.js';
+        import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // ImgBB API Key यहाँ राखिसकिएको छ
+        const IMGBB_API_KEY = "23d74b40855627150659eb9146d00f3a";
+
+        let currentUser = null;
+        const picInput = document.getElementById('profile-pic-input');
+        const previewImg = document.getElementById('profile-preview');
+
+        // Check Login State
+        onAuthStateChanged(auth, async (user) => {
+            if (user) { 
+                currentUser = user; 
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists() && userDoc.data().photoUrl) {
+                    previewImg.src = userDoc.data().photoUrl;
+                    picInput.removeAttribute('required');
+                }
+            } else { 
+                window.location.href = 'index.html'; 
+            }
+        });
+
+        // Image Preview
+        picInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                previewImg.src = URL.createObjectURL(file);
+            }
+        });
+
+        // Upload to ImgBB Function
+        async function uploadImageToImgBB(file) {
+            const formData = new FormData();
+            formData.append("image", file);
+
+            const response = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                return data.data.url;
+            } else {
+                throw new Error("Photo upload failed!");
+            }
+        }
+
+        // Save Profile
+        document.getElementById('profile-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('save-btn');
+            btn.disabled = true;
+            btn.innerText = "Uploading Photo...";
+
+            try {
+                let photoUrl = previewImg.src;
+                const file = picInput.files[0];
+
+                if (file) {
+                    photoUrl = await uploadImageToImgBB(file);
+                }
+
+                btn.innerText = "Saving Profile...";
+
+                await setDoc(doc(db, "users", currentUser.uid), {
+                    fullName: document.getElementById('full-name').value,
+                    age: parseInt(document.getElementById('age').value),
+                    gender: document.getElementById('gender').value,
+                    country: document.getElementById('country').value,
+                    city: document.getElementById('city').value,
+                    lookingFor: document.getElementById('looking-for').value,
+                    bio: document.getElementById('bio').value,
+                    photoUrl: photoUrl,
+                    profileCompleted: true,
+                    updatedAt: new Date()
+                }, { merge: true });
+
+                alert("Profile Saved Successfully!");
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                alert("Error: " + error.message);
+                btn.disabled = false;
+                btn.innerText = "Save Profile & Continue";
+            }
+        });
+    </script>
+</body>
+</html>

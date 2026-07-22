@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,7 +39,9 @@
         import { 
             signInWithEmailAndPassword, 
             createUserWithEmailAndPassword,
-            sendPasswordResetEmail
+            sendPasswordResetEmail,
+            sendEmailVerification,
+            signOut
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const loginBox = document.getElementById('login-box');
@@ -74,7 +75,7 @@
             }
         });
 
-        // Sign Up Logic
+        // Sign Up with Email Verification Logic
         const signupForm = document.getElementById('signup-form');
         signupForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -83,16 +84,23 @@
 
             createUserWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
-                    alert("Account successfully created! Please login now.");
-                    signupBox.style.display = 'none';
-                    loginBox.style.display = 'block';
+                    const user = userCredential.user;
+                    
+                    sendEmailVerification(user)
+                        .then(() => {
+                            alert("Account created successfully! A verification link has been sent to your email. Please verify your email before logging in.");
+                            signOut(auth).then(() => {
+                                signupBox.style.display = 'none';
+                                loginBox.style.display = 'block';
+                            });
+                        });
                 })
                 .catch((error) => {
                     alert("Registration failed: " + error.message);
                 });
         });
 
-        // Login Logic
+        // Login Logic (Fixed Redirect to face-scan.html)
         const loginForm = document.getElementById('login-form');
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -101,8 +109,15 @@
 
             signInWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
-                    alert("Login successful! Redirecting to profile...");
-                    window.location.href = 'profile.html';
+                    const user = userCredential.user;
+
+                    if (user.emailVerified) {
+                        alert("Login successful! Redirecting to Face Scan...");
+                        window.location.href = 'face-scan.html'; // Fixed link!
+                    } else {
+                        alert("Please verify your email first! Check your inbox for the verification link.");
+                        signOut(auth);
+                    }
                 })
                 .catch((error) => {
                     alert("Login failed: " + error.message);

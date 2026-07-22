@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Secret Date Nepal</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { display: block; padding: 20px; background-color: #121212; }
+        .header { display: flex; justify-content: space-between; align-items: center; background: #1e1e1e; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .card { background: #1e1e1e; padding: 15px; border-radius: 10px; text-align: center; border: 1px solid #333; }
+        .card img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #e91e63; }
+        .badge { background: #e91e63; padding: 3px 8px; border-radius: 12px; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h2>Secret Date Nepal 🤫</h2>
+        <div>
+            <span id="user-name">Loading...</span>
+            <button id="logout-btn" style="width: auto; padding: 5px 15px; margin-left: 10px;">Logout</button>
+        </div>
+    </div>
+
+    <h3>Matches For You 💕</h3>
+    <div class="grid" id="matches-grid">
+        <p>Searching for potential matches...</p>
+    </div>
+
+    <script type="module">
+        import { auth, db } from './firebase-config.js';
+        import { doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const matchesGrid = document.getElementById('matches-grid');
+        const userNameSpan = document.getElementById('user-name');
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Fetch logged-in user profile
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    userNameSpan.innerText = userData.fullName || "User";
+                    
+                    // Load Opposites Matches
+                    loadMatches(userData.lookingFor, user.uid);
+                } else {
+                    window.location.href = 'profile-setup.html';
+                }
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Query Opposite Gender Profiles
+        async function loadMatches(lookingForGender, currentUid) {
+            matchesGrid.innerHTML = "";
+            
+            try {
+                const q = query(
+                    collection(db, "users"), 
+                    where("gender", "==", lookingForGender)
+                );
+                
+                const querySnapshot = await getDocs(q);
+                
+                if (querySnapshot.empty) {
+                    matchesGrid.innerHTML = "<p>No matches found in your area yet!</p>";
+                    return;
+                }
+
+                querySnapshot.forEach((docSnap) => {
+                    if (docSnap.id !== currentUid) {
+                        const profile = docSnap.data();
+                        const cardHtml = `
+                            <div class="card">
+                                <img src="${profile.photoUrl || 'https://via.placeholder.com/100'}" alt="Profile">
+                                <h4>${profile.fullName}, ${profile.age}</h4>
+                                <p><span class="badge">${profile.city}, ${profile.country}</span></p>
+                                <p style="font-size:0.85rem; color:#aaa;">"${profile.bio || 'No bio yet.'}"</p>
+                                <button onclick="alert('Starting Chat with ${profile.fullName}...')">Private Message 💬</button>
+                                <button style="background-color:#008cba;" onclick="alert('59-sec Call Feature Coming Soon!')">Call 📞 (59s Limit)</button>
+                            </div>
+                        `;
+                        matchesGrid.innerHTML += cardHtml;
+                    }
+                });
+            } catch (error) {
+                console.error("Error loading matches:", error);
+                matchesGrid.innerHTML = "<p>Error loading matches.</p>";
+            }
+        }
+
+        // Logout
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            signOut(auth).then(() => {
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+</body>
+</html>

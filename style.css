@@ -1,69 +1,53 @@
-/* style.css */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f7f6;
+    background-color: #121212;
+    color: #ffffff;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
 }
 
 .auth-container {
-    background: white;
+    background: #1e1e1e;
     padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    width: 100%;
-    max-width: 400px;
+    border-radius: 12px;
+    width: 350px;
     text-align: center;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
 }
 
-h2 {
-    color: #e91e63;
-    margin-bottom: 20px;
-}
+h2 { color: #e91e63; margin-bottom: 5px; }
+h3 { margin-top: 0; font-size: 1.1rem; color: #ccc; }
 
-h3 {
-    color: #333;
-}
-
-input {
-    width: 90%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: 1px solid #333;
+    background: #2a2a2a;
+    color: #fff;
+    box-sizing: border-box;
+    font-size: 0.9rem;
 }
 
 button {
-    width: 95%;
+    width: 100%;
     padding: 12px;
     background-color: #e91e63;
-    color: white;
     border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
+    color: white;
+    border-radius: 6px;
     font-weight: bold;
-    transition: 0.3s;
+    cursor: pointer;
+    margin-top: 12px;
+    font-size: 1rem;
 }
 
-button:hover {
-    background-color: #c2185b;
-}
+button:hover { background-color: #c2185b; }
+button:disabled { background-color: #555; cursor: not-allowed; }
 
-p {
-    margin-top: 15px;
-    font-size: 14px;
-}
-
-a {
-    color: #e91e63;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
+a { color: #e91e63; text-decoration: none; }
+a:hover { text-decoration: underline; }

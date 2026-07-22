@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Scan - Secret Date Nepal</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/dist/face-api.js"></script>
+    <style>
+        .video-container {
+            position: relative;
+            margin: 15px auto;
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #000;
+        }
+        video { width: 100%; display: block; transform: scaleX(-1); }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <h2>Face Verification 📸</h2>
+        <p style="font-size: 0.85rem; color: #aaa;">Look straight at the camera to verify your identity.</p>
+        
+        <div class="video-container">
+            <video id="webcam" autoplay playsinline muted></video>
+        </div>
+
+        <p id="status-text" style="font-size:0.9rem; color:#e91e63;">Loading AI Models...</p>
+        <button id="scan-btn" disabled>Scan My Face</button>
+    </div>
+
+    <script type="module">
+        import { auth, db } from './firebase-config.js';
+        import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const video = document.getElementById('webcam');
+        const statusText = document.getElementById('status-text');
+        const scanBtn = document.getElementById('scan-btn');
+        let currentUser = null;
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                
+                // If profile is already fully set up, skip directly to dashboard
+                if (userDoc.exists() && userDoc.data().profileCompleted) {
+                    window.location.href = 'dashboard.html';
+                } else if (userDoc.exists() && userDoc.data().faceScanned) {
+                    // If face scanned but profile not complete, go to profile setup
+                    window.location.href = 'profile-setup.html';
+                } else {
+                    // Otherwise load models and webcam for new user
+                    loadModels();
+                }
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        async function loadModels() {
+            try {
+                const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/model/';
+                await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
+                await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
+                await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
+
+                navigator.mediaDevices.getUserMedia({ video: {} })
+                    .then((stream) => {
+                        video.srcObject = stream;
+                        statusText.innerText = "Camera Ready! Click below.";
+                        scanBtn.disabled = false;
+                    })
+                    .catch(() => { statusText.innerText = "Camera Access Denied!"; });
+            } catch (err) {
+                statusText.innerText = "Failed to load models!";
+            }
+        }
+
+        scanBtn.addEventListener('click', async () => {
+            scanBtn.disabled = true;
+            statusText.innerText = "Scanning Face...";
+
+            const detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptor();
+
+            if (!detection) {
+                alert("No face detected! Please center your face.");
+                scanBtn.disabled = false;
+                statusText.innerText = "Try Again.";
+                return;
+            }
+
+            await setDoc(doc(db, "users", currentUser.uid), {
+                faceDescriptor: Array.from(detection.descriptor),
+                faceScanned: true,
+                updatedAt: new Date()
+            }, { merge: true });
+
+            alert("Face Verification Successful!");
+            window.location.href = 'profile-setup.html';
+        });
+    </script>
+</body>
+</html>
