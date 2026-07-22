@@ -10,96 +10,85 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         
+        /* RAINBOW & BIRDS VIBE BACKGROUND */
         body { 
             background: #090a10; 
             background-image: 
-                radial-gradient(at 0% 0%, rgba(255, 51, 102, 0.12) 0px, transparent 40%),
-                radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.12) 0px, transparent 40%);
+                radial-gradient(circle at 10% 20%, rgba(255, 51, 102, 0.15), transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(122, 0, 255, 0.15), transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.1), transparent 50%);
             color: #ffffff; 
-            min-height: 100vh; 
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* HEADER NAVBAR */
+        /* NAVBAR */
         .fb-header {
             display: flex; justify-content: space-between; align-items: center;
-            background: #14151f; border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(20, 21, 31, 0.95); backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             padding: 8px 25px; position: sticky; top: 0; z-index: 100;
             box-shadow: 0 4px 20px rgba(0,0,0,0.6);
         }
-        .fb-logo { font-weight: 800; font-size: 1.4rem; background: linear-gradient(45deg, #ff3366, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; }
+        .fb-logo { font-weight: 800; font-size: 1.4rem; background: linear-gradient(45deg, #ff3366, #00e5ff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; }
         .fb-center { display: flex; gap: 15px; }
         .nav-icon-btn { width: 50px; height: 42px; display: flex; justify-content: center; align-items: center; color: #aaa; font-size: 1.2rem; cursor: pointer; border-radius: 12px; transition: 0.2s; }
         .nav-icon-btn:hover, .nav-icon-btn.active { color: #ff3366; background: rgba(255, 51, 102, 0.12); }
         .fb-right { display: flex; align-items: center; gap: 12px; }
-        .circle-icon-btn { width: 38px; height: 38px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); display: flex; justify-content: center; align-items: center; color: #fff; cursor: pointer; }
+        .circle-icon-btn { width: 38px; height: 38px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); display: flex; justify-content: center; align-items: center; color: #fff; cursor: pointer; transition:0.2s;}
+        .circle-icon-btn:hover { background: rgba(255, 51, 102, 0.3); }
         .header-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #ff3366; cursor: pointer; }
 
-        /* 3-COLUMN MAIN LAYOUT (FILLS THE EMPTY SPACE) */
-        .main-grid {
-            display: grid;
-            grid-template-columns: 280px 1fr 300px;
-            gap: 20px;
-            max-width: 1350px;
-            margin: 20px auto;
-            padding: 0 20px;
-        }
+        /* 3-COLUMN MAIN LAYOUT */
+        .main-grid { display: grid; grid-template-columns: 300px 1fr 300px; gap: 20px; max-width: 1400px; margin: 20px auto; padding: 0 20px; }
 
         /* SIDEBAR CARDS */
         .sidebar-card {
-            background: #14151f;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 18px;
-            padding: 18px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            background: rgba(20, 21, 31, 0.7); backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px;
+            padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: 0.3s;
         }
-        .sidebar-title { font-size: 0.95rem; font-weight: 600; color: #ff3366; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .sidebar-card:hover { border-color: rgba(255, 51, 102, 0.3); transform: translateY(-3px); }
+        .sidebar-title { font-size: 1rem; font-weight: 700; color: #ff3366; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
 
-        /* TRENDING HASHTAGS */
-        .tag-item { display: block; padding: 8px 12px; background: rgba(255,255,255,0.04); border-radius: 10px; margin-bottom: 8px; color: #ddd; font-size: 0.85rem; text-decoration: none; transition: 0.2s; }
-        .tag-item:hover { background: rgba(255, 51, 102, 0.2); color: #fff; transform: translateX(3px); }
+        /* GAMES SECTION (LEFT) */
+        .game-btn { 
+            width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); 
+            color: #fff; padding: 12px; border-radius: 12px; font-weight: 600; cursor: pointer; 
+            margin-bottom: 10px; text-align: left; transition: 0.3s; display:flex; gap:10px; align-items:center;
+        }
+        .game-btn:hover { background: linear-gradient(45deg, #ff3366, #a855f7); border-color: transparent; }
+        .game-output { font-size: 0.85rem; color: #00e5ff; margin: 5px 0 15px 0; font-weight: bold; text-align: center; min-height:20px;}
 
-        /* LOVE CALCULATOR WIDGET */
-        .love-calc input { width: 100%; padding: 8px 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; color: #fff; margin-bottom: 8px; outline: none; font-size: 0.85rem; }
-        .love-calc button { width: 100%; background: linear-gradient(45deg, #ff3366, #a855f7); border: none; color: #fff; padding: 8px; border-radius: 10px; font-weight: bold; cursor: pointer; }
-
-        /* ONLINE MEMBERS LIST */
-        .online-user { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; }
-        .online-user img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid #22c55e; }
-        .online-user-info h5 { font-size: 0.85rem; color: #fff; }
-        .online-user-info span { font-size: 0.72rem; color: #ff3366; }
+        /* LOVE & CARE BANNER (LEFT) */
+        .love-banner { text-align:center; padding:15px; background:linear-gradient(135deg, rgba(255,51,102,0.1), rgba(0,229,255,0.1)); border-radius:15px; border:1px dashed rgba(255,255,255,0.2); }
+        .love-banner p { font-size:0.85rem; color:#ccc; font-style:italic; line-height:1.5; }
 
         /* MIDDLE FEED POST CARDS */
-        .fb-post-creator { background: #14151f; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 15px; margin-bottom: 20px; }
+        .fb-post-creator { background: rgba(20, 21, 31, 0.8); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 18px; margin-bottom: 20px; }
         .creator-top { display: flex; align-items: center; gap: 12px; }
-        .creator-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 1px solid #ff3366; }
-        .creator-input-trigger { flex: 1; background: rgba(255, 255, 255, 0.06); border-radius: 25px; padding: 10px 18px; color: #aaa; font-size: 0.9rem; cursor: pointer; }
+        .creator-avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #00e5ff; }
+        .creator-input-trigger { flex: 1; background: rgba(255, 255, 255, 0.06); border-radius: 25px; padding: 12px 20px; color: #aaa; font-size: 0.95rem; cursor: pointer; transition:0.3s;}
+        .creator-input-trigger:hover { background:rgba(255,255,255,0.1);}
 
-        .post-card { background: #14151f; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 18px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .post-card { background: rgba(20, 21, 31, 0.8); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
         .post-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-        .post-header img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid #ff3366; }
-        .post-card img.post-img { width: 100%; max-height: 420px; object-fit: cover; border-radius: 14px; margin-top: 10px; }
+        .post-header img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid #a855f7; }
+        .post-card img.post-img { width: 100%; max-height: 450px; object-fit: cover; border-radius: 16px; margin-top: 12px; }
 
-        /* RESPONSIVE LAYOUT */
-        @media (max-width: 1100px) {
-            .main-grid { grid-template-columns: 240px 1fr; }
-            .right-sidebar { display: none; }
-        }
-        @media (max-width: 768px) {
-            .main-grid { grid-template-columns: 1fr; }
-            .left-sidebar { display: none; }
-        }
+        /* ONLINE MEMBERS LIST (RIGHT) */
+        .online-user { display: flex; align-items: center; justify-content:space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition:0.2s;}
+        .online-user:hover { padding-left:5px; }
+        .online-user-info { display:flex; align-items:center; gap:10px; }
+        .online-user img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #22c55e; }
+        .online-user h5 { font-size: 0.9rem; color: #fff; }
+        .msg-icon-small { color:#ff3366; background:rgba(255,51,102,0.1); padding:6px; border-radius:50%; }
 
-        /* MODALS */
-        .chat-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); justify-content: center; align-items: center; z-index: 1000; }
-        .chat-box { background: #14151f; border: 1px solid rgba(255, 51, 102, 0.35); width: 440px; max-width: 92%; height: 600px; border-radius: 24px; display: flex; flex-direction: column; overflow: hidden; }
-        .chat-header { background: #1c1d27; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; }
-        .chat-messages { flex: 1; padding: 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #12131c; }
-        .message { max-width: 78%; padding: 10px 16px; border-radius: 18px; font-size: 0.9rem; }
-        .message.sent { align-self: flex-end; background: linear-gradient(135deg, #ff3366, #b026ff); color: #fff; }
-        .message.received { align-self: flex-start; background: rgba(255, 255, 255, 0.08); color: #fff; }
-        .chat-input-area { display: flex; padding: 12px; background: #1c1d27; gap: 8px; }
-        .chat-input-area input { flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); padding: 10px 16px; border-radius: 20px; color: #fff; outline: none; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        @media (max-width: 1100px) { .main-grid { grid-template-columns: 280px 1fr; } .right-sidebar { display: none; } }
+        @media (max-width: 768px) { .main-grid { grid-template-columns: 1fr; } .left-sidebar { display: none; } }
     </style>
 </head>
 <body>
@@ -119,38 +108,44 @@
         </div>
     </header>
 
-    <!-- 3-COLUMN LAYOUT -->
     <div class="main-grid">
 
-        <!-- 1. LEFT SIDEBAR (ACTIVITIES & GAMES) -->
+        <!-- 1. LEFT SIDEBAR (GAMES & ROMANTIC VIBES) -->
         <aside class="left-sidebar">
-            <!-- TRENDING TOPICS -->
             <div class="sidebar-card">
-                <div class="sidebar-title"><i class="fa-solid fa-fire"></i> Trending Love Topics</div>
-                <a href="#" class="tag-item">#SecretDateKathmandu</a>
-                <a href="#" class="tag-item">#LateNightConversations</a>
-                <a href="#" class="tag-item">#PokharaRomance</a>
-                <a href="#" class="tag-item">#SoulmateSearch</a>
+                <div class="sidebar-title"><i class="fa-solid fa-gamepad" style="color:#a855f7;"></i> Mini Love Games</div>
+                
+                <!-- Game 1: Love Calculator -->
+                <button class="game-btn" onclick="playCalc()"><i class="fa-solid fa-heart-pulse" style="color:#ff3366;"></i> Love Calculator</button>
+                <div id="out-calc" class="game-output"></div>
+
+                <!-- Game 2: Magic 8 Ball -->
+                <button class="game-btn" onclick="play8Ball()"><i class="fa-solid fa-crystal-ball" style="color:#00e5ff;"></i> Magic Love Ball</button>
+                <div id="out-8ball" class="game-output"></div>
+
+                <!-- Game 3: Truth or Dare -->
+                <button class="game-btn" onclick="playToD()"><i class="fa-solid fa-masks-theater" style="color:#f59e0b;"></i> Couple Truth or Dare</button>
+                <div id="out-tod" class="game-output"></div>
+
+                <!-- Game 4: Daily Love Task -->
+                <button class="game-btn" onclick="playTask()"><i class="fa-solid fa-gift" style="color:#22c55e;"></i> Daily Romantic Task</button>
+                <div id="out-task" class="game-output"></div>
             </div>
 
-            <!-- FUN LOVE CALCULATOR -->
-            <div class="sidebar-card love-calc">
-                <div class="sidebar-title"><i class="fa-solid fa-calculator"></i> Love Compatibility Test</div>
-                <input type="text" id="calc-your-name" placeholder="Your Name">
-                <input type="text" id="calc-crush-name" placeholder="Crush's Name">
-                <button onclick="calculateLove()">Test Match % 💖</button>
-                <p id="calc-result" style="font-size:0.85rem; color:#f59e0b; margin-top:8px; font-weight:bold; text-align:center;"></p>
+            <!-- LOVE, CARE & RESPECT BANNER -->
+            <div class="sidebar-card love-banner">
+                <h4 style="color:#ff3366; margin-bottom:8px;">🕊️ Love, Care & Respect</h4>
+                <p>"True romance is built on respect. In this secret world, we cherish kindness, deeply care for each other, and paint our souls with rainbow colors." 🌈</p>
             </div>
         </aside>
 
-        <!-- 2. MIDDLE CONTENT (FEED / MATCHES / PROFILE) -->
+        <!-- 2. MIDDLE CONTENT (FEED) -->
         <main class="middle-content">
-            <!-- FEED TAB -->
             <div id="feed-tab" class="tab-content active">
                 <div class="fb-post-creator">
                     <div class="creator-top">
-                        <img id="creator-avatar" class="creator-avatar" src="https://via.placeholder.com/42" alt="Avatar">
-                        <div class="creator-input-trigger" onclick="alert('Use Post Button below!')">What's on your secret mind?</div>
+                        <img id="creator-avatar" class="creator-avatar" src="https://via.placeholder.com/45" alt="Avatar">
+                        <div class="creator-input-trigger" onclick="alert('Use Post Button!')">Share your rainbow thoughts...</div>
                     </div>
                 </div>
                 <div id="feed-posts-container"></div>
@@ -159,13 +154,13 @@
             <!-- MATCHES TAB -->
             <div id="matches-tab" class="tab-content">
                 <h3 style="margin-bottom: 15px; color: #ff3366;">💕 Secret Matches</h3>
-                <div class="grid" id="matches-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(180px, 1fr)); gap:15px;"></div>
+                <div id="matches-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:15px;"></div>
             </div>
 
             <!-- PROFILE TAB -->
             <div id="profile-tab" class="tab-content">
-                <div style="background:#14151f; border-radius:18px; padding:20px; text-align:center; margin-bottom:20px;">
-                    <img id="my-photo" style="width:100px; height:100px; border-radius:50%; border:3px solid #ff3366; object-fit:cover;" src="https://via.placeholder.com/100" alt="Profile">
+                <div style="background:rgba(20, 21, 31, 0.8); border-radius:20px; padding:20px; text-align:center; margin-bottom:20px;">
+                    <img id="my-photo" style="width:110px; height:110px; border-radius:50%; border:4px solid #ff3366; object-fit:cover;" src="https://via.placeholder.com/100" alt="Profile">
                     <h3 id="my-name" style="margin-top:10px;">Loading...</h3>
                     <p id="my-sdnp-id" style="color:#ff3366; font-size:0.85rem; font-weight:bold;">SDNP-ID</p>
                 </div>
@@ -173,48 +168,28 @@
             </div>
         </main>
 
-        <!-- 3. RIGHT SIDEBAR (ONLINE MEMBERS & POLLS) -->
+        <!-- 3. RIGHT SIDEBAR (LIVE MEMBERS & POLLS) -->
         <aside class="right-sidebar">
             <!-- LIVE ONLINE MEMBERS -->
             <div class="sidebar-card">
-                <div class="sidebar-title"><i class="fa-solid fa-circle" style="color:#22c55e; font-size:0.7rem;"></i> Live Active Members</div>
+                <div class="sidebar-title"><i class="fa-solid fa-circle" style="color:#22c55e; font-size:0.8rem;"></i> Live Secret Members</div>
                 <div id="online-users-container">
-                    <p style="font-size:0.8rem; color:#aaa;">Searching active users...</p>
+                    <p style="font-size:0.8rem; color:#aaa;">Searching...</p>
                 </div>
             </div>
 
-            <!-- DAILY LOVE POLL -->
+            <!-- ROMANTIC POLL -->
             <div class="sidebar-card">
-                <div class="sidebar-title"><i class="fa-solid fa-square-poll-vertical"></i> Daily Date Poll</div>
-                <p style="font-size:0.85rem; color:#ccc; margin-bottom:10px;">What is your ideal first date?</p>
-                <button onclick="votePoll('Coffee Date')" style="width:100%; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); padding:8px; border-radius:10px; color:#fff; margin-bottom:6px; cursor:pointer; text-align:left; font-size:0.8rem;">☕ Cozy Coffee Date</button>
-                <button onclick="votePoll('Night Walk')" style="width:100%; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); padding:8px; border-radius:10px; color:#fff; cursor:pointer; text-align:left; font-size:0.8rem;">🌙 Romantic Night Walk</button>
+                <div class="sidebar-title"><i class="fa-solid fa-chart-pie" style="color:#00e5ff;"></i> Romantic Poll</div>
+                <p style="font-size:0.9rem; color:#ccc; margin-bottom:12px;">What makes a perfect romantic evening?</p>
+                <button onclick="votePoll('Rainy Drive')" style="width:100%; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); padding:10px; border-radius:12px; color:#fff; margin-bottom:8px; cursor:pointer; text-align:left; font-size:0.85rem; transition:0.2s;">🌧️ Long Rainy Drive</button>
+                <button onclick="votePoll('Sunset Walk')" style="width:100%; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); padding:10px; border-radius:12px; color:#fff; cursor:pointer; text-align:left; font-size:0.85rem; transition:0.2s;">🌅 Sunset Beach Walk</button>
             </div>
         </aside>
 
     </div>
 
-    <!-- CHAT MODAL -->
-    <div id="chat-modal" class="chat-modal">
-        <div class="chat-box">
-            <div class="chat-header">
-                <div style="display:flex; align-items:center; gap:10px;">
-                    <img id="chat-user-img" style="width:40px; height:40px; border-radius:50%; object-fit:cover; border:2px solid #ff3366;" src="https://via.placeholder.com/40" alt="User">
-                    <div>
-                        <h4 id="chat-user-name" style="font-size:0.95rem; color:#fff;">User</h4>
-                        <span style="font-size:0.75rem; color:#22c55e;">Online (Free 59s Call)</span>
-                    </div>
-                </div>
-                <i class="fa-solid fa-xmark" onclick="closeChatModal()" style="color:#aaa; cursor:pointer; font-size:1.3rem;"></i>
-            </div>
-            <div class="chat-messages" id="chat-messages"></div>
-            <div class="chat-input-area">
-                <input type="text" id="chat-input" placeholder="Type secret message...">
-                <button id="send-msg-btn" style="background:#ff3366; color:#fff; border:none; width:40px; height:40px; border-radius:50%; cursor:pointer;"><i class="fa-solid fa-paper-plane"></i></button>
-            </div>
-        </div>
-    </div>
-
+    <!-- SIMPLE JS FOR GAMES & TABS -->
     <script type="module">
         import { auth, db } from './firebase-config.js';
         import { doc, getDoc, collection, query, where, getDocs, addDoc, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -222,7 +197,6 @@
 
         let currentUserId = null;
         let currentUserData = null;
-        let activeChatUserId = null;
 
         window.switchTab = function(tabId, btnElement) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -231,20 +205,24 @@
             if(btnElement) btnElement.classList.add('active');
         };
 
-        window.closeChatModal = function() { document.getElementById('chat-modal').style.display = 'none'; };
-
-        // LOVE CALCULATOR LOGIC
-        window.calculateLove = function() {
-            const name1 = document.getElementById('calc-your-name').value.trim();
-            const name2 = document.getElementById('calc-crush-name').value.trim();
-            if(!name1 || !name2) return alert("Enter both names!");
-            const match = Math.floor(Math.random() * 30) + 70; // 70% to 99%
-            document.getElementById('calc-result').innerText = `🔥 Match Compatibility: ${match}% Perfect!`;
+        // --- MINI GAMES LOGIC ---
+        window.playCalc = () => {
+            const match = Math.floor(Math.random() * 30) + 70;
+            document.getElementById('out-calc').innerText = `🔥 Secret Match: ${match}% Perfect!`;
         };
-
-        window.votePoll = function(option) {
-            alert(`Thanks for voting for "${option}"! 💕`);
+        window.play8Ball = () => {
+            const answers = ["Yes, they do! 💖", "Give it some time. ⏳", "Absolutely! 🌟", "Make the first move! 🚀"];
+            document.getElementById('out-8ball').innerText = `🔮 ${answers[Math.floor(Math.random() * answers.length)]}`;
         };
+        window.playToD = () => {
+            const dares = ["Truth: What's your wildest secret?", "Dare: Send a 💋 sticker to your match!", "Truth: Who was your first crush?", "Dare: Post a romantic quote!"];
+            document.getElementById('out-tod').innerText = `🎭 ${dares[Math.floor(Math.random() * dares.length)]}`;
+        };
+        window.playTask = () => {
+            const tasks = ["Compliment someone today! ✨", "Smile, you're beautiful! 😊", "Listen to a romantic song. 🎶"];
+            document.getElementById('out-task').innerText = `🎁 ${tasks[Math.floor(Math.random() * tasks.length)]}`;
+        };
+        window.votePoll = (opt) => alert(`You voted for "${opt}". Thanks! 💕`);
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -253,15 +231,11 @@
                 if (userDoc.exists()) {
                     currentUserData = userDoc.data();
                     renderHeaderAndProfile();
+                    loadLiveMembers();
                     loadMatches(currentUserData.lookingFor);
                     loadPosts();
-                    loadLiveMembers();
-                } else {
-                    window.location.href = 'profile-setup.html';
-                }
-            } else {
-                window.location.href = 'index.html';
-            }
+                } else { window.location.href = 'profile-setup.html'; }
+            } else { window.location.href = 'index.html'; }
         });
 
         function renderHeaderAndProfile() {
@@ -269,86 +243,46 @@
             document.getElementById('nav-user-avatar').src = photo;
             document.getElementById('creator-avatar').src = photo;
             document.getElementById('my-photo').src = photo;
-            document.getElementById('my-name').innerText = currentUserData.fullName || currentUserData.firstName || 'User';
+            document.getElementById('my-name').innerText = currentUserData.fullName || 'User';
             document.getElementById('my-sdnp-id').innerText = currentUserData.sdnpId || "SDNP-User";
         }
 
-        // LOAD LIVE ONLINE MEMBERS IN RIGHT SIDEBAR
         async function loadLiveMembers() {
             const container = document.getElementById('online-users-container');
-            const q = query(collection(db, "users"));
-            const snapshot = await getDocs(q);
+            const snapshot = await getDocs(query(collection(db, "users")));
             container.innerHTML = "";
-
+            let count = 0;
             snapshot.forEach((docSnap) => {
-                if(docSnap.id !== currentUserId) {
+                if(docSnap.id !== currentUserId && count < 6) {
                     const u = docSnap.data();
+                    count++;
                     const div = document.createElement('div');
                     div.className = 'online-user';
-                    div.onclick = () => openChatBox(docSnap.id, u.fullName || u.firstName, u.photoUrl);
                     div.innerHTML = `
-                        <img src="${u.photoUrl || 'https://via.placeholder.com/36'}" alt="User">
                         <div class="online-user-info">
-                            <h5>${u.fullName || u.firstName || 'User'}</h5>
-                            <span>${u.sdnpId || 'SDNP'} • Chat 💬</span>
+                            <img src="${u.photoUrl || 'https://via.placeholder.com/40'}">
+                            <div><h5>${u.fullName || 'User'}</h5><span style="font-size:0.7rem; color:#aaa;">${u.sdnpId}</span></div>
                         </div>
+                        <i class="fa-solid fa-paper-plane msg-icon-small"></i>
                     `;
                     container.appendChild(div);
                 }
             });
         }
 
-        // CHAT LOGIC
-        function getChatId(uid1, uid2) { return uid1 < uid2 ? `${uid1}_${uid2}` : `${uid2}_${uid1}`; }
-
-        window.openChatBox = function(receiverUid, receiverName, receiverPhoto) {
-            activeChatUserId = receiverUid;
-            document.getElementById('chat-user-name').innerText = receiverName;
-            document.getElementById('chat-user-img').src = receiverPhoto || 'https://via.placeholder.com/40';
-            document.getElementById('chat-modal').style.display = 'flex';
-            
-            const chatId = getChatId(currentUserId, receiverUid);
-            const q = query(collection(db, "chats", chatId, "messages"), orderBy("createdAt", "asc"));
-
-            onSnapshot(q, (snapshot) => {
-                const chatMessages = document.getElementById('chat-messages');
-                chatMessages.innerHTML = '';
-                snapshot.forEach((docSnap) => {
-                    const msg = docSnap.data();
-                    const msgDiv = document.createElement('div');
-                    msgDiv.className = `message ${msg.senderId === currentUserId ? 'sent' : 'received'}`;
-                    msgDiv.innerText = msg.text;
-                    chatMessages.appendChild(msgDiv);
-                });
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            });
-        };
-
-        document.getElementById('send-msg-btn').addEventListener('click', async () => {
-            const input = document.getElementById('chat-input');
-            const text = input.value.trim();
-            if (!text || !activeChatUserId) return;
-            input.value = '';
-            const chatId = getChatId(currentUserId, activeChatUserId);
-            await addDoc(collection(db, "chats", chatId, "messages"), {
-                text: text, senderId: currentUserId, receiverId: activeChatUserId, createdAt: new Date()
-            });
-        });
-
         async function loadMatches(lookingFor) {
             const matchesGrid = document.getElementById('matches-grid');
             matchesGrid.innerHTML = "";
-            const q = query(collection(db, "users"), where("gender", "==", lookingFor));
-            const snapshot = await getDocs(q);
+            const snapshot = await getDocs(query(collection(db, "users"), where("gender", "==", lookingFor)));
             snapshot.forEach((docSnap) => {
                 if (docSnap.id !== currentUserId) {
                     const profile = docSnap.data();
                     const card = document.createElement('div');
-                    card.style.background = '#14151f'; card.style.padding = '15px'; card.style.borderRadius = '16px'; card.style.textAlign = 'center';
+                    card.style.background = 'rgba(20,21,31,0.8)'; card.style.padding = '18px'; card.style.borderRadius = '20px'; card.style.textAlign = 'center';
                     card.innerHTML = `
-                        <img src="${profile.photoUrl || 'https://via.placeholder.com/85'}" style="width:75px; height:75px; border-radius:50%; border:2px solid #ff3366; object-fit:cover;">
-                        <h4 style="font-size:0.9rem; margin-top:6px;">${profile.fullName || profile.firstName}</h4>
-                        <button onclick="openChatBox('${docSnap.id}', '${profile.fullName || profile.firstName}', '${profile.photoUrl || ''}')" style="width:100%; background:rgba(255, 51, 102, 0.2); border:1px solid #ff3366; color:#fff; padding:6px; border-radius:8px; margin-top:8px; cursor:pointer; font-size:0.8rem;">Chat 💬</button>
+                        <img src="${profile.photoUrl || 'https://via.placeholder.com/85'}" style="width:80px; height:80px; border-radius:50%; border:3px solid #ff3366; object-fit:cover;">
+                        <h4 style="font-size:0.95rem; margin-top:10px;">${profile.fullName}</h4>
+                        <button style="width:100%; background:linear-gradient(45deg, #ff3366, #ff0055); color:#fff; padding:8px; border-radius:10px; margin-top:12px; border:none; cursor:pointer;">Chat & Call 💬</button>
                     `;
                     matchesGrid.appendChild(card);
                 }
@@ -365,8 +299,8 @@
                     const card = document.createElement('div');
                     card.className = 'post-card';
                     card.innerHTML = `
-                        <div class="post-header"><img src="${p.userPhoto || 'https://via.placeholder.com/44'}"><div><h4>${p.userName}</h4><span style="font-size:0.75rem; color:#ff3366;">${p.sdnpId || 'SDNP'}</span></div></div>
-                        ${p.text ? `<p style="font-size:0.92rem; color:#e0e0e0;">${p.text}</p>` : ''}
+                        <div class="post-header"><img src="${p.userPhoto}"><div><h4>${p.userName}</h4><span style="font-size:0.75rem; color:#00e5ff;">${p.sdnpId}</span></div></div>
+                        ${p.text ? `<p style="font-size:0.95rem; color:#e0e0e0;">${p.text}</p>` : ''}
                         ${p.photoUrl ? `<img src="${p.photoUrl}" class="post-img">` : ''}
                     `;
                     container.appendChild(card);
