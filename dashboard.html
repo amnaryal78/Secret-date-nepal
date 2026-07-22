@@ -245,7 +245,7 @@
             <!-- MY POSTS SECTION -->
             <h3 style="color:#ff3366; margin-bottom: 15px; font-size:1.2rem;">📸 My Published Posts</h3>
             <div id="my-posts-container">
-                <!-- User's own posts will be rendered here -->
+                <!-- User's own posts render here -->
             </div>
         </div>
 
@@ -320,7 +320,7 @@
         });
 
         function renderProfileTab() {
-            document.getElementById('my-name').innerText = currentUserData.fullName || 'User';
+            document.getElementById('my-name').innerText = currentUserData.fullName || currentUserData.firstName || 'User';
             document.getElementById('my-sdnp-id').innerText = currentUserData.sdnpId || "SDNP-User";
             document.getElementById('my-location').innerText = `📍 ${currentUserData.city || 'City'}, ${currentUserData.country || 'Nepal'}`;
             document.getElementById('my-bio').innerText = `"${currentUserData.bio || 'No bio'}"`;
@@ -570,10 +570,10 @@
             });
         }
 
-        // REALTIME MY POSTS LISTENER (USER PROFILE SECTION)
+        // REALTIME MY POSTS LISTENER (NO FIRESTORE INDEX REQUIRED FIX)
         function loadMyPosts() {
             const container = document.getElementById('my-posts-container');
-            const q = query(collection(db, "posts"), where("userId", "==", currentUserId), orderBy("createdAt", "desc"));
+            const q = query(collection(db, "posts"), where("userId", "==", currentUserId));
             
             onSnapshot(q, (snapshot) => {
                 container.innerHTML = "";
@@ -581,8 +581,16 @@
                     container.innerHTML = "<p style='color:#aaa; text-align:center;'>You haven't posted anything yet.</p>";
                     return;
                 }
+
+                // JS Sorting (Prevents Firestore Index Requirement)
+                let postsArray = [];
                 snapshot.forEach((docSnap) => {
-                    const p = docSnap.data();
+                    postsArray.push(docSnap.data());
+                });
+
+                postsArray.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+
+                postsArray.forEach((p) => {
                     const card = document.createElement('div');
                     card.className = 'post-card';
                     card.innerHTML = `
