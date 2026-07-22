@@ -7,8 +7,6 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/vision_bundle.js" crossorigin="anonymous"></script>
-
     <style>
         .scan-card {
             background: rgba(18, 18, 24, 0.85);
@@ -72,6 +70,9 @@
         import { auth, db } from './firebase-config.js';
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { doc, getDoc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        
+        // Import MediaPipe directly inside JS Module
+        import { FaceLandmarker, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3";
 
         const webcam = document.getElementById('webcam');
         const statusText = document.getElementById('status');
@@ -98,11 +99,13 @@
         // Initialize Google MediaPipe Face Landmarker
         async function initMediaPipe() {
             try {
-                const vision = await window.FilesetResolver.forVisionTasks(
-                    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
+                statusText.innerText = "Connecting Google AI vision engine...";
+                
+                const vision = await FilesetResolver.forVisionTasks(
+                    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
                 );
                 
-                faceLandmarker = await window.FaceLandmarker.createFromOptions(vision, {
+                faceLandmarker = await FaceLandmarker.createFromOptions(vision, {
                     baseOptions: {
                         modelAssetPath: "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",
                         delegate: "GPU"
@@ -132,7 +135,7 @@
                 });
         }
 
-        // Normalize & compare biometric landmarks (distance calculation)
+        // Normalize & compare biometric landmarks
         function calculateDistance(pointsA, pointsB) {
             let sum = 0;
             const count = Math.min(pointsA.length, pointsB.length);
@@ -155,7 +158,6 @@
                 const data = docSnap.data();
                 if (data.faceLandmarks && docSnap.id !== currentUser.uid) {
                     const distance = calculateDistance(newLandmarks, data.faceLandmarks);
-                    // Threshold check for facial structure similarity
                     if (distance <= 0.08) {
                         isDuplicate = true;
                     }
@@ -196,7 +198,7 @@
                     return;
                 }
 
-                // Clean & save simplified landmarks array to Firestore
+                // Clean & save simplified landmarks array
                 const simplifiedLandmarks = currentLandmarks.map(pt => ({
                     x: Number(pt.x.toFixed(4)),
                     y: Number(pt.y.toFixed(4)),
