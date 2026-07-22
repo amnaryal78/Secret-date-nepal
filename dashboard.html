@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,6 +13,80 @@
         .card { background: #1e1e1e; padding: 15px; border-radius: 10px; text-align: center; border: 1px solid #333; }
         .card img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #e91e63; }
         .badge { background: #e91e63; padding: 3px 8px; border-radius: 12px; font-size: 0.8rem; }
+        
+        /* CHAT MODAL STYLES */
+        .chat-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .chat-box {
+            background: #1e1e1e;
+            width: 380px;
+            max-width: 90%;
+            height: 500px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            border: 1px solid #333;
+        }
+        .chat-header {
+            background: #2a2a2a;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+        .chat-header h4 { margin: 0; color: #e91e63; }
+        .close-chat { cursor: pointer; color: #aaa; font-weight: bold; font-size: 1.2rem; }
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .message {
+            max-width: 70%;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            word-wrap: break-word;
+        }
+        .message.sent {
+            align-self: flex-end;
+            background: #e91e63;
+            color: #fff;
+        }
+        .message.received {
+            align-self: flex-start;
+            background: #333;
+            color: #fff;
+        }
+        .chat-input-area {
+            display: flex;
+            padding: 10px;
+            background: #2a2a2a;
+            gap: 8px;
+        }
+        .chat-input-area input {
+            flex: 1;
+            margin: 0;
+            padding: 10px;
+        }
+        .chat-input-area button {
+            width: auto;
+            margin: 0;
+            padding: 10px 15px;
+        }
     </style>
 </head>
 <body>
@@ -29,23 +104,50 @@
         <p>Searching for potential matches...</p>
     </div>
 
+    <!-- REALTIME CHAT MODAL -->
+    <div id="chat-modal" class="chat-modal">
+        <div class="chat-box">
+            <div class="chat-header">
+                <h4 id="chat-user-name">Chatting...</h4>
+                <span class="close-chat" id="close-chat-btn">&times;</span>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <!-- Messages will appear here -->
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Type a message...">
+                <button id="send-btn">Send</button>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         import { auth, db } from './firebase-config.js';
-        import { doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { doc, getDoc, collection, query, where, getDocs, addDoc, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const matchesGrid = document.getElementById('matches-grid');
         const userNameSpan = document.getElementById('user-name');
+        
+        // Chat Elements
+        const chatModal = document.getElementById('chat-modal');
+        const closeChatBtn = document.getElementById('close-chat-btn');
+        const chatUserName = document.getElementById('chat-user-name');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        let currentUserId = null;
+        let activeChatUserId = null;
+        let unsubscribeChat = null;
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Fetch logged-in user profile
+                currentUserId = user.uid;
                 const userDoc = await getDoc(doc(db, "users", user.uid));
                 if (userDoc.exists()) {
                     const userData = userDoc.data();
                     userNameSpan.innerText = userData.fullName || "User";
-                    
-                    // Load Opposites Matches
                     loadMatches(userData.lookingFor, user.uid);
                 } else {
                     window.location.href = 'profile-setup.html';
@@ -55,10 +157,9 @@
             }
         });
 
-        // Query Opposite Gender Profiles
+        // Load Opposites Matches
         async function loadMatches(lookingForGender, currentUid) {
             matchesGrid.innerHTML = "";
-            
             try {
                 const q = query(
                     collection(db, "users"), 
@@ -75,17 +176,22 @@
                 querySnapshot.forEach((docSnap) => {
                     if (docSnap.id !== currentUid) {
                         const profile = docSnap.data();
-                        const cardHtml = `
-                            <div class="card">
-                                <img src="${profile.photoUrl || 'https://via.placeholder.com/100'}" alt="Profile">
-                                <h4>${profile.fullName}, ${profile.age}</h4>
-                                <p><span class="badge">${profile.city}, ${profile.country}</span></p>
-                                <p style="font-size:0.85rem; color:#aaa;">"${profile.bio || 'No bio yet.'}"</p>
-                                <button onclick="alert('Starting Chat with ${profile.fullName}...')">Private Message 💬</button>
-                                <button style="background-color:#008cba;" onclick="alert('59-sec Call Feature Coming Soon!')">Call 📞 (59s Limit)</button>
-                            </div>
+                        const card = document.createElement('div');
+                        card.className = 'card';
+                        card.innerHTML = `
+                            <img src="${profile.photoUrl || 'https://via.placeholder.com/100'}" alt="Profile">
+                            <h4>${profile.fullName}, ${profile.age}</h4>
+                            <p><span class="badge">${profile.city}, ${profile.country}</span></p>
+                            <p style="font-size:0.85rem; color:#aaa;">"${profile.bio || 'No bio yet.'}"</p>
+                            <button class="msg-btn">Private Message 💬</button>
                         `;
-                        matchesGrid.innerHTML += cardHtml;
+                        
+                        // Attach Event Listener to Open Chat Box
+                        card.querySelector('.msg-btn').addEventListener('click', () => {
+                            openChatBox(docSnap.id, profile.fullName);
+                        });
+
+                        matchesGrid.appendChild(card);
                     }
                 });
             } catch (error) {
@@ -93,6 +199,68 @@
                 matchesGrid.innerHTML = "<p>Error loading matches.</p>";
             }
         }
+
+        // Generate Chat ID (Unique for 2 users)
+        function getChatId(uid1, uid2) {
+            return uid1 < uid2 ? `${uid1}_${uid2}` : `${uid2}_${uid1}`;
+        }
+
+        // Open Realtime Chat Modal
+        function openChatBox(receiverUid, receiverName) {
+            activeChatUserId = receiverUid;
+            chatUserName.innerText = receiverName;
+            chatModal.style.display = 'flex';
+            chatMessages.innerHTML = '';
+
+            const chatId = getChatId(currentUserId, receiverUid);
+
+            // Realtime Listener for Messages
+            const q = query(
+                collection(db, "chats", chatId, "messages"),
+                orderBy("createdAt", "asc")
+            );
+
+            if (unsubscribeChat) unsubscribeChat();
+
+            unsubscribeChat = onSnapshot(q, (snapshot) => {
+                chatMessages.innerHTML = '';
+                snapshot.forEach((doc) => {
+                    const msg = doc.data();
+                    const msgDiv = document.createElement('div');
+                    msgDiv.className = `message ${msg.senderId === currentUserId ? 'sent' : 'received'}`;
+                    msgDiv.innerText = msg.text;
+                    chatMessages.appendChild(msgDiv);
+                });
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            });
+        }
+
+        // Send Message
+        async function sendMessage() {
+            const text = chatInput.value.trim();
+            if (!text || !activeChatUserId) return;
+
+            const chatId = getChatId(currentUserId, activeChatUserId);
+            chatInput.value = '';
+
+            await addDoc(collection(db, "chats", chatId, "messages"), {
+                text: text,
+                senderId: currentUserId,
+                receiverId: activeChatUserId,
+                createdAt: new Date()
+            });
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        // Close Chat Modal
+        closeChatBtn.addEventListener('click', () => {
+            chatModal.style.display = 'none';
+            if (unsubscribeChat) unsubscribeChat();
+        });
 
         // Logout
         document.getElementById('logout-btn').addEventListener('click', () => {
