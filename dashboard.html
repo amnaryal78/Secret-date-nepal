@@ -18,7 +18,6 @@
             padding-bottom: 80px; 
         }
 
-        /* VIBRANT NAVBAR */
         .navbar {
             display: flex; justify-content: space-between; align-items: center;
             background: rgba(18, 18, 28, 0.85); backdrop-filter: blur(20px);
@@ -45,7 +44,6 @@
             box-shadow: 0 0 15px rgba(255, 51, 102, 0.5);
         }
 
-        /* AD SPACE BANNER */
         .ad-banner-top {
             background: rgba(255, 51, 102, 0.05); 
             border: 1px dashed rgba(255, 51, 102, 0.3);
@@ -57,7 +55,6 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* VIBRANT CREATE POST CARD */
         .create-post {
             background: rgba(22, 22, 32, 0.8); 
             border: 1px solid rgba(255, 51, 102, 0.25);
@@ -98,7 +95,6 @@
             transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 51, 102, 0.6);
         }
 
-        /* VIBRANT POST CARD */
         .post-card {
             background: rgba(22, 22, 32, 0.75); 
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -116,7 +112,6 @@
         .post-text { font-size: 0.95rem; color: #e0e0e0; line-height: 1.5; margin-bottom: 10px; }
         .post-card img.post-img { width: 100%; max-height: 420px; object-fit: cover; border-radius: 14px; margin-top: 10px; }
 
-        /* SEARCH BAR & GRID CARDS */
         .search-box { display: flex; gap: 10px; margin-bottom: 20px; }
         .search-box input {
             flex: 1; padding: 12px 16px; background: rgba(255, 255, 255, 0.06);
@@ -147,7 +142,6 @@
             display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px rgba(255,0,85,0.8);
         }
 
-        /* RAINBOW REALTIME CHAT MODAL */
         .chat-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.82); backdrop-filter: blur(12px);
@@ -175,7 +169,6 @@
         .chat-input-area input { flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); padding: 10px 15px; border-radius: 20px; color: #fff; outline: none; }
         .chat-input-area button { background: #ff3366; border: none; color: white; padding: 8px 18px; border-radius: 20px; font-weight: 600; cursor: pointer; }
 
-        /* PROFILE CARD */
         .profile-card { background: rgba(22, 22, 32, 0.8); border: 1px solid rgba(255, 51, 102, 0.2); border-radius: 20px; overflow: hidden; text-align: center; padding-bottom: 25px; }
         .cover-img { width: 100%; height: 180px; object-fit: cover; }
         .profile-img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid #ff3366; margin-top: -60px; }
@@ -183,7 +176,6 @@
 </head>
 <body>
 
-    <!-- NAVBAR -->
     <div class="navbar">
         <h2>Secret Date Nepal 🤫</h2>
         <div class="nav-links">
@@ -194,7 +186,6 @@
         </div>
     </div>
 
-    <!-- TOP AD BANNER PLACEHOLDER -->
     <div class="ad-banner-top">
         📢 <b>Sponsored Advertisement Space (728x90 Banner)</b>
     </div>
@@ -207,7 +198,6 @@
                 <h3>Create New Post 📸</h3>
                 <textarea id="post-text" rows="3" placeholder="Share your secret thoughts or romantic vibe..."></textarea>
                 
-                <!-- ONLY DIRECT FILE UPLOAD (NO URL LINK) -->
                 <label class="post-file-label">
                     📷 Upload Photo from Device
                     <input type="file" id="post-photo-upload" accept="image/*" style="display:none;">
@@ -270,7 +260,6 @@
                 <!-- Messages -->
             </div>
 
-            <!-- NAUGHTY & FUN STICKERS BAR -->
             <div class="sticker-bar">
                 <span class="sticker-item" onclick="sendSticker('🔥')">🔥</span>
                 <span class="sticker-item" onclick="sendSticker('💋')">💋</span>
@@ -299,7 +288,6 @@
         let activeChatUserId = null;
         let unsubscribeChat = null;
 
-        // Switch Tabs
         window.switchTab = function(tabId, btnElement) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -324,12 +312,11 @@
             }
         });
 
-        // Profile Tab Render
         function renderProfileTab() {
-            document.getElementById('my-name').innerText = currentUserData.fullName;
+            document.getElementById('my-name').innerText = currentUserData.fullName || 'User';
             document.getElementById('my-sdnp-id').innerText = currentUserData.sdnpId || "SDNP-User";
-            document.getElementById('my-location').innerText = `📍 ${currentUserData.city}, ${currentUserData.country}`;
-            document.getElementById('my-bio').innerText = `"${currentUserData.bio}"`;
+            document.getElementById('my-location').innerText = `📍 ${currentUserData.city || 'City'}, ${currentUserData.country || 'Nepal'}`;
+            document.getElementById('my-bio').innerText = `"${currentUserData.bio || 'No bio'}"`;
             document.getElementById('my-photo').src = currentUserData.photoUrl || 'https://via.placeholder.com/120';
             if(currentUserData.coverUrl) document.getElementById('my-cover').src = currentUserData.coverUrl;
 
@@ -340,14 +327,13 @@
             });
         }
 
-        // Display Uploaded Photo File Name
         document.getElementById('post-photo-upload').addEventListener('change', (e) => {
             const file = e.target.files[0];
             if(file) document.getElementById('file-name-display').innerText = `Selected: ${file.name}`;
         });
 
-        // Image Compression
-        function compressImage(file, maxWidth) {
+        // HIGH EFFICIENCY COMPRESSION (Max 500px, 60% quality) PREVENTS FIRESTORE BLOCKS
+        function compressImage(file) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
@@ -356,12 +342,23 @@
                     img.src = event.target.result;
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
-                        const ratio = maxWidth / img.width;
-                        canvas.width = maxWidth;
-                        canvas.height = img.height * ratio;
+                        let width = img.width;
+                        let height = img.height;
+                        const maxDim = 500;
+
+                        if (width > height && width > maxDim) {
+                            height *= maxDim / width;
+                            width = maxDim;
+                        } else if (height > maxDim) {
+                            width *= maxDim / height;
+                            height = maxDim;
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
                         const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        resolve(canvas.toDataURL('image/jpeg', 0.8));
+                        ctx.drawImage(img, 0, 0, width, height);
+                        resolve(canvas.toDataURL('image/jpeg', 0.6));
                     };
                 };
             });
@@ -381,10 +378,10 @@
                     card.className = 'card';
                     card.innerHTML = `
                         <img src="${profile.photoUrl || 'https://via.placeholder.com/100'}" alt="User">
-                        <h4>${profile.fullName}, ${profile.age}</h4>
+                        <h4>${profile.fullName || profile.firstName || 'User'}, ${profile.age || ''}</h4>
                         <p class="card-id">${profile.sdnpId || 'SDNP'}</p>
-                        <p style="font-size:0.8rem; color:#aaa; margin-top:4px;">📍 ${profile.city}, ${profile.country}</p>
-                        <button class="msg-btn" onclick="openChatBox('${docSnap.id}', '${profile.fullName}')">
+                        <p style="font-size:0.8rem; color:#aaa; margin-top:4px;">📍 ${profile.city || ''}, ${profile.country || ''}</p>
+                        <button class="msg-btn" onclick="openChatBox('${docSnap.id}', '${profile.fullName || profile.firstName}')">
                             Chat 💬 <span class="unread-badge" id="unread-${docSnap.id}" style="display:none;">0</span>
                         </button>
                     `;
@@ -406,7 +403,7 @@
             matchesGrid.innerHTML = "";
 
             if(snapshot.empty) {
-                matchesGrid.innerHTML = "<p style='color:#aaa;'>No user found with this SDNP ID!</p>";
+                matchesGrid.innerHTML = "<p style='color:#aaa;'>No user found with this Username!</p>";
                 return;
             }
 
@@ -416,9 +413,9 @@
                 card.className = 'card';
                 card.innerHTML = `
                     <img src="${profile.photoUrl || 'https://via.placeholder.com/100'}" alt="User">
-                    <h4>${profile.fullName}, ${profile.age}</h4>
+                    <h4>${profile.fullName || profile.firstName}, ${profile.age || ''}</h4>
                     <p class="card-id">${profile.sdnpId}</p>
-                    <button class="msg-btn" onclick="openChatBox('${docSnap.id}', '${profile.fullName}')">Chat 💬</button>
+                    <button class="msg-btn" onclick="openChatBox('${docSnap.id}', '${profile.fullName || profile.firstName}')">Chat 💬</button>
                 `;
                 matchesGrid.appendChild(card);
             });
@@ -485,68 +482,86 @@
             });
         }
 
-        // CREATE POST & FEED
+        // PUBLISH POST FIX (SUPER FAST COMPRESSION & INSTANT PUBLISH)
         document.getElementById('publish-post-btn').addEventListener('click', async () => {
             const text = document.getElementById('post-text').value.trim();
             const photoFile = document.getElementById('post-photo-upload').files[0];
             
-            if(!text && !photoFile) return;
+            if(!text && !photoFile) {
+                alert("Please write something or attach a photo to post!");
+                return;
+            }
 
             const btn = document.getElementById('publish-post-btn');
             btn.disabled = true;
             btn.innerText = "Publishing Post...";
 
-            let photoUrl = "";
-            if (photoFile) {
-                photoUrl = await compressImage(photoFile, 700);
+            try {
+                let photoUrl = "";
+                if (photoFile) {
+                    photoUrl = await compressImage(photoFile);
+                }
+
+                await addDoc(collection(db, "posts"), {
+                    userId: currentUserId,
+                    userName: currentUserData.fullName || currentUserData.firstName || 'User',
+                    userPhoto: currentUserData.photoUrl || '',
+                    sdnpId: currentUserData.sdnpId || 'SDNP',
+                    text: text,
+                    photoUrl: photoUrl,
+                    likes: [],
+                    createdAt: new Date()
+                });
+
+                document.getElementById('post-text').value = '';
+                document.getElementById('post-photo-upload').value = '';
+                document.getElementById('file-name-display').innerText = '';
+                
+                alert("Post Published Successfully! 🎉");
+                loadPosts();
+            } catch (err) {
+                alert("Error Publishing Post: " + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Publish Post 🚀";
             }
-
-            await addDoc(collection(db, "posts"), {
-                userId: currentUserId, userName: currentUserData.fullName, userPhoto: currentUserData.photoUrl,
-                sdnpId: currentUserData.sdnpId, text: text, photoUrl: photoUrl, likes: [], createdAt: new Date()
-            });
-
-            document.getElementById('post-text').value = '';
-            document.getElementById('post-photo-upload').value = '';
-            document.getElementById('file-name-display').innerText = '';
-            btn.disabled = false;
-            btn.innerText = "Publish Post 🚀";
-            loadPosts();
         });
 
-        async function loadPosts() {
+        // REALTIME POST LISTENER (Auto Refresh Posts)
+        function loadPosts() {
             const container = document.getElementById('feed-posts-container');
-            container.innerHTML = "";
             const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
-            const snapshot = await getDocs(q);
-
-            let count = 0;
-            snapshot.forEach((docSnap) => {
-                const p = docSnap.data();
-                count++;
-                const card = document.createElement('div');
-                card.className = 'post-card';
-                card.innerHTML = `
-                    <div class="post-header">
-                        <img src="${p.userPhoto || 'https://via.placeholder.com/48'}" alt="User">
-                        <div>
-                            <h4>${p.userName}</h4>
-                            <span>${p.sdnpId || 'SDNP'}</span>
+            
+            onSnapshot(q, (snapshot) => {
+                container.innerHTML = "";
+                let count = 0;
+                snapshot.forEach((docSnap) => {
+                    const p = docSnap.data();
+                    count++;
+                    const card = document.createElement('div');
+                    card.className = 'post-card';
+                    card.innerHTML = `
+                        <div class="post-header">
+                            <img src="${p.userPhoto || 'https://via.placeholder.com/48'}" alt="User">
+                            <div>
+                                <h4>${p.userName}</h4>
+                                <span>${p.sdnpId || 'SDNP'}</span>
+                            </div>
                         </div>
-                    </div>
-                    ${p.text ? `<p class="post-text">${p.text}</p>` : ''}
-                    ${p.photoUrl ? `<img src="${p.photoUrl}" class="post-img">` : ''}
-                `;
-                container.appendChild(card);
+                        ${p.text ? `<p class="post-text">${p.text}</p>` : ''}
+                        ${p.photoUrl ? `<img src="${p.photoUrl}" class="post-img">` : ''}
+                    `;
+                    container.appendChild(card);
 
-                if (count % 3 === 0) {
-                    const adCard = document.createElement('div');
-                    adCard.className = 'post-card';
-                    adCard.style.textAlign = 'center';
-                    adCard.style.color = '#ff6b81';
-                    adCard.innerHTML = `📢 <b>Sponsored Advertisement Space</b>`;
-                    container.appendChild(adCard);
-                }
+                    if (count % 3 === 0) {
+                        const adCard = document.createElement('div');
+                        adCard.className = 'post-card';
+                        adCard.style.textAlign = 'center';
+                        adCard.style.color = '#ff6b81';
+                        adCard.innerHTML = `📢 <b>Sponsored Advertisement Space</b>`;
+                        container.appendChild(adCard);
+                    }
+                });
             });
         }
 
