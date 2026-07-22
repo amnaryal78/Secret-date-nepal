@@ -9,329 +9,200 @@
     
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        
-        body { 
-            background: #0f1015; 
-            color: #ffffff; 
-            min-height: 100vh; 
-            padding-bottom: 80px; 
-        }
+        body { background: #0f1015; color: #ffffff; min-height: 100vh; padding-bottom: 80px; }
 
-        /* FACEBOOK STYLE TOP NAVBAR */
+        /* HEADER NAVBAR */
         .fb-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #181920;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 8px 20px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            display: flex; justify-content: space-between; align-items: center;
+            background: #181920; border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 8px 20px; position: sticky; top: 0; z-index: 100;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
-
-        .fb-left { display: flex; align-items: center; gap: 12px; }
-        .fb-logo { 
-            font-weight: 800; 
-            font-size: 1.3rem; 
-            background: linear-gradient(45deg, #ff3366, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            cursor: pointer;
-        }
-
-        .fb-search {
-            display: flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            padding: 6px 14px;
-            gap: 8px;
-            width: 220px;
-        }
-        .fb-search i { color: #aaa; font-size: 0.85rem; }
-        .fb-search input {
-            background: transparent; border: none; outline: none;
-            color: #fff; font-size: 0.85rem; width: 100%;
-        }
-
+        .fb-logo { font-weight: 800; font-size: 1.3rem; background: linear-gradient(45deg, #ff3366, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; }
         .fb-center { display: flex; gap: 10px; }
-        .nav-icon-btn {
-            width: 50px; height: 42px;
-            display: flex; justify-content: center; align-items: center;
-            color: #aaa; font-size: 1.2rem; cursor: pointer; border-radius: 10px;
-            transition: 0.2s; position: relative;
-        }
-        .nav-icon-btn:hover, .nav-icon-btn.active {
-            color: #ff3366; background: rgba(255, 51, 102, 0.1);
-        }
-        .nav-icon-btn.active::after {
-            content: ''; position: absolute; bottom: -8px; left: 0; width: 100%; height: 3px; background: #ff3366; border-radius: 3px;
-        }
-
+        .nav-icon-btn { width: 50px; height: 42px; display: flex; justify-content: center; align-items: center; color: #aaa; font-size: 1.2rem; cursor: pointer; border-radius: 10px; transition: 0.2s; position: relative; }
+        .nav-icon-btn:hover, .nav-icon-btn.active { color: #ff3366; background: rgba(255, 51, 102, 0.1); }
+        .nav-icon-btn.active::after { content: ''; position: absolute; bottom: -8px; left: 0; width: 100%; height: 3px; background: #ff3366; border-radius: 3px; }
         .fb-right { display: flex; align-items: center; gap: 10px; }
-        .circle-icon-btn {
-            width: 38px; height: 38px; border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1); display: flex;
-            justify-content: center; align-items: center; color: #fff;
-            font-size: 1rem; cursor: pointer; position: relative; transition: 0.2s;
-        }
+        .circle-icon-btn { width: 38px; height: 38px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); display: flex; justify-content: center; align-items: center; color: #fff; font-size: 1rem; cursor: pointer; transition: 0.2s; }
         .circle-icon-btn:hover { background: rgba(255, 51, 102, 0.3); }
-        .badge {
-            position: absolute; top: -3px; right: -3px; background: #ff0055;
-            color: white; font-size: 0.7rem; font-weight: bold; width: 18px;
-            height: 18px; border-radius: 50%; display: flex; justify-content: center; align-items: center;
-        }
-
-        .header-avatar {
-            width: 38px; height: 38px; border-radius: 50%;
-            object-fit: cover; border: 2px solid #ff3366; cursor: pointer;
-        }
+        .header-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #ff3366; cursor: pointer; }
 
         .container { max-width: 680px; margin: 20px auto; padding: 0 15px; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* FACEBOOK STYLE CREATE POST CARD */
-        .fb-post-creator {
-            background: #181920;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-
-        .creator-top {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .creator-avatar {
-            width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 1px solid #ff3366;
-        }
-
-        .creator-input-trigger {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.06);
-            border-radius: 25px;
-            padding: 10px 18px;
-            color: #aaa;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .creator-input-trigger:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
-
-        .creator-options {
-            display: flex;
-            justify-content: space-around;
-            padding-top: 10px;
-        }
-
-        .opt-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #ccc;
-            font-size: 0.88rem;
-            font-weight: 500;
-            cursor: pointer;
-            padding: 8px 14px;
-            border-radius: 10px;
-            transition: 0.2s;
-        }
-        .opt-btn:hover { background: rgba(255, 255, 255, 0.06); }
-
-        /* POST MODAL POPUP */
-        .post-modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
-            justify-content: center; align-items: center; z-index: 1000;
-        }
-        .post-modal-box {
-            background: #181920; border: 1px solid rgba(255, 51, 102, 0.3);
-            width: 500px; max-width: 90%; border-radius: 20px; padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-        }
-        .modal-header {
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 12px; margin-bottom: 15px;
-        }
-        .modal-header h3 { font-size: 1.1rem; color: #fff; }
-        .close-modal { cursor: pointer; font-size: 1.3rem; color: #aaa; }
-
-        /* POST CARD */
-        .post-card {
-            background: #181920;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px; padding: 18px; margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
+        /* POST CARDS */
+        .fb-post-creator { background: #181920; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 15px; margin-bottom: 20px; }
+        .creator-top { display: flex; align-items: center; gap: 12px; }
+        .creator-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 1px solid #ff3366; }
+        .creator-input-trigger { flex: 1; background: rgba(255, 255, 255, 0.06); border-radius: 25px; padding: 10px 18px; color: #aaa; font-size: 0.95rem; cursor: pointer; }
+        .post-card { background: #181920; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 18px; margin-bottom: 20px; }
         .post-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
         .post-header img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid #ff3366; }
-        .post-header h4 { font-size: 0.95rem; color: #fff; }
-        .post-header span { font-size: 0.75rem; color: #ff3366; font-weight: 600; }
-        .post-text { font-size: 0.92rem; color: #e0e0e0; line-height: 1.5; margin-bottom: 10px; }
         .post-card img.post-img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 12px; margin-top: 10px; }
 
         /* MATCHES GRID */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
-        .card {
-            background: #181920; border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px; padding: 15px; text-align: center; transition: 0.3s;
-        }
-        .card:hover { transform: translateY(-4px); border-color: #ff3366; }
+        .card { background: #181920; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 15px; text-align: center; }
         .card img { width: 85px; height: 85px; border-radius: 50%; object-fit: cover; border: 2px solid #ff3366; margin-bottom: 8px; }
-        .card-id { font-size: 0.78rem; color: #ff3366; font-weight: 600; }
-        .msg-btn {
-            width: 100%; background: rgba(255, 51, 102, 0.15); border: 1px solid rgba(255, 51, 102, 0.3);
-            color: white; padding: 8px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; font-size: 0.85rem;
-        }
+        .msg-btn { width: 100%; background: rgba(255, 51, 102, 0.15); border: 1px solid rgba(255, 51, 102, 0.3); color: white; padding: 8px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; font-size: 0.85rem; }
 
-        /* PROFILE CARD */
-        .profile-card { background: #181920; border: 1px solid rgba(255, 51, 102, 0.2); border-radius: 16px; overflow: hidden; text-align: center; padding-bottom: 20px; margin-bottom: 20px; }
-        .cover-img { width: 100%; height: 160px; object-fit: cover; }
-        .profile-img { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 4px solid #ff3366; margin-top: -55px; }
+        /* ADVANCED CHAT & CALL MODAL */
+        .chat-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); justify-content: center; align-items: center; z-index: 1000; }
+        .chat-box { background: #12131a; border: 1px solid rgba(255, 51, 102, 0.3); width: 440px; max-width: 92%; height: 580px; border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .chat-header { background: #181920; padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+        .chat-header-user { display: flex; align-items: center; gap: 10px; }
+        .chat-header-user img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #ff3366; }
+        .chat-actions { display: flex; gap: 12px; color: #ff3366; font-size: 1.2rem; }
+        .chat-actions i { cursor: pointer; transition: 0.2s; }
+        .chat-actions i:hover { transform: scale(1.2); }
+
+        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .message { max-width: 75%; padding: 10px 14px; border-radius: 16px; font-size: 0.88rem; line-height: 1.4; }
+        .message.sent { align-self: flex-end; background: linear-gradient(135deg, #ff3366, #b026ff); color: #fff; }
+        .message.received { align-self: flex-start; background: rgba(255, 255, 255, 0.08); color: #fff; }
+
+        .chat-input-area { display: flex; padding: 12px; background: #181920; gap: 8px; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); }
+        .chat-input-area input { flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 10px 15px; border-radius: 20px; color: #fff; outline: none; }
+        .chat-btn-icon { background: rgba(255, 51, 102, 0.2); color: #ff3366; border: none; width: 38px; height: 38px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s; }
+        .chat-btn-icon:hover { background: #ff3366; color: #fff; }
+
+        /* INCOMING CALL POPUP */
+        .call-popup { display: none; position: fixed; top: 20px; right: 20px; background: #181920; border: 2px solid #ff3366; border-radius: 16px; padding: 15px 20px; z-index: 2000; box-shadow: 0 10px 30px rgba(255,51,102,0.4); text-align: center; width: 280px; }
+        .call-btn-accept { background: #22c55e; color: white; border: none; padding: 8px 16px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-right: 8px; }
+        .call-btn-reject { background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+
+        /* VIDEO CALL OVERLAY */
+        .video-call-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 3000; flex-direction: column; justify-content: center; align-items: center; }
+        .video-container { position: relative; width: 100%; max-width: 800px; height: 80vh; background: #111; border-radius: 20px; overflow: hidden; }
+        video#remote-video { width: 100%; height: 100%; object-fit: cover; }
+        video#local-video { position: absolute; bottom: 20px; right: 20px; width: 180px; height: 120px; border-radius: 12px; border: 2px solid #ff3366; object-fit: cover; }
+        .call-controls { margin-top: 20px; display: flex; gap: 20px; }
+        .end-call-btn { background: #ef4444; color: white; border: none; padding: 12px 30px; border-radius: 30px; font-weight: bold; font-size: 1rem; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <!-- FACEBOOK STYLE HEADER NAVBAR -->
+    <!-- NAVBAR -->
     <header class="fb-header">
-        <div class="fb-left">
-            <div class="fb-logo" onclick="switchTab('feed-tab', document.getElementById('nav-feed'))">SDN 💖</div>
-            <div class="fb-search">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="header-search" placeholder="Search SDNP User...">
-            </div>
-        </div>
-
+        <div class="fb-logo" onclick="switchTab('feed-tab', document.getElementById('nav-feed'))">SDN 💖</div>
         <div class="fb-center">
-            <div class="nav-icon-btn active" id="nav-feed" onclick="switchTab('feed-tab', this)" title="Feed">
-                <i class="fa-solid fa-house"></i>
-            </div>
-            <div class="nav-icon-btn" id="nav-matches" onclick="switchTab('matches-tab', this)" title="Matches">
-                <i class="fa-solid fa-heart"></i>
-            </div>
-            <div class="nav-icon-btn" id="nav-profile" onclick="switchTab('profile-tab', this)" title="Profile">
-                <i class="fa-solid fa-user"></i>
-            </div>
+            <div class="nav-icon-btn active" id="nav-feed" onclick="switchTab('feed-tab', this)"><i class="fa-solid fa-house"></i></div>
+            <div class="nav-icon-btn" id="nav-matches" onclick="switchTab('matches-tab', this)"><i class="fa-solid fa-heart"></i></div>
+            <div class="nav-icon-btn" id="nav-profile" onclick="switchTab('profile-tab', this)"><i class="fa-solid fa-user"></i></div>
         </div>
-
         <div class="fb-right">
-            <div class="circle-icon-btn" title="Messages" onclick="switchTab('matches-tab', document.getElementById('nav-matches'))">
-                <i class="fa-solid fa-comment"></i>
-            </div>
-            <div class="circle-icon-btn" title="Notifications">
-                <i class="fa-solid fa-bell"></i>
-                <span class="badge">2</span>
-            </div>
+            <div class="circle-icon-btn" onclick="switchTab('matches-tab', document.getElementById('nav-matches'))"><i class="fa-solid fa-comment"></i></div>
             <img id="nav-user-avatar" class="header-avatar" src="https://via.placeholder.com/40" onclick="switchTab('profile-tab', document.getElementById('nav-profile'))" alt="Avatar">
-            <div class="circle-icon-btn" id="logout-btn" title="Logout" style="background: rgba(255, 0, 85, 0.2); color: #ff3366;">
-                <i class="fa-solid fa-right-from-bracket"></i>
-            </div>
+            <div class="circle-icon-btn" id="logout-btn" style="background: rgba(255, 0, 85, 0.2); color: #ff3366;"><i class="fa-solid fa-right-from-bracket"></i></div>
         </div>
     </header>
 
     <div class="container">
-
-        <!-- 1. FEED TAB -->
+        <!-- 1. FEED -->
         <div id="feed-tab" class="tab-content active">
-            
-            <!-- FACEBOOK STYLE WHAT'S ON YOUR MIND CARD -->
             <div class="fb-post-creator">
                 <div class="creator-top">
                     <img id="creator-avatar" class="creator-avatar" src="https://via.placeholder.com/40" alt="Avatar">
-                    <div class="creator-input-trigger" onclick="openPostModal()">What's on your secret mind?</div>
-                </div>
-                <div class="creator-options">
-                    <div class="opt-btn" style="color: #f3425f;" onclick="openPostModal()">
-                        <i class="fa-solid fa-video" style="font-size: 1.1rem;"></i> Live video
-                    </div>
-                    <div class="opt-btn" style="color: #45bd62;" onclick="openPostModal()">
-                        <i class="fa-solid fa-images" style="font-size: 1.1rem;"></i> Photo/video
-                    </div>
-                    <div class="opt-btn" style="color: #f7b928;" onclick="openPostModal()">
-                        <i class="fa-solid fa-clapperboard" style="font-size: 1.1rem;"></i> Reel
-                    </div>
+                    <div class="creator-input-trigger" onclick="alert('Use Post Button!')">What's on your secret mind?</div>
                 </div>
             </div>
-
-            <div id="feed-posts-container">
-                <!-- Posts -->
-            </div>
+            <div id="feed-posts-container"></div>
         </div>
 
-        <!-- 2. MATCHES TAB -->
+        <!-- 2. MATCHES -->
         <div id="matches-tab" class="tab-content">
-            <h3 style="margin-bottom: 15px; color: #ff3366;">💕 Suggested Secret Matches</h3>
-            <div class="grid" id="matches-grid">
-                <!-- Matches -->
-            </div>
+            <h3 style="margin-bottom: 15px; color: #ff3366;">💕 Secret Matches</h3>
+            <div class="grid" id="matches-grid"></div>
         </div>
 
-        <!-- 3. PROFILE TAB -->
+        <!-- 3. PROFILE -->
         <div id="profile-tab" class="tab-content">
-            <div class="profile-card">
-                <img id="my-cover" class="cover-img" src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23" alt="Cover">
-                <img id="my-photo" class="profile-img" src="https://via.placeholder.com/120" alt="Profile">
-                <h3 id="my-name" style="margin-top: 10px;">Loading...</h3>
-                <p id="my-sdnp-id" class="card-id">SDNP-ID</p>
-                <p id="my-location" style="font-size:0.85rem; color:#ccc; margin-top:4px;">📍 Nepal</p>
-                <p id="my-bio" style="margin: 15px 0; color:#aaa;">"No bio yet."</p>
+            <div style="background:#181920; border-radius:16px; padding:20px; text-align:center; margin-bottom:20px;">
+                <img id="my-photo" style="width:100px; height:100px; border-radius:50%; border:3px solid #ff3366; object-fit:cover;" src="https://via.placeholder.com/100" alt="Profile">
+                <h3 id="my-name" style="margin-top:10px;">Loading...</h3>
+                <p id="my-sdnp-id" style="color:#ff3366; font-size:0.85rem; font-weight:bold;">SDNP-ID</p>
             </div>
-
-            <h3 style="color:#ff3366; margin-bottom: 15px; font-size:1.1rem;">📸 My Published Posts</h3>
-            <div id="my-posts-container">
-                <!-- User Posts -->
-            </div>
+            <div id="my-posts-container"></div>
         </div>
-
     </div>
 
-    <!-- POST CREATOR POPUP MODAL -->
-    <div id="post-modal" class="post-modal">
-        <div class="post-modal-box">
-            <div class="modal-header">
-                <h3>Create Post 📝</h3>
-                <span class="close-modal" onclick="closePostModal()">&times;</span>
-            </div>
-            <textarea id="post-text" rows="4" style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:12px; color:#fff; outline:none; resize:none;" placeholder="Share your romantic thoughts..."></textarea>
-            
-            <div style="margin: 15px 0;">
-                <label style="background:rgba(255,255,255,0.08); padding:8px 15px; border-radius:10px; cursor:pointer; font-size:0.85rem; border:1px solid rgba(255,255,255,0.15);">
-                    📷 Choose Photo
-                    <input type="file" id="post-photo-upload" accept="image/*" style="display:none;">
-                </label>
-                <span id="file-name-display" style="font-size:0.8rem; color:#ff3366; margin-left:10px;"></span>
+    <!-- REALTIME CHAT MODAL -->
+    <div id="chat-modal" class="chat-modal">
+        <div class="chat-box">
+            <div class="chat-header">
+                <div class="chat-header-user">
+                    <img id="chat-user-img" src="https://via.placeholder.com/38" alt="User">
+                    <div>
+                        <h4 id="chat-user-name" style="font-size:0.95rem; color:#fff;">User</h4>
+                        <span style="font-size:0.75rem; color:#22c55e;">Online</span>
+                    </div>
+                </div>
+                <div class="chat-actions">
+                    <i class="fa-solid fa-phone" title="Audio Call" onclick="startCall('audio')"></i>
+                    <i class="fa-solid fa-video" title="Video Call" onclick="startCall('video')"></i>
+                    <i class="fa-solid fa-xmark" onclick="closeChatModal()" style="color:#aaa; margin-left:10px;"></i>
+                </div>
             </div>
 
-            <button id="publish-post-btn" style="width:100%; background:linear-gradient(45deg, #ff3366, #ff0055); border:none; color:white; padding:10px; border-radius:12px; font-weight:bold; cursor:pointer;">Publish Post 🚀</button>
+            <div class="chat-messages" id="chat-messages"></div>
+
+            <div class="chat-input-area">
+                <button class="chat-btn-icon" id="voice-rec-btn" title="Hold/Click to Record Voice"><i class="fa-solid fa-microphone"></i></button>
+                <input type="text" id="chat-input" placeholder="Type secret message...">
+                <button class="chat-btn-icon" id="send-msg-btn"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- INCOMING CALL POPUP -->
+    <div id="call-popup" class="call-popup">
+        <h4 style="color:#fff; margin-bottom:5px;">Incoming Call 📲</h4>
+        <p id="caller-name-text" style="color:#ff3366; font-size:0.9rem; margin-bottom:15px;">User is calling you...</p>
+        <button class="call-btn-accept" id="accept-call-btn">Accept</button>
+        <button class="call-btn-reject" id="reject-call-btn">Reject</button>
+    </div>
+
+    <!-- FULLSCREEN VIDEO CALL OVERLAY -->
+    <div id="video-call-overlay" class="video-call-overlay">
+        <div class="video-container">
+            <video id="remote-video" autoplay playsinline></video>
+            <video id="local-video" autoplay playsinline muted></video>
+        </div>
+        <div class="call-controls">
+            <button class="end-call-btn" id="end-call-btn"><i class="fa-solid fa-phone-slash"></i> End Call</button>
         </div>
     </div>
 
     <script type="module">
         import { auth, db } from './firebase-config.js';
-        import { doc, getDoc, collection, query, where, getDocs, addDoc, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { doc, getDoc, collection, query, where, getDocs, addDoc, onSnapshot, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         let currentUserId = null;
         let currentUserData = null;
+        let activeChatUserId = null;
+        let unsubscribeChat = null;
+
+        // WebRTC Variables
+        let localStream = null;
+        let peerConnection = null;
+        const rtcConfig = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
+
+        // Voice Recorder Variables
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let isRecording = false;
 
         window.switchTab = function(tabId, btnElement) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.nav-icon-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             if(btnElement) btnElement.classList.add('active');
-        }
+        };
 
-        window.openPostModal = function() { document.getElementById('post-modal').style.display = 'flex'; }
-        window.closePostModal = function() { document.getElementById('post-modal').style.display = 'none'; }
+        window.closeChatModal = function() { document.getElementById('chat-modal').style.display = 'none'; };
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -340,9 +211,9 @@
                 if (userDoc.exists()) {
                     currentUserData = userDoc.data();
                     renderHeaderAndProfile();
-                    loadMyPosts();
                     loadMatches(currentUserData.lookingFor);
                     loadPosts();
+                    listenIncomingCalls();
                 } else {
                     window.location.href = 'profile-setup.html';
                 }
@@ -352,135 +223,161 @@
         });
 
         function renderHeaderAndProfile() {
-            const photo = currentUserData.photoUrl || 'https://via.placeholder.com/120';
+            const photo = currentUserData.photoUrl || 'https://via.placeholder.com/100';
             document.getElementById('nav-user-avatar').src = photo;
             document.getElementById('creator-avatar').src = photo;
             document.getElementById('my-photo').src = photo;
-
             document.getElementById('my-name').innerText = currentUserData.fullName || currentUserData.firstName || 'User';
             document.getElementById('my-sdnp-id').innerText = currentUserData.sdnpId || "SDNP-User";
-            document.getElementById('my-location').innerText = `📍 ${currentUserData.city || 'City'}, ${currentUserData.country || 'Nepal'}`;
-            document.getElementById('my-bio').innerText = `"${currentUserData.bio || 'No bio'}"`;
-            if(currentUserData.coverUrl) document.getElementById('my-cover').src = currentUserData.coverUrl;
         }
 
-        document.getElementById('post-photo-upload').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if(file) document.getElementById('file-name-display').innerText = `Selected: ${file.name}`;
+        // CHAT OPEN
+        function getChatId(uid1, uid2) { return uid1 < uid2 ? `${uid1}_${uid2}` : `${uid2}_${uid1}`; }
+
+        window.openChatBox = function(receiverUid, receiverName, receiverPhoto) {
+            activeChatUserId = receiverUid;
+            document.getElementById('chat-user-name').innerText = receiverName;
+            document.getElementById('chat-user-img').src = receiverPhoto || 'https://via.placeholder.com/38';
+            document.getElementById('chat-modal').style.display = 'flex';
+            
+            const chatId = getChatId(currentUserId, receiverUid);
+            const q = query(collection(db, "chats", chatId, "messages"), orderBy("createdAt", "asc"));
+            if (unsubscribeChat) unsubscribeChat();
+
+            unsubscribeChat = onSnapshot(q, (snapshot) => {
+                const chatMessages = document.getElementById('chat-messages');
+                chatMessages.innerHTML = '';
+                snapshot.forEach((docSnap) => {
+                    const msg = docSnap.data();
+                    const msgDiv = document.createElement('div');
+                    msgDiv.className = `message ${msg.senderId === currentUserId ? 'sent' : 'received'}`;
+                    
+                    if(msg.type === 'voice') {
+                        msgDiv.innerHTML = `<audio controls src="${msg.audioUrl}" style="max-width:200px;"></audio>`;
+                    } else {
+                        msgDiv.innerText = msg.text;
+                    }
+                    chatMessages.appendChild(msgDiv);
+                });
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            });
+        };
+
+        // SEND TEXT MESSAGE
+        document.getElementById('send-msg-btn').addEventListener('click', async () => {
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if (!text || !activeChatUserId) return;
+            input.value = '';
+            const chatId = getChatId(currentUserId, activeChatUserId);
+            await addDoc(collection(db, "chats", chatId, "messages"), {
+                text: text, type: 'text', senderId: currentUserId, receiverId: activeChatUserId, createdAt: new Date()
+            });
         });
 
-        function compressImage(file) {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = (event) => {
-                    const img = new Image();
-                    img.src = event.target.result;
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        let width = img.width, height = img.height, maxDim = 500;
-                        if (width > height && width > maxDim) { height *= maxDim / width; width = maxDim; }
-                        else if (height > maxDim) { width *= maxDim / height; height = maxDim; }
-                        canvas.width = width; canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
-                        resolve(canvas.toDataURL('image/jpeg', 0.6));
+        // VOICE RECORDING & SENDING
+        const voiceBtn = document.getElementById('voice-rec-btn');
+        voiceBtn.addEventListener('click', async () => {
+            if (!isRecording) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+                    mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
+                    mediaRecorder.onstop = async () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        const reader = new FileReader();
+                        reader.readAsDataURL(audioBlob);
+                        reader.onloadend = async () => {
+                            const base64Audio = reader.result;
+                            const chatId = getChatId(currentUserId, activeChatUserId);
+                            await addDoc(collection(db, "chats", chatId, "messages"), {
+                                audioUrl: base64Audio, type: 'voice', senderId: currentUserId, receiverId: activeChatUserId, createdAt: new Date()
+                            });
+                        };
                     };
-                };
-            });
-        }
-
-        // PUBLISH POST
-        document.getElementById('publish-post-btn').addEventListener('click', async () => {
-            const text = document.getElementById('post-text').value.trim();
-            const photoFile = document.getElementById('post-photo-upload').files[0];
-            
-            if(!text && !photoFile) return alert("Write something or add a photo!");
-
-            const btn = document.getElementById('publish-post-btn');
-            btn.disabled = true; btn.innerText = "Publishing...";
-
-            try {
-                let photoUrl = photoFile ? await compressImage(photoFile) : "";
-                await addDoc(collection(db, "posts"), {
-                    userId: currentUserId,
-                    userName: currentUserData.fullName || currentUserData.firstName || 'User',
-                    userPhoto: currentUserData.photoUrl || '',
-                    sdnpId: currentUserData.sdnpId || 'SDNP',
-                    text: text, photoUrl: photoUrl, createdAt: new Date()
-                });
-
-                document.getElementById('post-text').value = '';
-                document.getElementById('post-photo-upload').value = '';
-                document.getElementById('file-name-display').innerText = '';
-                closePostModal();
-            } catch (err) {
-                alert("Error: " + err.message);
-            } finally {
-                btn.disabled = false; btn.innerText = "Publish Post 🚀";
+                    mediaRecorder.start();
+                    isRecording = true;
+                    voiceBtn.style.background = '#ef4444';
+                    voiceBtn.style.color = '#fff';
+                } catch(err) { alert("Mic Permission Denied!"); }
+            } else {
+                mediaRecorder.stop();
+                isRecording = false;
+                voiceBtn.style.background = 'rgba(255, 51, 102, 0.2)';
+                voiceBtn.style.color = '#ff3366';
             }
         });
 
-        // GLOBAL FEED POSTS
-        function loadPosts() {
-            const container = document.getElementById('feed-posts-container');
-            const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
-            
-            onSnapshot(q, (snapshot) => {
-                container.innerHTML = "";
-                snapshot.forEach((docSnap) => {
-                    const p = docSnap.data();
-                    const card = document.createElement('div');
-                    card.className = 'post-card';
-                    card.innerHTML = `
-                        <div class="post-header">
-                            <img src="${p.userPhoto || 'https://via.placeholder.com/44'}" alt="User">
-                            <div>
-                                <h4>${p.userName}</h4>
-                                <span>${p.sdnpId || 'SDNP'}</span>
-                            </div>
-                        </div>
-                        ${p.text ? `<p class="post-text">${p.text}</p>` : ''}
-                        ${p.photoUrl ? `<img src="${p.photoUrl}" class="post-img">` : ''}
-                    `;
-                    container.appendChild(card);
+        // WEBRTC CALLING SYSTEM
+        window.startCall = async function(type) {
+            if (!activeChatUserId) return;
+            document.getElementById('video-call-overlay').style.display = 'flex';
+            localStream = await navigator.mediaDevices.getUserMedia({ video: type === 'video', audio: true });
+            document.getElementById('local-video').srcObject = localStream;
+
+            peerConnection = new RTCPeerConnection(rtcConfig);
+            localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+            peerConnection.ontrack = (event) => {
+                document.getElementById('remote-video').srcObject = event.streams[0];
+            };
+
+            const offer = await peerConnection.createOffer();
+            await peerConnection.setLocalDescription(offer);
+
+            // Save Call Offer in Firestore
+            await addDoc(collection(db, "calls"), {
+                callerId: currentUserId, callerName: currentUserData.fullName || 'User',
+                receiverId: activeChatUserId, offer: offer, type: type, status: 'calling', createdAt: new Date()
+            });
+        };
+
+        // LISTEN FOR INCOMING CALLS
+        function listenIncomingCalls() {
+            const q = query(collection(db, "calls"), where("receiverId", "==", currentUserId), where("status", "==", "calling"));
+            onSnapshot(q, (snap) => {
+                snap.forEach((docSnap) => {
+                    const callData = docSnap.data();
+                    document.getElementById('caller-name-text').innerText = `${callData.callerName} is calling...`;
+                    document.getElementById('call-popup').style.display = 'block';
+
+                    document.getElementById('accept-call-btn').onclick = async () => {
+                        document.getElementById('call-popup').style.display = 'none';
+                        document.getElementById('video-call-overlay').style.display = 'flex';
+                        
+                        localStream = await navigator.mediaDevices.getUserMedia({ video: callData.type === 'video', audio: true });
+                        document.getElementById('local-video').srcObject = localStream;
+
+                        peerConnection = new RTCPeerConnection(rtcConfig);
+                        localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+                        peerConnection.ontrack = (e) => {
+                            document.getElementById('remote-video').srcObject = e.streams[0];
+                        };
+
+                        await peerConnection.setRemoteDescription(new RTCSessionDescription(callData.offer));
+                        const answer = await peerConnection.createAnswer();
+                        await peerConnection.setLocalDescription(answer);
+
+                        await updateDoc(doc(db, "calls", docSnap.id), { answer: answer, status: 'accepted' });
+                    };
+
+                    document.getElementById('reject-call-btn').onclick = async () => {
+                        document.getElementById('call-popup').style.display = 'none';
+                        await updateDoc(doc(db, "calls", docSnap.id), { status: 'rejected' });
+                    };
                 });
             });
         }
 
-        // USER MY POSTS
-        function loadMyPosts() {
-            const container = document.getElementById('my-posts-container');
-            const q = query(collection(db, "posts"), where("userId", "==", currentUserId));
-            
-            onSnapshot(q, (snapshot) => {
-                container.innerHTML = "";
-                if(snapshot.empty) return container.innerHTML = "<p style='color:#aaa;'>No posts yet.</p>";
+        document.getElementById('end-call-btn').addEventListener('click', () => {
+            if(peerConnection) peerConnection.close();
+            if(localStream) localStream.getTracks().forEach(t => t.stop());
+            document.getElementById('video-call-overlay').style.display = 'none';
+        });
 
-                let postsArray = [];
-                snapshot.forEach((docSnap) => postsArray.push(docSnap.data()));
-                postsArray.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
-
-                postsArray.forEach((p) => {
-                    const card = document.createElement('div');
-                    card.className = 'post-card';
-                    card.innerHTML = `
-                        <div class="post-header">
-                            <img src="${p.userPhoto || 'https://via.placeholder.com/44'}" alt="User">
-                            <div>
-                                <h4>${p.userName}</h4>
-                                <span>${p.sdnpId || 'SDNP'}</span>
-                            </div>
-                        </div>
-                        ${p.text ? `<p class="post-text">${p.text}</p>` : ''}
-                        ${p.photoUrl ? `<img src="${p.photoUrl}" class="post-img">` : ''}
-                    `;
-                    container.appendChild(card);
-                });
-            });
-        }
-
-        // MATCHES
+        // LOAD MATCHES
         async function loadMatches(lookingFor) {
             const matchesGrid = document.getElementById('matches-grid');
             matchesGrid.innerHTML = "";
@@ -495,11 +392,31 @@
                     card.innerHTML = `
                         <img src="${profile.photoUrl || 'https://via.placeholder.com/85'}" alt="User">
                         <h4>${profile.fullName || profile.firstName}, ${profile.age || ''}</h4>
-                        <p class="card-id">${profile.sdnpId || 'SDNP'}</p>
-                        <button class="msg-btn">Chat 💬</button>
+                        <p style="font-size:0.78rem; color:#ff3366; font-weight:600;">${profile.sdnpId || 'SDNP'}</p>
+                        <button class="msg-btn" onclick="openChatBox('${docSnap.id}', '${profile.fullName || profile.firstName}', '${profile.photoUrl || ''}')">Chat & Call 💬</button>
                     `;
                     matchesGrid.appendChild(card);
                 }
+            });
+        }
+
+        // LOAD POSTS
+        function loadPosts() {
+            const container = document.getElementById('feed-posts-container');
+            const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+            onSnapshot(q, (snapshot) => {
+                container.innerHTML = "";
+                snapshot.forEach((docSnap) => {
+                    const p = docSnap.data();
+                    const card = document.createElement('div');
+                    card.className = 'post-card';
+                    card.innerHTML = `
+                        <div class="post-header"><img src="${p.userPhoto || 'https://via.placeholder.com/44'}"><div><h4>${p.userName}</h4><span>${p.sdnpId || 'SDNP'}</span></div></div>
+                        ${p.text ? `<p style="font-size:0.92rem; color:#e0e0e0;">${p.text}</p>` : ''}
+                        ${p.photoUrl ? `<img src="${p.photoUrl}" class="post-img">` : ''}
+                    `;
+                    container.appendChild(card);
+                });
             });
         }
 
