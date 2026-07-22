@@ -3,104 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Face Scan - Secret Date Nepal</title>
+    <title>Face Verification - Secret Date Nepal</title>
     <link rel="stylesheet" href="style.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/dist/face-api.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Face-API.js Models -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.min.js"></script>
     <style>
-        .video-container {
+        .scan-card {
+            background: rgba(18, 18, 24, 0.85);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 25px;
+            border-radius: 20px;
+            width: 400px;
+            max-width: 90%;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
             position: relative;
-            margin: 15px auto;
-            width: 100%;
-            border-radius: 8px;
-            overflow: hidden;
-            background: #000;
+            z-index: 10;
         }
-        video { width: 100%; display: block; transform: scaleX(-1); }
+
+        .video-box {
+            position: relative;
+            width: 100%;
+            height: 280px;
+            background: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 15px 0;
+            border: 2px solid #ff3366;
+        }
+
+        video#webcam {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .status-text {
+            font-size: 0.9rem;
+            color: #ff3366;
+            margin-top: 10px;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
-    <div class="auth-container">
-        <h2>Face Verification 📸</h2>
-        <p style="font-size: 0.85rem; color: #aaa;">Look straight at the camera to verify your identity.</p>
-        
-        <div class="video-container">
-            <video id="webcam" autoplay playsinline muted></video>
+
+    <video autoplay muted loop id="bg-video">
+        <source src="bg-video.mp4" type="video/mp4">
+    </video>
+
+    <div class="scan-card">
+        <h2>Face Verification 👤</h2>
+        <p style="font-size: 0.85rem; color: #ccc;">One Person = One Account strictly enforced!</p>
+
+        <div class="video-box">
+            <video id="webcam" autoplay playsinline></video>
         </div>
 
-        <p id="status-text" style="font-size:0.9rem; color:#e91e63;">Loading AI Models...</p>
-        <button id="scan-btn" disabled>Scan My Face</button>
+        <p class="status-text" id="status">Loading AI Models... Please wait.</p>
+
+        <button id="scan-btn" disabled style="opacity: 0.6;">Scan Face & Verify</button>
     </div>
 
     <script type="module">
         import { auth, db } from './firebase-config.js';
-        import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { doc, getDoc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const video = document.getElementById('webcam');
-        const statusText = document.getElementById('status-text');
+        const webcam = document.getElementById('webcam');
+        const statusText = document.getElementById('status');
         const scanBtn = document.getElementById('scan-btn');
-        let currentUser = null;
 
+        let currentUser = null;
+        let faceMatcher = null;
+
+        // Check Auth Status
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
                 const userDoc = await getDoc(doc(db, "users", user.uid));
-                
-                // If profile is already fully set up, skip directly to dashboard
-                if (userDoc.exists() && userDoc.data().profileCompleted) {
-                    window.location.href = 'dashboard.html';
-                } else if (userDoc.exists() && userDoc.data().faceScanned) {
-                    // If face scanned but profile not complete, go to profile setup
+                if (userDoc.exists() && userDoc.data().faceVerified) {
                     window.location.href = 'profile-setup.html';
                 } else {
-                    // Otherwise load models and webcam for new user
-                    loadModels();
+                    initFaceAPI();
                 }
             } else {
                 window.location.href = 'index.html';
             }
         });
 
-        async function loadModels() {
+        // Initialize Face-API Models & Camera
+        async function initFaceAPI() {
             try {
-                const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/model/';
-                await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
-                await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
-                await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
+                const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/';
+                await Promise.all([
+                    faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
+                    faceapi.nets.faceLandmark64Net.loadFromUri(MODEL_URL),
+                    faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)
+                ]);
 
-                navigator.mediaDevices.getUserMedia({ video: {} })
-                    .then((stream) => {
-                        video.srcObject = stream;
-                        statusText.innerText = "Camera Ready! Click below.";
-                        scanBtn.disabled = false;
-                    })
-                    .catch(() => { statusText.innerText = "Camera Access Denied!"; });
+                statusText.innerText = "Starting Camera...";
+                startCamera();
             } catch (err) {
-                statusText.innerText = "Failed to load models!";
+                statusText.innerText = "Error loading AI models: " + err.message;
             }
         }
 
+        function startCamera() {
+            navigator.mediaDevices.getUserMedia({ video: {} })
+                .then(stream => {
+                    webcam.srcObject = stream;
+                    statusText.innerText = "Align your face in the camera & click Scan!";
+                    scanBtn.disabled = false;
+                    scanBtn.style.opacity = "1";
+                })
+                .catch(err => {
+                    statusText.innerText = "Camera access denied: " + err.message;
+                });
+        }
+
+        // Compare Face Descriptor with Existing Database Users
+        async function checkDuplicateFace(newDescriptor) {
+            statusText.innerText = "Checking biometric database for duplicates...";
+            const querySnapshot = await getDocs(collection(db, "users"));
+            
+            let isDuplicate = false;
+
+            querySnapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                if (data.faceDescriptor && docSnap.id !== currentUser.uid) {
+                    const existingDescriptor = new Float32Array(data.faceDescriptor);
+                    const distance = faceapi.euclideanDistance(newDescriptor, existingDescriptor);
+                    
+                    // Distance threshold <= 0.45 means match (Same Person)
+                    if (distance <= 0.45) {
+                        isDuplicate = true;
+                    }
+                }
+            });
+
+            return isDuplicate;
+        }
+
+        // Scan Face Trigger
         scanBtn.addEventListener('click', async () => {
             scanBtn.disabled = true;
-            statusText.innerText = "Scanning Face...";
+            scanBtn.innerText = "Scanning...";
+            statusText.innerText = "Detecting face landmarks...";
 
-            const detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptor();
+            const detection = await faceapi.detectSingleFace(webcam)
+                .withFaceLandmarks()
+                .withFaceDescriptor();
 
             if (!detection) {
-                alert("No face detected! Please center your face.");
+                alert("No face detected! Please position your face clearly in light.");
+                statusText.innerText = "Scan failed. Try again!";
                 scanBtn.disabled = false;
-                statusText.innerText = "Try Again.";
+                scanBtn.innerText = "Scan Face & Verify";
                 return;
             }
 
-            await setDoc(doc(db, "users", currentUser.uid), {
-                faceDescriptor: Array.from(detection.descriptor),
-                faceScanned: true,
-                updatedAt: new Date()
-            }, { merge: true });
+            const faceDescriptorArray = Array.from(detection.descriptor);
 
-            alert("Face Verification Successful!");
-            window.location.href = 'profile-setup.html';
+            // Strict One Person = One ID Check
+            const duplicateFound = await checkDuplicateFace(detection.descriptor);
+
+            if (duplicateFound) {
+                alert("⛔ REJECTED: An account with this face ALREADY EXISTS in Secret Date Nepal!\n\nMultiple accounts are NOT allowed. Please login with your original email.");
+                statusText.innerText = "Duplicate Account Detected! Blocked.";
+                scanBtn.innerText = "Account Blocked";
+                return;
+            }
+
+            // Save Face Descriptor & Mark Verified
+            try {
+                await setDoc(doc(db, "users", currentUser.uid), {
+                    faceVerified: true,
+                    faceDescriptor: faceDescriptorArray,
+                    updatedAt: new Date()
+                }, { merge: true });
+
+                alert("Face Verification Successful! 🎉");
+                window.location.href = 'profile-setup.html';
+            } catch (err) {
+                alert("Database Error: " + err.message);
+                scanBtn.disabled = false;
+                scanBtn.innerText = "Scan Face & Verify";
+            }
         });
     </script>
 </body>
