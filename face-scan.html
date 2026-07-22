@@ -9,35 +9,31 @@
     
     <style>
         .scan-card {
-            background: rgba(18, 18, 24, 0.85); backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.12); padding: 25px;
+            background: rgba(18, 18, 24, 0.9); backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 51, 102, 0.3); padding: 25px;
             border-radius: 20px; width: 400px; max-width: 90%; text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.7); position: relative; z-index: 10;
+            box-shadow: 0 15px 35px rgba(255, 51, 102, 0.2); position: relative; z-index: 10; margin: 40px auto;
         }
         .video-box {
             position: relative; width: 100%; height: 280px; background: #000;
             border-radius: 15px; overflow: hidden; margin: 15px 0; border: 2px solid #ff3366;
         }
         video#webcam { width: 100%; height: 100%; object-fit: cover; }
-        .status-text { font-size: 0.9rem; color: #ff3366; margin-top: 10px; font-weight: 500; }
+        .status-text { font-size: 0.88rem; color: #ff3366; margin-top: 10px; font-weight: 500; }
     </style>
 </head>
 <body>
 
-    <video autoplay muted loop id="bg-video">
-        <source src="bg-video.mp4" type="video/mp4">
-    </video>
-
     <div class="scan-card">
         <h2>Face Verification 👤</h2>
-        <p style="font-size: 0.85rem; color: #ccc;">One Person = One Account strictly enforced!</p>
+        <p style="font-size: 0.8rem; color: #ccc;">Strict Identity Verification (1 Person = 1 Account Only)</p>
 
         <div class="video-box">
             <video id="webcam" autoplay playsinline muted></video>
         </div>
 
         <p class="status-text" id="status">Loading AI Biometrics... Please wait.</p>
-        <button id="scan-btn" disabled style="opacity: 0.6; background:#ff3366; color:#fff; padding:10px 20px; border:none; border-radius:10px; cursor:pointer;">Scan Face & Verify</button>
+        <button id="scan-btn" disabled style="opacity: 0.5; background:#ff3366; color:#fff; padding:12px 24px; border:none; border-radius:12px; cursor:pointer; font-weight:bold; width:100%; margin-top:10px;">Scan & Verify Face 🚀</button>
     </div>
 
     <script type="module">
@@ -45,7 +41,7 @@
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { doc, getDoc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         
-        // DIRECT ESM IMPORT OF FACE-API (NO UNDEFINED ERRORS!)
+        // DIRECT ESM IMPORT
         import * as faceapi from 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/dist/face-api.esm.js';
 
         const webcam = document.getElementById('webcam');
@@ -70,7 +66,7 @@
 
         async function initFaceAPI() {
             try {
-                statusText.innerText = "Downloading AI Recognition Models...";
+                statusText.innerText = "Loading Security AI Models...";
                 const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/model/';
                 
                 await Promise.all([
@@ -79,10 +75,10 @@
                     faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)
                 ]);
 
-                statusText.innerText = "Models Loaded! Starting Camera...";
+                statusText.innerText = "Models Loaded! Turn on camera and click Scan.";
                 startCamera();
             } catch (err) {
-                statusText.innerText = "Error: " + err.message;
+                statusText.innerText = "Error loading AI: " + err.message;
             }
         }
 
@@ -90,31 +86,40 @@
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(stream => {
                     webcam.srcObject = stream;
-                    statusText.innerText = "Look directly at the camera & Click Scan!";
+                    statusText.innerText = "Look directly into the camera & click Scan!";
                     scanBtn.disabled = false;
                     scanBtn.style.opacity = "1";
                 })
                 .catch(err => {
-                    statusText.innerText = "Camera access denied.";
+                    statusText.innerText = "Camera access denied or not available!";
                 });
         }
 
-        // BIOMETRIC DUPLICATE CHECK
+        // ULTRA-STRICT DUPLICATE FACE DETECTOR
         async function checkDuplicateFace(newDescriptor) {
-            statusText.innerText = "Checking entire database for your face...";
+            statusText.innerText = "Checking system database for face match...";
             const querySnapshot = await getDocs(collection(db, "users"));
             let isDuplicate = false;
 
             querySnapshot.forEach((docSnap) => {
                 const data = docSnap.data();
-                // Compare with valid existing descriptors
-                if (data.faceDescriptor && docSnap.id !== currentUser.uid && Array.isArray(data.faceDescriptor) && data.faceDescriptor.length === 128) {
-                    const existingDescriptor = new Float32Array(data.faceDescriptor);
-                    const distance = faceapi.euclideanDistance(newDescriptor, existingDescriptor);
-                    
-                    // The distance threshold for same person (Lower is stricter)
-                    if (distance <= 0.45) {
-                        isDuplicate = true;
+                // Compare with all verified users in Database
+                if (data.faceDescriptor && docSnap.id !== currentUser.uid) {
+                    let existingDescriptor;
+                    if (Array.isArray(data.faceDescriptor)) {
+                        existingDescriptor = new Float32Array(data.faceDescriptor);
+                    } else if (typeof data.faceDescriptor === 'object') {
+                        existingDescriptor = new Float32Array(Object.values(data.faceDescriptor));
+                    }
+
+                    if (existingDescriptor && existingDescriptor.length === 128) {
+                        const distance = faceapi.euclideanDistance(newDescriptor, existingDescriptor);
+                        console.log("Calculated Face Distance:", distance);
+                        
+                        // ULTRA-STRICT LIMIT (0.30 - Strict Match Block)
+                        if (distance <= 0.30) {
+                            isDuplicate = true;
+                        }
                     }
                 }
             });
@@ -123,7 +128,7 @@
 
         scanBtn.addEventListener('click', async () => {
             scanBtn.disabled = true;
-            scanBtn.innerText = "Scanning Biometrics...";
+            scanBtn.innerText = "Scanning Face Biometrics...";
             statusText.innerText = "Extracting facial features...";
 
             try {
@@ -132,24 +137,24 @@
                     .withFaceDescriptor();
 
                 if (!detection) {
-                    alert("No face detected! Please ensure good lighting and look straight.");
-                    statusText.innerText = "Scan failed. Try again!";
+                    alert("No face detected! Please ensure proper light and look straight at the camera.");
+                    statusText.innerText = "Scan failed. Please try again!";
                     scanBtn.disabled = false;
-                    scanBtn.innerText = "Scan Face & Verify";
+                    scanBtn.innerText = "Scan & Verify Face 🚀";
                     return;
                 }
 
-                // Strict Identity Check
+                // Check Database
                 const duplicateFound = await checkDuplicateFace(detection.descriptor);
 
                 if (duplicateFound) {
-                    alert("⛔ SECURITY ALERT: An account with your exact face ALREADY EXISTS in the system!\n\nCreating duplicate accounts is strictly blocked. Please login to your original account.");
-                    statusText.innerText = "Duplicate Blocked!";
-                    scanBtn.innerText = "Blocked";
+                    alert("⛔ SECURITY BLOCK!\n\nAn account with your exact face ALREADY EXISTS in Secret Date Nepal.\n\nCreating duplicate accounts to bypass 59-second call limits is strictly prohibited!");
+                    statusText.innerText = "Duplicate Account Creation Blocked!";
+                    scanBtn.innerText = "Account Permanently Blocked";
                     return;
                 }
 
-                // Save Identity Descriptor Array
+                // Save Biometric Descriptor if unique
                 const faceDescriptorArray = Array.from(detection.descriptor);
                 await setDoc(doc(db, "users", currentUser.uid), {
                     faceVerified: true,
@@ -157,12 +162,12 @@
                     updatedAt: new Date()
                 }, { merge: true });
 
-                alert("Face Verified! Identity secured. 🎉");
+                alert("Face Verified Successfully! Your Identity is Locked to this Account. 🎉");
                 window.location.href = 'profile-setup.html';
             } catch (err) {
                 alert("Scan Error: " + err.message);
                 scanBtn.disabled = false;
-                scanBtn.innerText = "Scan Face & Verify";
+                scanBtn.innerText = "Scan & Verify Face 🚀";
             }
         });
     </script>
