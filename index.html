@@ -8,9 +8,25 @@
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
-        // Your Public Key Added
         emailjs.init("zMb5_t4JWR3_hV5as"); 
     </script>
+    <style>
+        .show-pass-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 8px;
+            margin: 8px 0 12px 0;
+            font-size: 0.85rem;
+            color: #ccc;
+            cursor: pointer;
+        }
+        .show-pass-container input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <div class="auth-container">
@@ -22,6 +38,12 @@
             <form id="login-form">
                 <input type="email" id="login-email" placeholder="Email Address" required>
                 <input type="password" id="login-password" placeholder="Password" required>
+                
+                <!-- Show Password Checkbox (Login) -->
+                <label class="show-pass-container">
+                    <input type="checkbox" id="toggle-login-pass"> Show Password
+                </label>
+
                 <button type="submit">Login</button>
             </form>
             <p><a href="#" id="forgot-password-link">Forgot Password?</a></p>
@@ -34,6 +56,12 @@
             <form id="signup-form">
                 <input type="email" id="signup-email" placeholder="Email Address" required>
                 <input type="password" id="signup-password" placeholder="Password (Min. 6 characters)" required>
+                
+                <!-- Show Password Checkbox (Sign Up) -->
+                <label class="show-pass-container">
+                    <input type="checkbox" id="toggle-signup-pass"> Show Password
+                </label>
+
                 <button type="submit" id="signup-btn">Send OTP Code</button>
             </form>
             <p>Already have an account? <a href="#" id="go-to-login">Login Here</a></p>
@@ -67,6 +95,19 @@
         let generatedOTP = null;
         let tempUserEmail = "";
         let tempUserPassword = "";
+
+        // TOGGLE SHOW/HIDE PASSWORD LOGIC
+        const loginPassInput = document.getElementById('login-password');
+        const toggleLoginPass = document.getElementById('toggle-login-pass');
+        toggleLoginPass.addEventListener('change', () => {
+            loginPassInput.type = toggleLoginPass.checked ? 'text' : 'password';
+        });
+
+        const signupPassInput = document.getElementById('signup-password');
+        const toggleSignupPass = document.getElementById('toggle-signup-pass');
+        toggleSignupPass.addEventListener('change', () => {
+            signupPassInput.type = toggleSignupPass.checked ? 'text' : 'password';
+        });
 
         // Switch Forms
         document.getElementById('go-to-signup').addEventListener('click', (e) => {
@@ -104,12 +145,10 @@
                 to_email: email,
                 otp_code: otp
             };
-            
-            // Your Service ID: service_e4qw80t & Template ID: template_pf3avf8
             return emailjs.send('service_e4qw80t', 'template_pf3avf8', templateParams);
         }
 
-        // Sign Up Submit (Sends OTP first)
+        // Sign Up Submit (Sends OTP)
         document.getElementById('signup-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             tempUserEmail = document.getElementById('signup-email').value;
@@ -160,7 +199,6 @@
                     const userCredential = await createUserWithEmailAndPassword(auth, tempUserEmail, tempUserPassword);
                     const user = userCredential.user;
 
-                    // Store verification status in Firestore
                     await setDoc(doc(db, "users", user.uid), {
                         email: tempUserEmail,
                         emailVerified: true,
