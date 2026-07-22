@@ -1,128 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secret Date Nepal - Welcome</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="auth-container">
-        <h2>Secret Date Nepal 🤫</h2>
-        
-        <!-- LOGIN FORM -->
-        <div id="login-box">
-            <h3>Login to Your Account</h3>
-            <form id="login-form">
-                <input type="email" id="login-email" placeholder="Email Address" required>
-                <input type="password" id="login-password" placeholder="Password" required>
-                <button type="submit">Login</button>
-            </form>
-            <p><a href="#" id="forgot-password-link">Forgot Password?</a></p>
-            <p>Don't have an account? <a href="#" id="go-to-signup">Sign Up Here</a></p>
-        </div>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getStorage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
-        <!-- SIGNUP FORM -->
-        <div id="signup-box" style="display: none;">
-            <h3>Create New Account</h3>
-            <form id="signup-form">
-                <input type="email" id="signup-email" placeholder="Email Address" required>
-                <input type="password" id="signup-password" placeholder="Strong Password (Min. 6 characters)" required>
-                <button type="submit">Register</button>
-            </form>
-            <p>Already have an account? <a href="#" id="go-to-login">Login Here</a></p>
-        </div>
-    </div>
+const firebaseConfig = {
+  apiKey: "AIzaSyCCivsIRM6Bx5t4fj8YvHIWIajJu7RoZvM",
+  authDomain: "secret-date-nepal.firebaseapp.com",
+  projectId: "secret-date-nepal",
+  storageBucket: "secret-date-nepal.firebasestorage.app",
+  messagingSenderId: "520835969835",
+  appId: "1:520835969835:web:0aaa303cf8b965a907cb6e",
+  measurementId: "G-78V2V28EW9"
+};
 
-    <script type="module">
-        import { auth } from './firebase-config.js';
-        import { 
-            signInWithEmailAndPassword, 
-            createUserWithEmailAndPassword,
-            sendPasswordResetEmail,
-            sendEmailVerification,
-            signOut
-        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-        const loginBox = document.getElementById('login-box');
-        const signupBox = document.getElementById('signup-box');
-        
-        // Switch between login and signup
-        document.getElementById('go-to-signup').addEventListener('click', (e) => {
-            e.preventDefault();
-            loginBox.style.display = 'none';
-            signupBox.style.display = 'block';
-        });
-
-        document.getElementById('go-to-login').addEventListener('click', (e) => {
-            e.preventDefault();
-            signupBox.style.display = 'none';
-            loginBox.style.display = 'block';
-        });
-
-        // Forgot Password Logic
-        document.getElementById('forgot-password-link').addEventListener('click', (e) => {
-            e.preventDefault();
-            const email = prompt("Please enter your registered email address:");
-            if (email) {
-                sendPasswordResetEmail(auth, email)
-                    .then(() => {
-                        alert("Password reset email sent! Please check your inbox or spam folder.");
-                    })
-                    .catch((error) => {
-                        alert("Error sending reset email: " + error.message);
-                    });
-            }
-        });
-
-        // Sign Up with Email Verification Logic
-        const signupForm = document.getElementById('signup-form');
-        signupForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('signup-email').value;
-            const password = document.getElementById('signup-password').value;
-
-            createUserWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    const user = userCredential.user;
-                    
-                    sendEmailVerification(user)
-                        .then(() => {
-                            alert("Account created successfully! A verification link has been sent to your email. Please verify your email before logging in.");
-                            signOut(auth).then(() => {
-                                signupBox.style.display = 'none';
-                                loginBox.style.display = 'block';
-                            });
-                        });
-                })
-                .catch((error) => {
-                    alert("Registration failed: " + error.message);
-                });
-        });
-
-        // Login Logic (Fixed Redirect to face-scan.html)
-        const loginForm = document.getElementById('login-form');
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-
-            signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    const user = userCredential.user;
-
-                    if (user.emailVerified) {
-                        alert("Login successful! Redirecting to Face Scan...");
-                        window.location.href = 'face-scan.html'; // Fixed link!
-                    } else {
-                        alert("Please verify your email first! Check your inbox for the verification link.");
-                        signOut(auth);
-                    }
-                })
-                .catch((error) => {
-                    alert("Login failed: " + error.message);
-                });
-        });
-    </script>
-</body>
-</html>
+const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+export const db = getFirestore(app);
+export const storage = getStorage(app);
