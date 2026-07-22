@@ -9,34 +9,26 @@
     <style>
         body { overflow-y: auto; padding: 40px 0; }
         .setup-card {
-            background: rgba(18, 18, 24, 0.88);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            padding: 30px;
-            border-radius: 20px;
-            width: 450px;
-            max-width: 90%;
-            margin: auto;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
-            position: relative;
-            z-index: 10;
+            background: rgba(18, 18, 24, 0.88); backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.12); padding: 30px;
+            border-radius: 20px; width: 450px; max-width: 90%; margin: auto;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7); position: relative; z-index: 10;
         }
-
         .input-group { text-align: left; margin-bottom: 12px; }
         .input-group label { font-size: 0.85rem; color: #ff3366; font-weight: 500; display: block; margin-bottom: 4px; }
-        
-        select {
-            width: 100%;
-            padding: 12px 15px;
-            margin: 5px 0;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
-            color: #fff;
-            font-size: 0.95rem;
-            outline: none;
+        input, select {
+            width: 100%; padding: 12px 15px; margin: 5px 0; background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; color: #fff; font-size: 0.95rem; outline: none;
         }
         select option { background: #121212; color: #fff; }
+        input[type="file"] { padding: 8px; font-size: 0.85rem; }
+        .auto-id-box {
+            background: rgba(255, 51, 102, 0.15);
+            border: 1px solid rgba(255, 51, 102, 0.3);
+            color: #ff3366;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
     </style>
 </head>
 <body>
@@ -50,15 +42,22 @@
         <p style="font-size: 0.85rem; color: #ccc; margin-bottom: 20px;">Complete your profile to find your secret match</p>
 
         <form id="profile-form">
-            
-            <div class="input-group">
-                <label>Full Name</label>
-                <input type="text" id="full-name" placeholder="John Doe" required>
+            <!-- FIRST NAME & LAST NAME -->
+            <div style="display: flex; gap: 10px;">
+                <div class="input-group" style="flex:1;">
+                    <label>First Name</label>
+                    <input type="text" id="first-name" placeholder="Namita" required>
+                </div>
+                <div class="input-group" style="flex:1;">
+                    <label>Last Name</label>
+                    <input type="text" id="last-name" placeholder="Gurung" required>
+                </div>
             </div>
 
+            <!-- AUTO-GENERATED SDNP USER ID -->
             <div class="input-group">
-                <label>Custom SDNP Username (Example: SDNP-Aman)</label>
-                <input type="text" id="sdnp-id" placeholder="SDNP-YourName" required>
+                <label>System Generated User ID (Auto)</label>
+                <input type="text" id="sdnp-id" class="auto-id-box" placeholder="SDNPnamita" readonly>
             </div>
 
             <div style="display: flex; gap: 10px;">
@@ -86,27 +85,16 @@
             </div>
 
             <div class="input-group">
-                <label>Country</label>
-                <select id="country" required>
-                    <option value="Nepal">Nepal 🇳🇵</option>
-                    <option value="India">India 🇮🇳</option>
-                    <option value="United States">United States 🇺🇸</option>
-                    <option value="United Kingdom">United Kingdom 🇬🇧</option>
-                    <option value="Australia">Australia 🇦🇺</option>
-                    <option value="Canada">Canada 🇨🇦</option>
-                    <option value="United Arab Emirates">United Arab Emirates 🇦🇪</option>
-                    <option value="Qatar">Qatar 🇶🇦</option>
-                    <option value="Saudi Arabia">Saudi Arabia 🇸🇦</option>
-                    <option value="Japan">Japan 🇯🇵</option>
-                    <option value="South Korea">South Korea 🇰🇷</option>
-                    <option value="Malaysia">Malaysia 🇲🇾</option>
-
-                </select>
-            </div>
-
-            <div class="input-group">
-                <label>City / Location</label>
-                <input type="text" id="city" placeholder="Kathmandu / Pokhara / etc." required>
+                <label>Country & City</label>
+                <div style="display: flex; gap: 10px;">
+                    <select id="country" style="flex:1;" required>
+                        <option value="Nepal">Nepal 🇳🇵</option>
+                        <option value="India">India 🇮🇳</option>
+                        <option value="USA">USA 🇺🇸</option>
+                        <option value="Australia">Australia 🇦🇺</option>
+                    </select>
+                    <input type="text" id="city" placeholder="City Name" style="flex:1;" required>
+                </div>
             </div>
 
             <div class="input-group">
@@ -114,26 +102,29 @@
                 <input type="text" id="bio" placeholder="Passionate traveler & music lover..." required>
             </div>
 
+            <!-- DIRECT PHOTO UPLOAD (OPTIONAL) -->
             <div class="input-group">
-                <label>Profile Picture URL (Direct Image Link)</label>
-                <input type="url" id="photo-url" placeholder="https://images.unsplash.com/photo-..." required>
+                <label>Profile Picture (Optional)</label>
+                <input type="file" id="profile-upload" accept="image/*">
             </div>
 
             <div class="input-group">
-                <label>Cover Picture URL (Optional)</label>
-                <input type="url" id="cover-url" placeholder="https://images.unsplash.com/cover-...">
+                <label>Cover Picture (Optional)</label>
+                <input type="file" id="cover-upload" accept="image/*">
             </div>
 
-            <button type="submit" id="save-btn">Save & Go to Dashboard 🚀</button>
+            <button type="submit" id="save-btn" style="width:100%; background:#ff3366; color:#fff; padding:12px; border:none; border-radius:10px; font-weight:bold; cursor:pointer; margin-top:10px;">Save & Go to Dashboard 🚀</button>
         </form>
     </div>
 
     <script type="module">
         import { auth, db } from './firebase-config.js';
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { doc, getDoc, setDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         let currentUser = null;
+        const firstNameInput = document.getElementById('first-name');
+        const sdnpIdInput = document.getElementById('sdnp-id');
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -147,35 +138,95 @@
             }
         });
 
+        // AUTO-GENERATE SDNP USER ID (SDNPnamita, SDNPnamita1, SDNPnamita2, etc.)
+        async function generateSDNPId(firstName) {
+            const cleanName = firstName.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+            if (!cleanName) {
+                sdnpIdInput.value = '';
+                return;
+            }
+
+            const baseId = `SDNP${cleanName}`;
+            
+            // Check Database for matching existing usernames
+            const q = query(collection(db, "users"), where("sdnpBaseName", "==", cleanName));
+            const querySnapshot = await getDocs(q);
+
+            const count = querySnapshot.size;
+            if (count === 0) {
+                sdnpIdInput.value = baseId;
+            } else {
+                sdnpIdInput.value = `${baseId}${count}`;
+            }
+        }
+
+        firstNameInput.addEventListener('input', (e) => {
+            generateSDNPId(e.target.value);
+        });
+
+        // Image Compression Function
+        function compressImage(file, maxWidth) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const ratio = maxWidth / img.width;
+                        canvas.width = maxWidth;
+                        canvas.height = img.height * ratio;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        resolve(canvas.toDataURL('image/jpeg', 0.8));
+                    };
+                };
+            });
+        }
+
         document.getElementById('profile-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('save-btn');
             btn.disabled = true;
             btn.innerText = "Saving Profile...";
 
-            let sdnpInput = document.getElementById('sdnp-id').value.trim();
-            if(!sdnpInput.toUpperCase().startsWith("SDNP-")){
-                sdnpInput = "SDNP-" + sdnpInput;
-            }
+            const firstName = firstNameInput.value.trim();
+            const lastName = document.getElementById('last-name').value.trim();
+            const fullName = `${firstName} ${lastName}`;
+            const sdnpId = sdnpIdInput.value;
+            const cleanBaseName = firstName.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+            let finalProfilePhoto = 'https://via.placeholder.com/150';
+            let finalCoverPhoto = 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23';
+
+            const profileFile = document.getElementById('profile-upload').files[0];
+            if (profileFile) finalProfilePhoto = await compressImage(profileFile, 400);
+
+            const coverFile = document.getElementById('cover-upload').files[0];
+            if (coverFile) finalCoverPhoto = await compressImage(coverFile, 800);
 
             try {
                 await setDoc(doc(db, "users", currentUser.uid), {
-                    fullName: document.getElementById('full-name').value.trim(),
-                    sdnpId: sdnpInput,
+                    firstName: firstName,
+                    lastName: lastName,
+                    fullName: fullName,
+                    sdnpBaseName: cleanBaseName,
+                    sdnpId: sdnpId,
                     age: parseInt(document.getElementById('age').value),
                     gender: document.getElementById('gender').value,
                     lookingFor: document.getElementById('looking-for').value,
                     country: document.getElementById('country').value,
                     city: document.getElementById('city').value.trim(),
                     bio: document.getElementById('bio').value.trim(),
-                    photoUrl: document.getElementById('photo-url').value.trim(),
-                    coverUrl: document.getElementById('cover-url').value.trim() || 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23',
+                    photoUrl: finalProfilePhoto,
+                    coverUrl: finalCoverPhoto,
                     profileCompleted: true,
                     invisibleMode: false,
                     updatedAt: new Date()
                 }, { merge: true });
 
-                alert("Profile Saved Successfully! 🎉");
+                alert(`Profile Saved! Your Unique ID is: ${sdnpId} 🎉`);
                 window.location.href = 'dashboard.html';
             } catch (error) {
                 alert("Error saving profile: " + error.message);
