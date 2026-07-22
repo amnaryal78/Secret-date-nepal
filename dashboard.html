@@ -52,23 +52,81 @@
         .card img { width: 85px; height: 85px; border-radius: 50%; object-fit: cover; border: 2px solid #ff3366; margin-bottom: 8px; }
         .msg-btn { width: 100%; background: rgba(255, 51, 102, 0.15); border: 1px solid rgba(255, 51, 102, 0.3); color: white; padding: 8px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; font-size: 0.85rem; }
 
-        /* ADVANCED CHAT MODAL */
-        .chat-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); justify-content: center; align-items: center; z-index: 1000; }
-        .chat-box { background: #12131a; border: 1px solid rgba(255, 51, 102, 0.3); width: 440px; max-width: 92%; height: 580px; border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-        .chat-header { background: #181920; padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
-        .chat-header-user { display: flex; align-items: center; gap: 10px; }
-        .chat-header-user img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #ff3366; }
-        .chat-actions { display: flex; gap: 12px; color: #ff3366; font-size: 1.2rem; }
-        .chat-actions i { cursor: pointer; }
+        /* ULTRA-MODERN ROMANTIC MESSENGER THEME */
+        .chat-modal { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0, 0, 0, 0.88); backdrop-filter: blur(15px); 
+            justify-content: center; align-items: center; z-index: 1000; 
+        }
+        .chat-box { 
+            background: #14151f; 
+            border: 1px solid rgba(255, 51, 102, 0.35); 
+            width: 440px; max-width: 92%; height: 600px; 
+            border-radius: 24px; display: flex; flex-direction: column; overflow: hidden; 
+            box-shadow: 0 15px 40px rgba(255, 51, 102, 0.25); 
+        }
+        .chat-header { 
+            background: #1c1d27; padding: 14px 20px; 
+            display: flex; justify-content: space-between; align-items: center; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08); 
+        }
+        .chat-header-user { display: flex; align-items: center; gap: 12px; }
+        .chat-header-user-img-wrap { position: relative; }
+        .chat-header-user img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #ff3366; }
+        .online-dot { position: absolute; bottom: 2px; right: 2px; width: 10px; height: 10px; background: #22c55e; border-radius: 50%; border: 2px solid #1c1d27; }
+        .chat-actions { display: flex; gap: 14px; color: #ff3366; font-size: 1.25rem; }
+        .chat-actions i { cursor: pointer; transition: 0.2s; }
+        .chat-actions i:hover { transform: scale(1.2); }
 
-        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .message { max-width: 75%; padding: 10px 14px; border-radius: 16px; font-size: 0.88rem; line-height: 1.4; }
-        .message.sent { align-self: flex-end; background: linear-gradient(135deg, #ff3366, #b026ff); color: #fff; }
-        .message.received { align-self: flex-start; background: rgba(255, 255, 255, 0.08); color: #fff; }
+        /* CHAT MESSAGES AREA WITH VIBRANT PATTERN */
+        .chat-messages { 
+            flex: 1; padding: 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; 
+            background-color: #12131c;
+            background-image: 
+                radial-gradient(at 10% 20%, rgba(255, 51, 102, 0.08) 0px, transparent 40%),
+                radial-gradient(at 90% 80%, rgba(168, 85, 247, 0.08) 0px, transparent 40%);
+        }
 
-        .chat-input-area { display: flex; padding: 12px; background: #181920; gap: 8px; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); }
-        .chat-input-area input { flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 10px 15px; border-radius: 20px; color: #fff; outline: none; }
-        .chat-btn-icon { background: rgba(255, 51, 102, 0.2); color: #ff3366; border: none; width: 38px; height: 38px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; }
+        .message { max-width: 78%; padding: 10px 16px; border-radius: 18px; font-size: 0.9rem; line-height: 1.45; word-wrap: break-word; }
+        .message.sent { 
+            align-self: flex-end; 
+            background: linear-gradient(135deg, #ff3366, #b026ff); 
+            color: #fff; 
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 4px 15px rgba(255, 51, 102, 0.3);
+        }
+        .message.received { 
+            align-self: flex-start; 
+            background: rgba(255, 255, 255, 0.08); 
+            color: #fff; 
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-bottom-left-radius: 4px;
+        }
+
+        .sticker-msg { font-size: 2.3rem; background: none !important; border: none !important; box-shadow: none !important; }
+
+        /* ROMANTIC STICKERS BAR */
+        .sticker-bar {
+            display: flex; gap: 12px; padding: 8px 15px; 
+            background: rgba(255,255,255,0.03); border-top: 1px solid rgba(255,255,255,0.05);
+            overflow-x: auto;
+        }
+        .sticker-item { font-size: 1.4rem; cursor: pointer; transition: 0.2s; }
+        .sticker-item:hover { transform: scale(1.3); }
+
+        .chat-input-area { display: flex; padding: 12px; background: #1c1d27; gap: 8px; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); }
+        .chat-input-area input { 
+            flex: 1; background: rgba(255,255,255,0.06); 
+            border: 1px solid rgba(255,255,255,0.15); padding: 10px 16px; 
+            border-radius: 20px; color: #fff; outline: none; font-size:0.9rem;
+        }
+        .chat-btn-icon { 
+            background: linear-gradient(45deg, #ff3366, #ff0055); 
+            color: #fff; border: none; width: 40px; height: 40px; border-radius: 50%; 
+            display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s;
+            box-shadow: 0 4px 12px rgba(255,51,102,0.4);
+        }
+        .chat-btn-icon:hover { transform: scale(1.08); }
 
         /* FULLSCREEN VIDEO CALL OVERLAY WITH 59 SEC TIMER */
         .video-call-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 3000; flex-direction: column; justify-content: center; align-items: center; }
@@ -143,12 +201,15 @@
         </div>
     </div>
 
-    <!-- CHAT MODAL -->
+    <!-- BEAUTIFUL MESSENGER CHAT MODAL -->
     <div id="chat-modal" class="chat-modal">
         <div class="chat-box">
             <div class="chat-header">
                 <div class="chat-header-user">
-                    <img id="chat-user-img" src="https://via.placeholder.com/38" alt="User">
+                    <div class="chat-header-user-img-wrap">
+                        <img id="chat-user-img" src="https://via.placeholder.com/42" alt="User">
+                        <div class="online-dot"></div>
+                    </div>
                     <div>
                         <h4 id="chat-user-name" style="font-size:0.95rem; color:#fff;">User</h4>
                         <span style="font-size:0.75rem; color:#22c55e;">Online (Free 59s Call)</span>
@@ -161,11 +222,26 @@
                 </div>
             </div>
 
-            <div class="chat-messages" id="chat-messages"></div>
+            <!-- CHAT MESSAGES CONTAINER -->
+            <div class="chat-messages" id="chat-messages">
+                <!-- Messages render here -->
+            </div>
+
+            <!-- ROMANTIC STICKERS QUICK BAR -->
+            <div class="sticker-bar">
+                <span class="sticker-item" onclick="sendSticker('🔥')">🔥</span>
+                <span class="sticker-item" onclick="sendSticker('💋')">💋</span>
+                <span class="sticker-item" onclick="sendSticker('😈')">😈</span>
+                <span class="sticker-item" onclick="sendSticker('🥂')">🥂</span>
+                <span class="sticker-item" onclick="sendSticker('🌶️')">🌶️</span>
+                <span class="sticker-item" onclick="sendSticker('🔞')">🔞</span>
+                <span class="sticker-item" onclick="sendSticker('🌹')">🌹</span>
+                <span class="sticker-item" onclick="sendSticker('🙈')">🙈</span>
+            </div>
 
             <div class="chat-input-area">
-                <button class="chat-btn-icon" id="voice-rec-btn"><i class="fa-solid fa-microphone"></i></button>
-                <input type="text" id="chat-input" placeholder="Type secret message (Unlimited Text)...">
+                <button class="chat-btn-icon" id="voice-rec-btn" title="Hold/Click to Record Voice" style="background: rgba(255,255,255,0.08); color:#ff3366;"><i class="fa-solid fa-microphone"></i></button>
+                <input type="text" id="chat-input" placeholder="Type secret message...">
                 <button class="chat-btn-icon" id="send-msg-btn"><i class="fa-solid fa-paper-plane"></i></button>
             </div>
         </div>
@@ -290,7 +366,7 @@
         window.openChatBox = function(receiverUid, receiverName, receiverPhoto) {
             activeChatUserId = receiverUid;
             document.getElementById('chat-user-name').innerText = receiverName;
-            document.getElementById('chat-user-img').src = receiverPhoto || 'https://via.placeholder.com/38';
+            document.getElementById('chat-user-img').src = receiverPhoto || 'https://via.placeholder.com/42';
             document.getElementById('chat-modal').style.display = 'flex';
             
             const chatId = getChatId(currentUserId, receiverUid);
@@ -303,7 +379,8 @@
                 snapshot.forEach((docSnap) => {
                     const msg = docSnap.data();
                     const msgDiv = document.createElement('div');
-                    msgDiv.className = `message ${msg.senderId === currentUserId ? 'sent' : 'received'}`;
+                    const isSticker = ['🔥','💋','😈','🥂','🌶️','🔞','🌹','🙈'].includes(msg.text);
+                    msgDiv.className = `message ${msg.senderId === currentUserId ? 'sent' : 'received'} ${isSticker ? 'sticker-msg' : ''}`;
                     msgDiv.innerText = msg.text;
                     chatMessages.appendChild(msgDiv);
                 });
@@ -311,7 +388,16 @@
             });
         };
 
-        // SEND TEXT MESSAGE (UNLIMITED FREE TEXT)
+        // SEND STICKER
+        window.sendSticker = async function(emoji) {
+            if(!activeChatUserId) return;
+            const chatId = getChatId(currentUserId, activeChatUserId);
+            await addDoc(collection(db, "chats", chatId, "messages"), {
+                text: emoji, senderId: currentUserId, receiverId: activeChatUserId, createdAt: new Date()
+            });
+        };
+
+        // SEND TEXT MESSAGE
         document.getElementById('send-msg-btn').addEventListener('click', async () => {
             const input = document.getElementById('chat-input');
             const text = input.value.trim();
@@ -333,7 +419,6 @@
                 document.getElementById('local-video').srcObject = localStream;
             } catch(err) { alert("Camera/Mic Permission Error!"); }
 
-            // Start 59 Second Countdown Timer
             callSecondsLeft = 59;
             clearInterval(callTimerInterval);
             callTimerInterval = setInterval(() => {
@@ -356,7 +441,7 @@
             document.getElementById('video-call-overlay').style.display = 'none';
         };
 
-        // RECHARGE / VIP PAYMENT SUBMIT
+        // RECHARGE SUBMIT
         window.submitPayment = async function() {
             const txn = document.getElementById('txn-id-input').value.trim();
             if(!txn) return alert("Please enter Transaction Ref ID!");
@@ -406,7 +491,7 @@
                 container.innerHTML = "";
                 snapshot.forEach((docSnap) => {
                     const p = docSnap.data();
-                    const card = document.createElement('div');
+                    card = document.createElement('div');
                     card.className = 'post-card';
                     card.innerHTML = `
                         <div class="post-header"><img src="${p.userPhoto || 'https://via.placeholder.com/44'}"><div><h4>${p.userName}</h4><span>${p.sdnpId || 'SDNP'}</span></div></div>
