@@ -34,7 +34,7 @@
 
         .glass-card {
             background: rgba(20, 21, 31, 0.75); backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 30px;
+            border: 1px solid rgba(255, 51, 102, 0.3); border-radius: 24px; padding: 30px;
             width: 100%; max-width: 480px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
 
@@ -42,10 +42,17 @@
             width: 100%; background: linear-gradient(45deg, #ff3366, #a855f7);
             border: none; color: #fff; padding: 14px; border-radius: 14px; font-weight: 700;
             font-size: 1rem; cursor: pointer; margin-bottom: 12px; transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 51, 102, 0.4);
         }
         .btn-secondary {
             width: 100%; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);
             color: #fff; padding: 14px; border-radius: 14px; font-weight: 600; font-size: 0.95rem; cursor: pointer; margin-bottom: 12px;
+        }
+
+        .room-code-input {
+            width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; color: #fff;
+            text-align: center; font-size: 1.1rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 12px; outline: none;
         }
 
         .game-layout { display: grid; grid-template-columns: 1fr 340px; gap: 20px; width: 100%; }
@@ -55,14 +62,14 @@
         .controls-bar { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding: 10px 15px; background: rgba(255,255,255,0.05); border-radius: 14px; }
         .dice-box { width: 60px; height: 60px; background: linear-gradient(135deg, #ff3366, #a855f7); border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.8rem; font-weight: 800; color: #fff; cursor: pointer; }
 
-        /* ADVERTISEMENT BANNER BOXES */
+        /* ADVERTISEMENT BANNERS */
         .ad-banner-horizontal {
-            width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 255, 255, 0.15);
-            border-radius: 14px; padding: 12px; margin-top: 15px; text-align: center; color: #777; font-size: 0.75rem;
+            width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 14px; padding: 12px; margin-top: 15px; text-align: center; color: #888; font-size: 0.75rem;
         }
         .ad-banner-vertical {
-            width: 100%; height: 180px; background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 255, 255, 0.15);
-            border-radius: 14px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #777; font-size: 0.75rem; margin-top: 15px;
+            width: 100%; height: 180px; background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 14px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #888; font-size: 0.75rem; margin-top: 15px;
         }
 
         .chat-panel { background: rgba(20, 21, 31, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; display: flex; flex-direction: column; height: 580px; overflow: hidden; }
@@ -86,19 +93,28 @@
         <!-- VIEW 1: MODE SELECTION -->
         <div id="home-view" class="view-panel active">
             <div class="glass-card">
-                <h2 style="color:#ff3366; margin-bottom: 5px;">Choose Ludo Mode 🎲</h2>
-                <p style="font-size: 0.85rem; color:#aaa; margin-bottom: 25px;">Play Single vs Computer or Couple with Match</p>
+                <h2 style="color:#ff3366; margin-bottom: 5px;">Secret Ludo Modes 🎲</h2>
+                <p style="font-size: 0.85rem; color:#aaa; margin-bottom: 25px;">Select your preferred game mode</p>
 
                 <!-- SINGLE PLAYER BUTTON -->
-                <button class="btn-primary" onclick="startSinglePlayer()"><i class="fa-solid fa-robot"></i> 1. Play Single (vs AI Computer)</button>
+                <button class="btn-primary" onclick="startSinglePlayer()"><i class="fa-solid fa-robot"></i> 🤖 Play Single (vs AI Computer)</button>
                 
+                <div style="margin: 15px 0; color:#666; font-size:0.8rem;">— OR PLAY WITH PARTNER —</div>
+
                 <!-- COUPLE MULTIPLAYER BUTTON -->
-                <button class="btn-secondary" onclick="showCoupleSetup()"><i class="fa-solid fa-heart"></i> 2. Secret Couple Mode (2 Player)</button>
+                <button class="btn-secondary" onclick="showCoupleBox()"><i class="fa-solid fa-heart" style="color:#ff3366;"></i> 💕 Secret Couple Mode (2 Player)</button>
+
+                <!-- HIDDEN COUPLE ROOM BOX -->
+                <div id="couple-box" style="display:none; margin-top:15px; padding-top:15px; border-top:1px solid rgba(255,255,255,0.1);">
+                    <button class="btn-primary" style="background:linear-gradient(45deg, #00e5ff, #a855f7);" onclick="startSinglePlayer()">+ Create Private Room</button>
+                    <input type="text" class="room-code-input" placeholder="ENTER ROOM CODE">
+                    <button class="btn-secondary" onclick="startSinglePlayer()">Join Room</button>
+                </div>
 
                 <!-- AD BANNER IN MENU -->
                 <div class="ad-banner-horizontal">
                     📢 ADVERTISEMENT SPACE<br>
-                    <span style="font-size:0.65rem; color:#555;">(Google AdSense / Sponsor Ads Here)</span>
+                    <span style="font-size:0.65rem; color:#666;">(Google AdSense / Sponsor Ads Here)</span>
                 </div>
             </div>
         </div>
@@ -129,7 +145,7 @@
                     <div style="padding: 12px 15px; background: rgba(255,255,255,0.05); font-weight: 700; color: #ff3366;"><i class="fa-solid fa-comments"></i> Game Assistant & Chat</div>
                     
                     <div class="chat-messages" id="chat-box">
-                        <div class="msg-bubble bot">Welcome! Roll 6 to open your token. Good luck! 🎲</div>
+                        <div class="msg-bubble bot">Welcome to Secret Ludo! Roll dice to start! 🎲</div>
                     </div>
 
                     <!-- SIDEBAR ADVERTISEMENT BOX -->
@@ -145,8 +161,7 @@
     </div>
 
     <script>
-        let isSinglePlayer = true;
-        let currentTurn = 'user'; // 'user' or 'ai'
+        let currentTurn = 'user';
         let diceValue = 1;
         let isDiceRolled = false;
 
@@ -164,16 +179,14 @@
             document.getElementById(id).classList.add('active');
         }
 
-        function startSinglePlayer() {
-            isSinglePlayer = true;
-            document.getElementById('game-mode-tag').innerText = "Mode: Single Player vs AI 🤖";
-            showView('game-view');
-            drawBoard();
+        function showCoupleBox() {
+            const box = document.getElementById('couple-box');
+            box.style.display = box.style.display === 'none' ? 'block' : 'none';
         }
 
-        function showCoupleSetup() {
-            alert("Couple Mode selected! You can share code with partner.");
-            startSinglePlayer();
+        function startSinglePlayer() {
+            showView('game-view');
+            drawBoard();
         }
 
         function drawBoard() {
@@ -222,7 +235,6 @@
                 confetti({ particleCount: 40, spread: 50 });
             }
 
-            // AI Turn Automatic Simulation
             setTimeout(() => {
                 document.getElementById('turn-indicator').innerText = "AI Turn (Yellow)...";
                 document.getElementById('turn-indicator').style.color = "#eab308";
