@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secret Ludo - Single & Couple Mode</title>
+    <title>Secret Ludo - Real Graphics</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
@@ -12,7 +12,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; user-select: none; }
 
         body {
-            background: #0a0b10;
+            background: #090a10;
             background-image: 
                 radial-gradient(circle at 10% 20%, rgba(255, 51, 102, 0.18), transparent 45%),
                 radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.18), transparent 45%);
@@ -20,10 +20,9 @@
         }
 
         .ludo-header {
-            width: 100%; background: rgba(20, 21, 31, 0.9); backdrop-filter: blur(15px);
+            width: 100%; background: rgba(20, 21, 31, 0.95); backdrop-filter: blur(15px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 12px 25px;
-            display: flex; justify-content: space-between; align-items: center;
-            position: sticky; top: 0; z-index: 100;
+            display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
         }
         .ludo-title { font-size: 1.3rem; font-weight: 800; background: linear-gradient(45deg, #ff3366, #a855f7, #00e5ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .back-btn { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; padding: 6px 14px; border-radius: 20px; cursor: pointer; text-decoration: none; font-size:0.85rem; }
@@ -33,7 +32,7 @@
         .view-panel.active { display: flex; flex-direction: column; align-items: center; }
 
         .glass-card {
-            background: rgba(20, 21, 31, 0.75); backdrop-filter: blur(20px);
+            background: rgba(20, 21, 31, 0.8); backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 51, 102, 0.3); border-radius: 24px; padding: 30px;
             width: 100%; max-width: 480px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
@@ -49,34 +48,22 @@
             color: #fff; padding: 14px; border-radius: 14px; font-weight: 600; font-size: 0.95rem; cursor: pointer; margin-bottom: 12px;
         }
 
-        .room-code-input {
-            width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; color: #fff;
-            text-align: center; font-size: 1.1rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 12px; outline: none;
-        }
-
         .game-layout { display: grid; grid-template-columns: 1fr 340px; gap: 20px; width: 100%; }
-        .board-wrapper { background: rgba(20, 21, 31, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 15px; display: flex; flex-direction: column; align-items: center; }
-        #ludoCanvas { background: #12131c; border-radius: 12px; max-width: 100%; height: auto; }
+        .board-wrapper { background: rgba(20, 21, 31, 0.9); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 20px; display: flex; flex-direction: column; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+        #ludoCanvas { background: #12131c; border-radius: 16px; border: 3px solid rgba(255,255,255,0.1); max-width: 100%; height: auto; }
 
-        .controls-bar { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding: 10px 15px; background: rgba(255,255,255,0.05); border-radius: 14px; }
-        .dice-box { width: 60px; height: 60px; background: linear-gradient(135deg, #ff3366, #a855f7); border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.8rem; font-weight: 800; color: #fff; cursor: pointer; }
+        .controls-bar { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding: 12px 18px; background: rgba(255,255,255,0.05); border-radius: 16px; }
+        .dice-box { width: 65px; height: 65px; background: linear-gradient(135deg, #ff3366, #a855f7); border-radius: 16px; display: flex; justify-content: center; align-items: center; font-size: 2rem; font-weight: 800; color: #fff; cursor: pointer; box-shadow: 0 6px 20px rgba(255, 51, 102, 0.4); transition: 0.2s; }
+        .dice-box:active { transform: scale(0.92); }
 
-        /* ADVERTISEMENT BANNERS */
-        .ad-banner-horizontal {
-            width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 255, 255, 0.2);
-            border-radius: 14px; padding: 12px; margin-top: 15px; text-align: center; color: #888; font-size: 0.75rem;
-        }
-        .ad-banner-vertical {
-            width: 100%; height: 180px; background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 255, 255, 0.2);
-            border-radius: 14px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #888; font-size: 0.75rem; margin-top: 15px;
-        }
+        .ad-banner-horizontal { width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 255, 255, 0.18); border-radius: 14px; padding: 10px; margin-top: 15px; text-align: center; color: #888; font-size: 0.75rem; }
+        .ad-banner-vertical { width: 100%; height: 160px; background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 255, 255, 0.18); border-radius: 14px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #888; font-size: 0.75rem; margin-top: 15px; }
 
-        .chat-panel { background: rgba(20, 21, 31, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; display: flex; flex-direction: column; height: 580px; overflow: hidden; }
+        .chat-panel { background: rgba(20, 21, 31, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; display: flex; flex-direction: column; height: 580px; overflow: hidden; }
         .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .msg-bubble { max-width: 80%; padding: 8px 12px; border-radius: 12px; font-size: 0.85rem; }
+        .msg-bubble { max-width: 85%; padding: 10px 14px; border-radius: 14px; font-size: 0.85rem; line-height: 1.4; }
         .msg-bubble.me { align-self: flex-end; background: linear-gradient(45deg, #ff3366, #a855f7); }
-        .msg-bubble.bot { align-self: flex-start; background: rgba(255,255,255,0.1); }
+        .msg-bubble.bot { align-self: flex-start; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); }
 
         @media(max-width: 850px) { .game-layout { grid-template-columns: 1fr; } }
     </style>
@@ -84,71 +71,51 @@
 <body>
 
     <header class="ludo-header">
-        <div class="ludo-title"><i class="fa-solid fa-gamepad"></i> Secret Ludo 🎲</div>
+        <div class="ludo-title"><i class="fa-solid fa-gamepad"></i> Secret Ludo 💖</div>
         <a href="dashboard.html" class="back-btn"><i class="fa-solid fa-house"></i> Exit Game</a>
     </header>
 
     <div class="app-container">
 
-        <!-- VIEW 1: MODE SELECTION -->
+        <!-- MODE SELECTION -->
         <div id="home-view" class="view-panel active">
             <div class="glass-card">
-                <h2 style="color:#ff3366; margin-bottom: 5px;">Secret Ludo Modes 🎲</h2>
-                <p style="font-size: 0.85rem; color:#aaa; margin-bottom: 25px;">Select your preferred game mode</p>
+                <h2 style="color:#ff3366; margin-bottom: 5px;">Secret Couple Ludo 🎲</h2>
+                <p style="font-size: 0.85rem; color:#aaa; margin-bottom: 25px;">Real Animated Board & AI Player</p>
 
-                <!-- SINGLE PLAYER BUTTON -->
                 <button class="btn-primary" onclick="startSinglePlayer()"><i class="fa-solid fa-robot"></i> 🤖 Play Single (vs AI Computer)</button>
-                
-                <div style="margin: 15px 0; color:#666; font-size:0.8rem;">— OR PLAY WITH PARTNER —</div>
+                <button class="btn-secondary" onclick="startSinglePlayer()"><i class="fa-solid fa-heart" style="color:#ff3366;"></i> 💕 Secret Couple Mode (Online)</button>
 
-                <!-- COUPLE MULTIPLAYER BUTTON -->
-                <button class="btn-secondary" onclick="showCoupleBox()"><i class="fa-solid fa-heart" style="color:#ff3366;"></i> 💕 Secret Couple Mode (2 Player)</button>
-
-                <!-- HIDDEN COUPLE ROOM BOX -->
-                <div id="couple-box" style="display:none; margin-top:15px; padding-top:15px; border-top:1px solid rgba(255,255,255,0.1);">
-                    <button class="btn-primary" style="background:linear-gradient(45deg, #00e5ff, #a855f7);" onclick="startSinglePlayer()">+ Create Private Room</button>
-                    <input type="text" class="room-code-input" placeholder="ENTER ROOM CODE">
-                    <button class="btn-secondary" onclick="startSinglePlayer()">Join Room</button>
-                </div>
-
-                <!-- AD BANNER IN MENU -->
-                <div class="ad-banner-horizontal">
-                    📢 ADVERTISEMENT SPACE<br>
-                    <span style="font-size:0.65rem; color:#666;">(Google AdSense / Sponsor Ads Here)</span>
-                </div>
+                <div class="ad-banner-horizontal">📢 ADVERTISEMENT SPACE (Google AdSense)</div>
             </div>
         </div>
 
-        <!-- VIEW 2: GAMEPLAY & CHAT -->
+        <!-- GAMEPLAY PANEL -->
         <div id="game-view" class="view-panel">
             <div class="game-layout">
                 
                 <div class="board-wrapper">
-                    <canvas id="ludoCanvas" width="500" height="500"></canvas>
+                    <canvas id="ludoCanvas" width="510" height="510"></canvas>
                     
                     <div class="controls-bar">
                         <div>
-                            <h5 id="turn-indicator" style="color:#ff3366;">Your Turn (Red)</h5>
-                            <span id="game-mode-tag" style="font-size:0.75rem; color:#00e5ff;">Single Player vs AI</span>
+                            <h5 id="turn-indicator" style="color:#ff3366; font-weight:700;">Your Turn (Red) 💖</h5>
+                            <span id="game-mode-tag" style="font-size:0.75rem; color:#00e5ff;">Single Player vs AI 🤖</span>
                         </div>
                         <div id="dice-element" class="dice-box" onclick="rollDice()">🎲</div>
                     </div>
 
-                    <!-- AD BANNER BELOW BOARD -->
-                    <div class="ad-banner-horizontal">
-                        📢 ADVERTISEMENT BANNER (Monetize your app traffic here)
-                    </div>
+                    <div class="ad-banner-horizontal">📢 ADVERTISEMENT BANNER</div>
                 </div>
 
-                <!-- SIDE CHAT OR AI BOT CHAT -->
+                <!-- CHAT PANEL -->
                 <div class="chat-panel">
-                    <div style="padding: 12px 15px; background: rgba(255,255,255,0.05); font-weight: 700; color: #ff3366;"><i class="fa-solid fa-comments"></i> Game Assistant & Chat</div>
+                    <div style="padding: 14px 18px; background: rgba(255,255,255,0.05); font-weight: 700; color: #ff3366;"><i class="fa-solid fa-comments"></i> Game Assistant & Chat</div>
                     
                     <div class="chat-messages" id="chat-box">
-                        <div class="msg-bubble bot">Welcome to Secret Ludo! Roll dice to start! 🎲</div>
+                        <div class="msg-bubble bot">Welcome to Secret Ludo! Tap the 🎲 Dice to roll. Roll 6 to open your tokens!</div>
                     </div>
 
-                    <!-- SIDEBAR ADVERTISEMENT BOX -->
                     <div class="ad-banner-vertical">
                         <i class="fa-solid fa-rectangle-ad" style="font-size:2rem; margin-bottom:5px;"></i>
                         <span>SPONSORED AD</span>
@@ -167,11 +134,13 @@
 
         const canvas = document.getElementById('ludoCanvas');
         const ctx = canvas.getContext('2d');
-        const tileSize = 500 / 15;
+        const size = 510;
+        const cell = size / 15;
 
+        // TOKEN POSITIONS (Steps from 0 to 56)
         let tokens = {
-            user: [{x: 1, y: 1}, {x: 4, y: 1}, {x: 1, y: 4}, {x: 4, y: 4}],
-            ai: [{x: 10, y: 10}, {x: 13, y: 10}, {x: 10, y: 13}, {x: 13, y: 13}]
+            user: [0, 0, 0, 0], // Red
+            ai: [0, 0, 0, 0]    // Yellow
         };
 
         function showView(id) {
@@ -179,48 +148,104 @@
             document.getElementById(id).classList.add('active');
         }
 
-        function showCoupleBox() {
-            const box = document.getElementById('couple-box');
-            box.style.display = box.style.display === 'none' ? 'block' : 'none';
-        }
-
         function startSinglePlayer() {
             showView('game-view');
-            drawBoard();
+            drawRealLudoBoard();
         }
 
-        function drawBoard() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        function drawRealLudoBoard() {
+            ctx.clearRect(0, 0, size, size);
 
-            // Bases
-            ctx.fillStyle = '#ff3366'; ctx.fillRect(0, 0, tileSize*6, tileSize*6);
-            ctx.fillStyle = '#12131c'; ctx.fillRect(tileSize, tileSize, tileSize*4, tileSize*4);
+            // 1. BASE HOMES
+            drawBase(0, 0, '#ff3366', 'RED');
+            drawBase(9*cell, 0, '#22c55e', 'GREEN');
+            drawBase(9*cell, 9*cell, '#eab308', 'YELLOW');
+            drawBase(0, 9*cell, '#3b82f6', 'BLUE');
 
-            ctx.fillStyle = '#22c55e'; ctx.fillRect(tileSize*9, 0, tileSize*6, tileSize*6);
-            ctx.fillStyle = '#12131c'; ctx.fillRect(tileSize*10, tileSize, tileSize*4, tileSize*4);
+            // 2. PATHWAYS & GRID
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.lineWidth = 1;
 
-            ctx.fillStyle = '#eab308'; ctx.fillRect(tileSize*9, tileSize*9, tileSize*6, tileSize*6);
-            ctx.fillStyle = '#12131c'; ctx.fillRect(tileSize*10, tileSize*10, tileSize*4, tileSize*4);
-
-            ctx.fillStyle = '#3b82f6'; ctx.fillRect(0, tileSize*9, tileSize*6, tileSize*6);
-            ctx.fillStyle = '#12131c'; ctx.fillRect(tileSize, tileSize*10, tileSize*4, tileSize*4);
-
-            // Grid
-            ctx.strokeStyle = 'rgba(255,255,255,0.15)';
-            for(let i=0; i<15; i++) {
-                for(let j=0; j<15; j++) { ctx.strokeRect(i*tileSize, j*tileSize, tileSize, tileSize); }
+            for(let i=0; i<15; i++){
+                for(let j=0; j<15; j++){
+                    if((i<6 || i>8) && (j<6 || j>8)) continue; // Skip Bases
+                    ctx.fillStyle = '#161824';
+                    ctx.fillRect(i*cell, j*cell, cell, cell);
+                    ctx.strokeRect(i*cell, j*cell, cell, cell);
+                }
             }
 
-            // Tokens
-            tokens.user.forEach(t => {
-                ctx.beginPath(); ctx.arc((t.x + 0.5) * tileSize, (t.y + 0.5) * tileSize, tileSize/2.8, 0, Math.PI * 2);
-                ctx.fillStyle = '#ff3366'; ctx.fill(); ctx.strokeStyle = '#fff'; ctx.stroke();
+            // 3. HOME RUN PATHS (Colored Cells)
+            for(let i=1; i<6; i++) {
+                fillCell(i*cell, 7*cell, '#ff3366'); // Red Home Path
+                fillCell(7*cell, i*cell, '#22c55e'); // Green Home Path
+                fillCell((14-i)*cell, 7*cell, '#eab308'); // Yellow Home Path
+                fillCell(7*cell, (14-i)*cell, '#3b82f6'); // Blue Home Path
+            }
+
+            // Starting Safe Spots
+            fillCell(1*cell, 6*cell, '#ff3366');
+            fillCell(8*cell, 1*cell, '#22c55e');
+            fillCell(13*cell, 8*cell, '#eab308');
+            fillCell(6*cell, 13*cell, '#3b82f6');
+
+            // 4. CENTER TRIANGLE HOME
+            ctx.fillStyle = '#ff3366'; ctx.beginPath(); ctx.moveTo(6*cell, 6*cell); ctx.lineTo(7.5*cell, 7.5*cell); ctx.lineTo(6*cell, 9*cell); ctx.fill();
+            ctx.fillStyle = '#22c55e'; ctx.beginPath(); ctx.moveTo(6*cell, 6*cell); ctx.lineTo(7.5*cell, 7.5*cell); ctx.lineTo(9*cell, 6*cell); ctx.fill();
+            ctx.fillStyle = '#eab308'; ctx.beginPath(); ctx.moveTo(9*cell, 6*cell); ctx.lineTo(7.5*cell, 7.5*cell); ctx.lineTo(9*cell, 9*cell); ctx.fill();
+            ctx.fillStyle = '#3b82f6'; ctx.beginPath(); ctx.moveTo(6*cell, 9*cell); ctx.lineTo(7.5*cell, 7.5*cell); ctx.lineTo(9*cell, 9*cell); ctx.fill();
+
+            // 5. DRAW REAL 3D TOKENS
+            drawTokens();
+        }
+
+        function fillCell(x, y, color) {
+            ctx.fillStyle = color;
+            ctx.fillRect(x+1, y+1, cell-2, cell-2);
+        }
+
+        function drawBase(x, y, color, label) {
+            ctx.fillStyle = color;
+            ctx.fillRect(x, y, 6*cell, 6*cell);
+            ctx.fillStyle = '#0f1017';
+            ctx.fillRect(x+cell, y+cell, 4*cell, 4*cell);
+
+            // White Inner Circles
+            ctx.fillStyle = 'rgba(255,255,255,0.2)';
+            const spots = [
+                {cx: x+2*cell, cy: y+2*cell}, {cx: x+4*cell, cy: y+2*cell},
+                {cx: x+2*cell, cy: y+4*cell}, {cx: x+4*cell, cy: y+4*cell}
+            ];
+            spots.forEach(s => {
+                ctx.beginPath(); ctx.arc(s.cx, s.cy, cell*0.6, 0, Math.PI*2); ctx.fill();
+            });
+        }
+
+        function drawTokens() {
+            // RED USER TOKENS IN BASE
+            const redBaseSpots = [{x: 2*cell, y: 2*cell}, {x: 4*cell, y: 2*cell}, {x: 2*cell, y: 4*cell}, {x: 4*cell, y: 4*cell}];
+            tokens.user.forEach((pos, idx) => {
+                let p = redBaseSpots[idx];
+                draw3DPiece(p.x, p.y, '#ff3366', idx+1);
             });
 
-            tokens.ai.forEach(t => {
-                ctx.beginPath(); ctx.arc((t.x + 0.5) * tileSize, (t.y + 0.5) * tileSize, tileSize/2.8, 0, Math.PI * 2);
-                ctx.fillStyle = '#eab308'; ctx.fill(); ctx.strokeStyle = '#fff'; ctx.stroke();
+            // YELLOW AI TOKENS IN BASE
+            const yellowBaseSpots = [{x: 11*cell, y: 11*cell}, {x: 13*cell, y: 11*cell}, {x: 11*cell, y: 13*cell}, {x: 13*cell, y: 13*cell}];
+            tokens.ai.forEach((pos, idx) => {
+                let p = yellowBaseSpots[idx];
+                draw3DPiece(p.x, p.y, '#eab308', idx+1);
             });
+        }
+
+        function draw3DPiece(x, y, color, num) {
+            ctx.shadowBlur = 10; ctx.shadowColor = color;
+            ctx.beginPath(); ctx.arc(x, y, cell*0.5, 0, Math.PI*2);
+            ctx.fillStyle = color; ctx.fill();
+            ctx.lineWidth = 3; ctx.strokeStyle = '#ffffff'; ctx.stroke(); ctx.shadowBlur = 0;
+
+            ctx.fillStyle = '#ffffff'; ctx.font = 'bold 12px Poppins';
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText(num, x, y);
         }
 
         function rollDice() {
@@ -231,31 +256,37 @@
             diceEl.innerText = diceValue;
             isDiceRolled = true;
 
-            if(diceValue === 6) {
-                confetti({ particleCount: 40, spread: 50 });
-            }
+            const chatBox = document.getElementById('chat-box');
+            const msg = document.createElement('div');
+            msg.className = 'msg-bubble me';
+            msg.innerText = ` You rolled a ${diceValue}! 🎲`;
+            chatBox.appendChild(msg);
+            chatBox.scrollTop = chatBox.scrollHeight;
 
+            if(diceValue === 6) confetti({ particleCount: 50, spread: 60 });
+
+            // AI TURN SIMULATION
             setTimeout(() => {
-                document.getElementById('turn-indicator').innerText = "AI Turn (Yellow)...";
+                document.getElementById('turn-indicator').innerText = "AI Turn (Yellow)... 🤖";
                 document.getElementById('turn-indicator').style.color = "#eab308";
                 
                 setTimeout(() => {
                     const aiRoll = Math.floor(Math.random() * 6) + 1;
-                    const chatBox = document.getElementById('chat-box');
-                    const msg = document.createElement('div');
-                    msg.className = 'msg-bubble bot';
-                    msg.innerText = `🤖 AI Computer rolled a ${aiRoll}!`;
-                    chatBox.appendChild(msg);
+                    const aiMsg = document.createElement('div');
+                    aiMsg.className = 'msg-bubble bot';
+                    aiMsg.innerText = `🤖 AI Computer rolled a ${aiRoll}!`;
+                    chatBox.appendChild(aiMsg);
+                    chatBox.scrollTop = chatBox.scrollHeight;
 
                     currentTurn = 'user';
                     isDiceRolled = false;
-                    document.getElementById('turn-indicator').innerText = "Your Turn (Red)";
+                    document.getElementById('turn-indicator').innerText = "Your Turn (Red) 💖";
                     document.getElementById('turn-indicator').style.color = "#ff3366";
                 }, 1000);
             }, 800);
         }
 
-        drawBoard();
+        drawRealLudoBoard();
     </script>
 </body>
 </html>
