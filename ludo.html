@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secret Ludo - Real Graphics</title>
+    <title>Romantic Secret Ludo - Couple Special</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
@@ -12,58 +12,76 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; user-select: none; }
 
         body {
-            background: #090a10;
+            background: #0d0614;
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(255, 51, 102, 0.18), transparent 45%),
-                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.18), transparent 45%);
+                radial-gradient(circle at 20% 20%, rgba(255, 51, 102, 0.25), transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.25), transparent 50%);
             color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center;
         }
 
         .ludo-header {
-            width: 100%; background: rgba(20, 21, 31, 0.95); backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 12px 25px;
+            width: 100%; background: rgba(20, 10, 30, 0.95); backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 51, 102, 0.3); padding: 12px 25px;
             display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
         }
-        .ludo-title { font-size: 1.3rem; font-weight: 800; background: linear-gradient(45deg, #ff3366, #a855f7, #00e5ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .back-btn { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; padding: 6px 14px; border-radius: 20px; cursor: pointer; text-decoration: none; font-size:0.85rem; }
+        .ludo-title { font-size: 1.4rem; font-weight: 800; background: linear-gradient(45deg, #ff3366, #ff758c, #00e5ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .back-btn { background: rgba(255, 51, 102, 0.2); border: 1px solid rgba(255, 51, 102, 0.4); color: #fff; padding: 6px 16px; border-radius: 20px; cursor: pointer; text-decoration: none; font-size:0.85rem; font-weight:bold; }
 
-        .app-container { width: 100%; max-width: 1100px; margin: 20px auto; padding: 0 15px; display: flex; justify-content: center; }
+        .app-container { width: 100%; max-width: 1150px; margin: 20px auto; padding: 0 15px; display: flex; justify-content: center; }
         .view-panel { display: none; width: 100%; }
         .view-panel.active { display: flex; flex-direction: column; align-items: center; }
 
         .glass-card {
-            background: rgba(20, 21, 31, 0.8); backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 51, 102, 0.3); border-radius: 24px; padding: 30px;
-            width: 100%; max-width: 480px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            background: rgba(25, 12, 38, 0.85); backdrop-filter: blur(25px);
+            border: 2px solid rgba(255, 51, 102, 0.4); border-radius: 28px; padding: 35px;
+            width: 100%; max-width: 500px; text-align: center; box-shadow: 0 20px 50px rgba(255, 51, 102, 0.2);
         }
 
         .btn-primary {
-            width: 100%; background: linear-gradient(45deg, #ff3366, #a855f7);
-            border: none; color: #fff; padding: 14px; border-radius: 14px; font-weight: 700;
-            font-size: 1rem; cursor: pointer; margin-bottom: 12px; transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(255, 51, 102, 0.4);
-        }
-        .btn-secondary {
-            width: 100%; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);
-            color: #fff; padding: 14px; border-radius: 14px; font-weight: 600; font-size: 0.95rem; cursor: pointer; margin-bottom: 12px;
+            width: 100%; background: linear-gradient(45deg, #ff3366, #ff007f, #a855f7);
+            border: none; color: #fff; padding: 15px; border-radius: 16px; font-weight: 700;
+            font-size: 1.05rem; cursor: pointer; margin-bottom: 12px; transition: 0.3s;
+            box-shadow: 0 5px 20px rgba(255, 51, 102, 0.5);
         }
 
         .game-layout { display: grid; grid-template-columns: 1fr 340px; gap: 20px; width: 100%; }
-        .board-wrapper { background: rgba(20, 21, 31, 0.9); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 20px; display: flex; flex-direction: column; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
-        #ludoCanvas { background: #12131c; border-radius: 16px; border: 3px solid rgba(255,255,255,0.1); max-width: 100%; height: auto; }
+        .board-wrapper { 
+            background: rgba(25, 12, 38, 0.9); border: 2px solid rgba(255, 51, 102, 0.3); 
+            border-radius: 28px; padding: 20px; display: flex; flex-direction: column; align-items: center; 
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 51, 102, 0.2); 
+        }
 
-        .controls-bar { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding: 12px 18px; background: rgba(255,255,255,0.05); border-radius: 16px; }
-        .dice-box { width: 65px; height: 65px; background: linear-gradient(135deg, #ff3366, #a855f7); border-radius: 16px; display: flex; justify-content: center; align-items: center; font-size: 2rem; font-weight: 800; color: #fff; cursor: pointer; box-shadow: 0 6px 20px rgba(255, 51, 102, 0.4); transition: 0.2s; }
-        .dice-box:active { transform: scale(0.92); }
+        #ludoCanvas { background: #12091c; border-radius: 20px; border: 3px solid rgba(255, 51, 102, 0.4); max-width: 100%; height: auto; }
 
-        .ad-banner-horizontal { width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 255, 255, 0.18); border-radius: 14px; padding: 10px; margin-top: 15px; text-align: center; color: #888; font-size: 0.75rem; }
-        .ad-banner-vertical { width: 100%; height: 160px; background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 255, 255, 0.18); border-radius: 14px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #888; font-size: 0.75rem; margin-top: 15px; }
+        .controls-bar { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 18px; padding: 12px 20px; background: rgba(255,51,102,0.1); border: 1px solid rgba(255,51,102,0.2); border-radius: 18px; }
 
-        .chat-panel { background: rgba(20, 21, 31, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; display: flex; flex-direction: column; height: 580px; overflow: hidden; }
+        /* ANIMATED SPINNING ROMANTIC DICE */
+        .dice-box { 
+            width: 70px; height: 70px; 
+            background: linear-gradient(135deg, #ff3366, #ff007f); 
+            border: 2px solid #fff; border-radius: 18px; 
+            display: flex; justify-content: center; align-items: center; 
+            font-size: 2.2rem; font-weight: 800; color: #fff; cursor: pointer; 
+            box-shadow: 0 8px 25px rgba(255, 51, 102, 0.6); transition: 0.3s; 
+        }
+        .dice-box.spinning {
+            animation: spinDice 0.6s ease-in-out infinite;
+        }
+
+        @keyframes spinDice {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.15); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .chat-panel { background: rgba(25, 12, 38, 0.9); border: 1px solid rgba(255, 51, 102, 0.3); border-radius: 28px; display: flex; flex-direction: column; height: 580px; overflow: hidden; }
         .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .msg-bubble { max-width: 85%; padding: 10px 14px; border-radius: 14px; font-size: 0.85rem; line-height: 1.4; }
+        .msg-bubble { max-width: 85%; padding: 10px 14px; border-radius: 16px; font-size: 0.88rem; line-height: 1.4; }
         .msg-bubble.me { align-self: flex-end; background: linear-gradient(45deg, #ff3366, #a855f7); }
-        .msg-bubble.bot { align-self: flex-start; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); }
+        .msg-bubble.bot { align-self: flex-start; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,51,102,0.2); }
+
+        .ad-banner-horizontal { width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 51, 102, 0.3); border-radius: 14px; padding: 10px; margin-top: 15px; text-align: center; color: #aaa; font-size: 0.75rem; }
+        .ad-banner-vertical { width: 100%; height: 150px; background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 51, 102, 0.3); border-radius: 14px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #aaa; font-size: 0.75rem; margin-top: 12px; }
 
         @media(max-width: 850px) { .game-layout { grid-template-columns: 1fr; } }
     </style>
@@ -71,26 +89,25 @@
 <body>
 
     <header class="ludo-header">
-        <div class="ludo-title"><i class="fa-solid fa-gamepad"></i> Secret Ludo 💖</div>
+        <div class="ludo-title"><i class="fa-solid fa-heart"></i> Romantic Secret Ludo 💖</div>
         <a href="dashboard.html" class="back-btn"><i class="fa-solid fa-house"></i> Exit Game</a>
     </header>
 
     <div class="app-container">
 
-        <!-- MODE SELECTION -->
+        <!-- MENU VIEW -->
         <div id="home-view" class="view-panel active">
             <div class="glass-card">
-                <h2 style="color:#ff3366; margin-bottom: 5px;">Secret Couple Ludo 🎲</h2>
-                <p style="font-size: 0.85rem; color:#aaa; margin-bottom: 25px;">Real Animated Board & AI Player</p>
+                <h2 style="color:#ff3366; margin-bottom: 8px;">💕 Romantic Couple Ludo</h2>
+                <p style="font-size: 0.88rem; color:#ccc; margin-bottom: 25px;">Play with Love, Kiss, Hug & Rose Tokens!</p>
 
-                <button class="btn-primary" onclick="startSinglePlayer()"><i class="fa-solid fa-robot"></i> 🤖 Play Single (vs AI Computer)</button>
-                <button class="btn-secondary" onclick="startSinglePlayer()"><i class="fa-solid fa-heart" style="color:#ff3366;"></i> 💕 Secret Couple Mode (Online)</button>
+                <button class="btn-primary" onclick="startRomanticGame()"><i class="fa-solid fa-gamepad"></i> Start Romantic Game 🎲</button>
 
                 <div class="ad-banner-horizontal">📢 ADVERTISEMENT SPACE (Google AdSense)</div>
             </div>
         </div>
 
-        <!-- GAMEPLAY PANEL -->
+        <!-- GAMEPLAY VIEW -->
         <div id="game-view" class="view-panel">
             <div class="game-layout">
                 
@@ -99,25 +116,25 @@
                     
                     <div class="controls-bar">
                         <div>
-                            <h5 id="turn-indicator" style="color:#ff3366; font-weight:700;">Your Turn (Red) 💖</h5>
-                            <span id="game-mode-tag" style="font-size:0.75rem; color:#00e5ff;">Single Player vs AI 🤖</span>
+                            <h5 id="turn-indicator" style="color:#ff3366; font-size:1.05rem;">Your Turn (Love & Kiss) ❤️</h5>
+                            <span id="game-mode-tag" style="font-size:0.75rem; color:#00e5ff;">Single vs Romantic AI Bot 🤖</span>
                         </div>
-                        <div id="dice-element" class="dice-box" onclick="rollDice()">🎲</div>
+                        <div id="dice-element" class="dice-box" onclick="rollRomanticDice()">🎲</div>
                     </div>
 
                     <div class="ad-banner-horizontal">📢 ADVERTISEMENT BANNER</div>
                 </div>
 
-                <!-- CHAT PANEL -->
+                <!-- CHAT & TASKS PANEL -->
                 <div class="chat-panel">
-                    <div style="padding: 14px 18px; background: rgba(255,255,255,0.05); font-weight: 700; color: #ff3366;"><i class="fa-solid fa-comments"></i> Game Assistant & Chat</div>
+                    <div style="padding: 14px 18px; background: rgba(255,51,102,0.15); font-weight: 700; color: #ff3366;"><i class="fa-solid fa-wand-magic-sparkles"></i> Couple Chat & Love Tasks</div>
                     
                     <div class="chat-messages" id="chat-box">
-                        <div class="msg-bubble bot">Welcome to Secret Ludo! Tap the 🎲 Dice to roll. Roll 6 to open your tokens!</div>
+                        <div class="msg-bubble bot">💖 Welcome to Romantic Ludo! Touch the 🎲 Dice to spin and reveal your lucky move!</div>
                     </div>
 
                     <div class="ad-banner-vertical">
-                        <i class="fa-solid fa-rectangle-ad" style="font-size:2rem; margin-bottom:5px;"></i>
+                        <i class="fa-solid fa-rectangle-ad" style="font-size:1.8rem; margin-bottom:4px; color:#ff3366;"></i>
                         <span>SPONSORED AD</span>
                     </div>
                 </div>
@@ -129,7 +146,6 @@
 
     <script>
         let currentTurn = 'user';
-        let diceValue = 1;
         let isDiceRolled = false;
 
         const canvas = document.getElementById('ludoCanvas');
@@ -137,66 +153,68 @@
         const size = 510;
         const cell = size / 15;
 
-        // TOKEN POSITIONS (Steps from 0 to 56)
-        let tokens = {
-            user: [0, 0, 0, 0], // Red
-            ai: [0, 0, 0, 0]    // Yellow
-        };
+        // ROMANTIC TOKENS: Love, Kiss, Hug, Rose
+        const userEmojis = ['❤️', '💋', '🫂', '🌹'];
+        const aiEmojis = ['💖', '😘', '🌺', '💌'];
 
         function showView(id) {
             document.querySelectorAll('.view-panel').forEach(v => v.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         }
 
-        function startSinglePlayer() {
+        function startRomanticGame() {
             showView('game-view');
-            drawRealLudoBoard();
+            drawRomanticLudoBoard();
         }
 
-        function drawRealLudoBoard() {
+        function drawRomanticLudoBoard() {
             ctx.clearRect(0, 0, size, size);
 
-            // 1. BASE HOMES
-            drawBase(0, 0, '#ff3366', 'RED');
-            drawBase(9*cell, 0, '#22c55e', 'GREEN');
-            drawBase(9*cell, 9*cell, '#eab308', 'YELLOW');
-            drawBase(0, 9*cell, '#3b82f6', 'BLUE');
+            // 1. ROMANTIC COLORED BASES
+            drawBase(0, 0, '#ff3366', 'LOVE'); // Red/Pink Base
+            drawBase(9*cell, 0, '#00e5ff', 'SWEET'); // Cyan Base
+            drawBase(9*cell, 9*cell, '#a855f7', 'PASSION'); // Purple Base
+            drawBase(0, 9*cell, '#ff007f', 'ROMANCE'); // Deep Pink Base
 
-            // 2. PATHWAYS & GRID
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            // 2. PATHWAY GRID WITH GLOW
+            ctx.strokeStyle = 'rgba(255, 51, 102, 0.25)';
             ctx.lineWidth = 1;
 
             for(let i=0; i<15; i++){
                 for(let j=0; j<15; j++){
-                    if((i<6 || i>8) && (j<6 || j>8)) continue; // Skip Bases
-                    ctx.fillStyle = '#161824';
+                    if((i<6 || i>8) && (j<6 || j>8)) continue;
+                    ctx.fillStyle = '#180d26';
                     ctx.fillRect(i*cell, j*cell, cell, cell);
                     ctx.strokeRect(i*cell, j*cell, cell, cell);
                 }
             }
 
-            // 3. HOME RUN PATHS (Colored Cells)
+            // 3. HOME PATHWAYS
             for(let i=1; i<6; i++) {
-                fillCell(i*cell, 7*cell, '#ff3366'); // Red Home Path
-                fillCell(7*cell, i*cell, '#22c55e'); // Green Home Path
-                fillCell((14-i)*cell, 7*cell, '#eab308'); // Yellow Home Path
-                fillCell(7*cell, (14-i)*cell, '#3b82f6'); // Blue Home Path
+                fillCell(i*cell, 7*cell, '#ff3366');
+                fillCell(7*cell, i*cell, '#00e5ff');
+                fillCell((14-i)*cell, 7*cell, '#a855f7');
+                fillCell(7*cell, (14-i)*cell, '#ff007f');
             }
 
-            // Starting Safe Spots
+            // Starting Safe Spots (Heart Marked)
             fillCell(1*cell, 6*cell, '#ff3366');
-            fillCell(8*cell, 1*cell, '#22c55e');
-            fillCell(13*cell, 8*cell, '#eab308');
-            fillCell(6*cell, 13*cell, '#3b82f6');
+            fillCell(8*cell, 1*cell, '#00e5ff');
+            fillCell(13*cell, 8*cell, '#a855f7');
+            fillCell(6*cell, 13*cell, '#ff007f');
 
-            // 4. CENTER TRIANGLE HOME
+            // 4. CENTER HEART HOME
             ctx.fillStyle = '#ff3366'; ctx.beginPath(); ctx.moveTo(6*cell, 6*cell); ctx.lineTo(7.5*cell, 7.5*cell); ctx.lineTo(6*cell, 9*cell); ctx.fill();
-            ctx.fillStyle = '#22c55e'; ctx.beginPath(); ctx.moveTo(6*cell, 6*cell); ctx.lineTo(7.5*cell, 7.5*cell); ctx.lineTo(9*cell, 6*cell); ctx.fill();
-            ctx.fillStyle = '#eab308'; ctx.beginPath(); ctx.moveTo(9*cell, 6*cell); ctx.lineTo(7.5*cell, 7.5*cell); ctx.lineTo(9*cell, 9*cell); ctx.fill();
-            ctx.fillStyle = '#3b82f6'; ctx.beginPath(); ctx.moveTo(6*cell, 9*cell); ctx.lineTo(7.5*cell, 7.5*cell); ctx.lineTo(9*cell, 9*cell); ctx.fill();
+            ctx.fillStyle = '#00e5ff'; ctx.beginPath(); ctx.moveTo(6*cell, 6*cell); ctx.lineTo(7.5*cell, 7.5*cell); ctx.lineTo(9*cell, 6*cell); ctx.fill();
+            ctx.fillStyle = '#a855f7'; ctx.beginPath(); ctx.moveTo(9*cell, 6*cell); ctx.lineTo(7.5*cell, 7.5*cell); ctx.lineTo(9*cell, 9*cell); ctx.fill();
+            ctx.fillStyle = '#ff007f'; ctx.beginPath(); ctx.moveTo(6*cell, 9*cell); ctx.lineTo(7.5*cell, 7.5*cell); ctx.lineTo(9*cell, 9*cell); ctx.fill();
 
-            // 5. DRAW REAL 3D TOKENS
-            drawTokens();
+            // Center Heart Symbol
+            ctx.font = '24px Poppins'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText('💖', 7.5*cell, 7.5*cell);
+
+            // 5. DRAW ROMANTIC EMOJI TOKENS
+            drawRomanticTokens();
         }
 
         function fillCell(x, y, color) {
@@ -207,86 +225,91 @@
         function drawBase(x, y, color, label) {
             ctx.fillStyle = color;
             ctx.fillRect(x, y, 6*cell, 6*cell);
-            ctx.fillStyle = '#0f1017';
+            ctx.fillStyle = '#12081f';
             ctx.fillRect(x+cell, y+cell, 4*cell, 4*cell);
 
-            // White Inner Circles
-            ctx.fillStyle = 'rgba(255,255,255,0.2)';
+            ctx.fillStyle = 'rgba(255,51,102,0.2)';
             const spots = [
                 {cx: x+2*cell, cy: y+2*cell}, {cx: x+4*cell, cy: y+2*cell},
                 {cx: x+2*cell, cy: y+4*cell}, {cx: x+4*cell, cy: y+4*cell}
             ];
             spots.forEach(s => {
-                ctx.beginPath(); ctx.arc(s.cx, s.cy, cell*0.6, 0, Math.PI*2); ctx.fill();
+                ctx.beginPath(); ctx.arc(s.cx, s.cy, cell*0.65, 0, Math.PI*2); ctx.fill();
             });
         }
 
-        function drawTokens() {
-            // RED USER TOKENS IN BASE
-            const redBaseSpots = [{x: 2*cell, y: 2*cell}, {x: 4*cell, y: 2*cell}, {x: 2*cell, y: 4*cell}, {x: 4*cell, y: 4*cell}];
-            tokens.user.forEach((pos, idx) => {
-                let p = redBaseSpots[idx];
-                draw3DPiece(p.x, p.y, '#ff3366', idx+1);
+        function drawRomanticTokens() {
+            // USER TOKENS (Love, Kiss, Hug, Rose)
+            const userSpots = [{x: 2*cell, y: 2*cell}, {x: 4*cell, y: 2*cell}, {x: 2*cell, y: 4*cell}, {x: 4*cell, y: 4*cell}];
+            userEmojis.forEach((emoji, idx) => {
+                let p = userSpots[idx];
+                drawEmojiPiece(p.x, p.y, emoji, '#ff3366');
             });
 
-            // YELLOW AI TOKENS IN BASE
-            const yellowBaseSpots = [{x: 11*cell, y: 11*cell}, {x: 13*cell, y: 11*cell}, {x: 11*cell, y: 13*cell}, {x: 13*cell, y: 13*cell}];
-            tokens.ai.forEach((pos, idx) => {
-                let p = yellowBaseSpots[idx];
-                draw3DPiece(p.x, p.y, '#eab308', idx+1);
+            // AI TOKENS
+            const aiSpots = [{x: 11*cell, y: 11*cell}, {x: 13*cell, y: 11*cell}, {x: 11*cell, y: 13*cell}, {x: 13*cell, y: 13*cell}];
+            aiEmojis.forEach((emoji, idx) => {
+                let p = aiSpots[idx];
+                drawEmojiPiece(p.x, p.y, emoji, '#a855f7');
             });
         }
 
-        function draw3DPiece(x, y, color, num) {
-            ctx.shadowBlur = 10; ctx.shadowColor = color;
-            ctx.beginPath(); ctx.arc(x, y, cell*0.5, 0, Math.PI*2);
-            ctx.fillStyle = color; ctx.fill();
-            ctx.lineWidth = 3; ctx.strokeStyle = '#ffffff'; ctx.stroke(); ctx.shadowBlur = 0;
+        function drawEmojiPiece(x, y, emoji, glowColor) {
+            ctx.shadowBlur = 12; ctx.shadowColor = glowColor;
+            ctx.beginPath(); ctx.arc(x, y, cell*0.55, 0, Math.PI*2);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.15)'; ctx.fill();
+            ctx.lineWidth = 2; ctx.strokeStyle = glowColor; ctx.stroke(); ctx.shadowBlur = 0;
 
-            ctx.fillStyle = '#ffffff'; ctx.font = 'bold 12px Poppins';
-            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-            ctx.fillText(num, x, y);
+            ctx.font = '20px Poppins'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText(emoji, x, y + 2);
         }
 
-        function rollDice() {
+        // ANIMATED SPINNING DICE LOGIC
+        function rollRomanticDice() {
             if(isDiceRolled || currentTurn !== 'user') return;
 
             const diceEl = document.getElementById('dice-element');
-            diceValue = Math.floor(Math.random() * 6) + 1;
-            diceEl.innerText = diceValue;
+            diceEl.classList.add('spinning');
             isDiceRolled = true;
 
-            const chatBox = document.getElementById('chat-box');
-            const msg = document.createElement('div');
-            msg.className = 'msg-bubble me';
-            msg.innerText = ` You rolled a ${diceValue}! 🎲`;
-            chatBox.appendChild(msg);
-            chatBox.scrollTop = chatBox.scrollHeight;
-
-            if(diceValue === 6) confetti({ particleCount: 50, spread: 60 });
-
-            // AI TURN SIMULATION
+            // Roll Animation Delay
             setTimeout(() => {
-                document.getElementById('turn-indicator').innerText = "AI Turn (Yellow)... 🤖";
-                document.getElementById('turn-indicator').style.color = "#eab308";
-                
-                setTimeout(() => {
-                    const aiRoll = Math.floor(Math.random() * 6) + 1;
-                    const aiMsg = document.createElement('div');
-                    aiMsg.className = 'msg-bubble bot';
-                    aiMsg.innerText = `🤖 AI Computer rolled a ${aiRoll}!`;
-                    chatBox.appendChild(aiMsg);
-                    chatBox.scrollTop = chatBox.scrollHeight;
+                diceEl.classList.remove('spinning');
+                const roll = Math.floor(Math.random() * 6) + 1;
+                diceEl.innerText = roll;
 
-                    currentTurn = 'user';
-                    isDiceRolled = false;
-                    document.getElementById('turn-indicator').innerText = "Your Turn (Red) 💖";
-                    document.getElementById('turn-indicator').style.color = "#ff3366";
+                const chatBox = document.getElementById('chat-box');
+                const msg = document.createElement('div');
+                msg.className = 'msg-bubble me';
+                msg.innerText = `You rolled a ${roll}! 🎲`;
+                chatBox.appendChild(msg);
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+                if(roll === 6) confetti({ particleCount: 70, spread: 80 });
+
+                // AI TURN
+                setTimeout(() => {
+                    document.getElementById('turn-indicator').innerText = "AI Partner's Turn... 💖";
+                    document.getElementById('turn-indicator').style.color = "#a855f7";
+                    
+                    setTimeout(() => {
+                        const aiRoll = Math.floor(Math.random() * 6) + 1;
+                        const aiMsg = document.createElement('div');
+                        aiMsg.className = 'msg-bubble bot';
+                        aiMsg.innerText = `🤖 Partner rolled a ${aiRoll}!`;
+                        chatBox.appendChild(aiMsg);
+                        chatBox.scrollTop = chatBox.scrollHeight;
+
+                        currentTurn = 'user';
+                        isDiceRolled = false;
+                        document.getElementById('turn-indicator').innerText = "Your Turn (Love & Kiss) ❤️";
+                        document.getElementById('turn-indicator').style.color = "#ff3366";
+                    }, 1200);
                 }, 1000);
-            }, 800);
+            }, 600);
         }
 
-        drawRealLudoBoard();
+        drawRomanticLudoBoard();
     </script>
 </body>
 </html>
