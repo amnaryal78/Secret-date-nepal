@@ -10,7 +10,6 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         
-        /* RAINBOW & ROMANTIC BACKGROUND */
         body { 
             background: #090a10; 
             background-image: 
@@ -38,7 +37,13 @@
         .fb-right { display: flex; align-items: center; gap: 12px; }
         .circle-icon-btn { width: 38px; height: 38px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); display: flex; justify-content: center; align-items: center; color: #fff; cursor: pointer; transition:0.2s; text-decoration: none;}
         .circle-icon-btn:hover { background: rgba(255, 51, 102, 0.3); }
-        .header-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #ff3366; cursor: pointer; }
+
+        /* AVATAR BOX (SVG/FontIcon based - Never Breaks) */
+        .avatar-box {
+            display: flex; justify-content: center; align-items: center;
+            background: linear-gradient(45deg, #ff3366, #a855f7);
+            color: #fff; border-radius: 50%; font-weight: bold; flex-shrink: 0;
+        }
 
         /* 3-COLUMN MAIN LAYOUT */
         .main-grid { display: grid; grid-template-columns: 310px 1fr 300px; gap: 20px; max-width: 1400px; margin: 20px auto; padding: 0 20px; }
@@ -73,7 +78,6 @@
         /* POST CREATOR CARD */
         .fb-post-creator { background: rgba(20, 21, 31, 0.8); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 18px; margin-bottom: 20px; }
         .creator-top { display: flex; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); }
-        .creator-avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #00e5ff; }
         .creator-input-trigger { flex: 1; background: rgba(255, 255, 255, 0.06); border-radius: 25px; padding: 12px 20px; color: #aaa; font-size: 0.95rem; cursor: pointer; transition: 0.2s; }
         .creator-input-trigger:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
 
@@ -84,8 +88,6 @@
         /* POST CARDS */
         .post-card { background: rgba(20, 21, 31, 0.8); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
         .post-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-        .post-header img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid #a855f7; }
-        .post-card img.post-img { width: 100%; max-height: 450px; object-fit: cover; border-radius: 16px; margin-top: 12px; }
 
         /* POST POPUP MODAL */
         .post-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); justify-content: center; align-items: center; z-index: 1000; }
@@ -110,7 +112,12 @@
         <div class="fb-right">
             <a href="ludo.html" class="circle-icon-btn" style="background:rgba(255, 51, 102, 0.2); color:#ff3366;" title="Secret Ludo"><i class="fa-solid fa-gamepad"></i></a>
             <div class="circle-icon-btn" onclick="switchTab('matches-tab', document.getElementById('nav-matches'))"><i class="fa-solid fa-comment"></i></div>
-            <img class="header-avatar" src="https://via.placeholder.com/40" onclick="switchTab('profile-tab', document.getElementById('nav-profile'))" alt="Avatar">
+            
+            <!-- FIXED NAV AVATAR -->
+            <div class="avatar-box" style="width:40px; height:40px; border:2px solid #ff3366;" onclick="switchTab('profile-tab', document.getElementById('nav-profile'))">
+                <i class="fa-solid fa-user"></i>
+            </div>
+            
             <a href="index.html" class="circle-icon-btn" style="background: rgba(255, 0, 85, 0.2); color: #ff3366;"><i class="fa-solid fa-right-from-bracket"></i></a>
         </div>
     </header>
@@ -167,7 +174,9 @@
             <div id="feed-tab" class="tab-content active">
                 <div class="fb-post-creator">
                     <div class="creator-top">
-                        <img class="creator-avatar" src="https://via.placeholder.com/45" alt="Avatar">
+                        <div class="avatar-box" style="width:45px; height:45px; border:2px solid #00e5ff;">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
                         <div class="creator-input-trigger" onclick="openPostModal()">What's on your secret mind?</div>
                     </div>
                     <div class="creator-options">
@@ -180,7 +189,9 @@
                 <div id="feed-posts-container">
                     <div class="post-card">
                         <div class="post-header">
-                            <img src="https://via.placeholder.com/48">
+                            <div class="avatar-box" style="width:48px; height:48px; border:2px solid #a855f7;">
+                                <i class="fa-solid fa-user-shield"></i>
+                            </div>
                             <div>
                                 <h4>Secret Admin</h4>
                                 <span style="color:#00e5ff; font-size:0.75rem;">SDNP-OFFICIAL</span>
@@ -195,19 +206,23 @@
             <div id="matches-tab" class="tab-content">
                 <h3 style="margin-bottom: 15px; color: #ff3366;">💕 Secret Matches</h3>
                 <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:15px;">
-                    <div style="background:rgba(20,21,31,0.8); padding:18px; border-radius:20px; text-align:center;">
-                        <img src="https://via.placeholder.com/85" style="width:80px; height:80px; border-radius:50%; border:3px solid #ff3366; object-fit:cover;">
+                    <div style="background:rgba(20,21,31,0.8); padding:18px; border-radius:20px; text-align:center; display:flex; flex-direction:column; align-items:center;">
+                        <div class="avatar-box" style="width:80px; height:80px; font-size:2rem; border:3px solid #ff3366;">
+                            <i class="fa-solid fa-user-ninja"></i>
+                        </div>
                         <h4 style="font-size:0.95rem; margin-top:10px;">Sita, 24</h4>
                         <p style="font-size:0.75rem; color:#ff3366;">SDNP-Sita</p>
-                        <a href="ludo.html" style="display:block; margin-top:12px; background:linear-gradient(45deg, #ff3366, #ff0055); color:#fff; padding:8px; border-radius:10px; text-decoration:none; font-size:0.85rem; font-weight:bold;">Play Ludo 🎲</a>
+                        <a href="ludo.html" style="width:100%; margin-top:12px; background:linear-gradient(45deg, #ff3366, #ff0055); color:#fff; padding:8px; border-radius:10px; text-decoration:none; font-size:0.85rem; font-weight:bold;">Play Ludo 🎲</a>
                     </div>
                 </div>
             </div>
 
             <!-- PROFILE TAB -->
             <div id="profile-tab" class="tab-content">
-                <div style="background:rgba(20, 21, 31, 0.8); border-radius:20px; padding:20px; text-align:center; margin-bottom:20px;">
-                    <img style="width:110px; height:110px; border-radius:50%; border:4px solid #ff3366; object-fit:cover;" src="https://via.placeholder.com/100" alt="Profile">
+                <div style="background:rgba(20, 21, 31, 0.8); border-radius:20px; padding:20px; text-align:center; margin-bottom:20px; display:flex; flex-direction:column; align-items:center;">
+                    <div class="avatar-box" style="width:110px; height:110px; font-size:3rem; border:4px solid #ff3366;">
+                        <i class="fa-solid fa-user-astronaut"></i>
+                    </div>
                     <h3 style="margin-top:10px;">My Profile</h3>
                     <p style="color:#ff3366; font-size:0.85rem; font-weight:bold;">SDNP-MYID</p>
                 </div>
@@ -224,7 +239,9 @@
                 <div class="sidebar-title"><i class="fa-solid fa-circle" style="color:#22c55e; font-size:0.75rem;"></i> Live Active Members</div>
                 <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
                     <div style="display:flex; align-items:center; gap:10px;">
-                        <img src="https://via.placeholder.com/40" style="width:38px; height:38px; border-radius:50%; border:2px solid #22c55e;">
+                        <div class="avatar-box" style="width:38px; height:38px; border:2px solid #22c55e;">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
                         <div><h5 style="font-size:0.85rem; color:#fff;">Sita</h5><span style="font-size:0.7rem; color:#aaa;">SDNP-Sita</span></div>
                     </div>
                     <i class="fa-solid fa-paper-plane" style="color:#ff3366; font-size:0.9rem; cursor:pointer;"></i>
@@ -279,7 +296,9 @@
             newCard.className = 'post-card';
             newCard.innerHTML = `
                 <div class="post-header">
-                    <img src="https://via.placeholder.com/48">
+                    <div class="avatar-box" style="width:48px; height:48px; border:2px solid #a855f7;">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
                     <div>
                         <h4>You</h4>
                         <span style="color:#00e5ff; font-size:0.75rem;">SDNP-MYID</span>
