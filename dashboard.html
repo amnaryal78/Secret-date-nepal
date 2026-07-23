@@ -9,49 +9,87 @@
     
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
+        /* RAINBOW & ROMANTIC BACKGROUND */
         body { 
             background: #090a10; 
             background-image: 
                 radial-gradient(circle at 10% 20%, rgba(255, 51, 102, 0.15), transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(122, 0, 255, 0.15), transparent 40%);
-            color: #ffffff; min-height: 100vh; padding-bottom: 50px;
+                radial-gradient(circle at 90% 80%, rgba(122, 0, 255, 0.15), transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.1), transparent 50%);
+            color: #ffffff; 
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding-bottom: 50px;
         }
 
-        .dev-banner {
-            background: #f59e0b; color: #000; font-size: 0.8rem; font-weight: bold;
-            text-align: center; padding: 6px; position: sticky; top: 0; z-index: 200;
-        }
-
+        /* NAVBAR */
         .fb-header {
             display: flex; justify-content: space-between; align-items: center;
             background: rgba(20, 21, 31, 0.95); backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding: 10px 25px;
-            position: sticky; top: 30px; z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 8px 25px; position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
         }
         .fb-logo { font-weight: 800; font-size: 1.4rem; background: linear-gradient(45deg, #ff3366, #00e5ff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; }
         .fb-center { display: flex; gap: 15px; }
-        .nav-icon-btn { width: 50px; height: 42px; display: flex; justify-content: center; align-items: center; color: #aaa; font-size: 1.2rem; cursor: pointer; border-radius: 12px; }
-        .nav-icon-btn.active { color: #ff3366; background: rgba(255, 51, 102, 0.12); }
+        .nav-icon-btn { width: 50px; height: 42px; display: flex; justify-content: center; align-items: center; color: #aaa; font-size: 1.2rem; cursor: pointer; border-radius: 12px; transition: 0.2s; }
+        .nav-icon-btn:hover, .nav-icon-btn.active { color: #ff3366; background: rgba(255, 51, 102, 0.12); }
         .fb-right { display: flex; align-items: center; gap: 12px; }
-        .circle-icon-btn { width: 38px; height: 38px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); display: flex; justify-content: center; align-items: center; color: #fff; cursor: pointer; text-decoration: none; }
+        .circle-icon-btn { width: 38px; height: 38px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); display: flex; justify-content: center; align-items: center; color: #fff; cursor: pointer; transition:0.2s; text-decoration: none;}
+        .circle-icon-btn:hover { background: rgba(255, 51, 102, 0.3); }
         .header-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #ff3366; cursor: pointer; }
 
-        .main-grid { display: grid; grid-template-columns: 300px 1fr 300px; gap: 20px; max-width: 1400px; margin: 20px auto; padding: 0 20px; }
-        
+        /* 3-COLUMN MAIN LAYOUT */
+        .main-grid { display: grid; grid-template-columns: 310px 1fr 300px; gap: 20px; max-width: 1400px; margin: 20px auto; padding: 0 20px; }
+
+        /* SIDEBAR CARDS */
         .sidebar-card {
             background: rgba(20, 21, 31, 0.7); backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px;
-            padding: 18px; margin-bottom: 20px;
+            padding: 18px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: 0.3s;
+        }
+        .sidebar-card:hover { border-color: rgba(255, 51, 102, 0.3); }
+        .sidebar-title { font-size: 0.95rem; font-weight: 700; color: #ff3366; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+
+        /* GAMES & BUTTONS */
+        .game-btn { 
+            width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); 
+            color: #fff; padding: 10px 12px; border-radius: 12px; font-weight: 600; cursor: pointer; 
+            margin-bottom: 8px; text-align: left; transition: 0.3s; display:flex; gap:10px; align-items:center;
+            font-size: 0.85rem; text-decoration: none;
+        }
+        .game-btn:hover { background: linear-gradient(45deg, #ff3366, #a855f7); color: #fff; }
+
+        .ludo-special-btn {
+            background: linear-gradient(45deg, #ff3366, #a855f7, #00e5ff) !important;
+            box-shadow: 0 4px 15px rgba(255, 51, 102, 0.4);
+            font-weight: 700;
         }
 
-        .fb-post-creator { background: rgba(20, 21, 31, 0.8); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 18px; margin-bottom: 20px; }
-        .creator-top { display: flex; align-items: center; gap: 12px; }
-        .creator-avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #00e5ff; }
-        .creator-input-trigger { flex: 1; background: rgba(255, 255, 255, 0.06); border-radius: 25px; padding: 12px 20px; color: #aaa; font-size: 0.95rem; cursor: pointer; }
+        .game-output { font-size: 0.82rem; color: #00e5ff; margin: 2px 0 10px 0; font-weight: bold; text-align: center; min-height:18px;}
 
-        .post-card { background: rgba(20, 21, 31, 0.8); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
+        /* POST CREATOR CARD */
+        .fb-post-creator { background: rgba(20, 21, 31, 0.8); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 18px; margin-bottom: 20px; }
+        .creator-top { display: flex; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+        .creator-avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #00e5ff; }
+        .creator-input-trigger { flex: 1; background: rgba(255, 255, 255, 0.06); border-radius: 25px; padding: 12px 20px; color: #aaa; font-size: 0.95rem; cursor: pointer; transition: 0.2s; }
+        .creator-input-trigger:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+
+        .creator-options { display: flex; justify-content: space-around; padding-top: 12px; }
+        .opt-btn { display: flex; align-items: center; gap: 8px; color: #ccc; font-size: 0.88rem; font-weight: 500; cursor: pointer; padding: 6px 12px; border-radius: 10px; }
+        .opt-btn:hover { background: rgba(255, 255, 255, 0.06); }
+
+        /* POST CARDS */
+        .post-card { background: rgba(20, 21, 31, 0.8); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
         .post-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
         .post-header img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid #a855f7; }
+        .post-card img.post-img { width: 100%; max-height: 450px; object-fit: cover; border-radius: 16px; margin-top: 12px; }
+
+        /* POST POPUP MODAL */
+        .post-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); justify-content: center; align-items: center; z-index: 1000; }
+        .post-modal-box { background: #181920; border: 1px solid rgba(255, 51, 102, 0.4); width: 500px; max-width: 92%; border-radius: 24px; padding: 22px; }
 
         .tab-content { display: none; }
         .tab-content.active { display: block; }
@@ -60,8 +98,6 @@
     </style>
 </head>
 <body>
-
-    <div class="dev-banner">🛠️ Secret Date Nepal - Dashboard Active</div>
 
     <!-- NAVBAR -->
     <header class="fb-header">
@@ -73,65 +109,97 @@
         </div>
         <div class="fb-right">
             <a href="ludo.html" class="circle-icon-btn" style="background:rgba(255, 51, 102, 0.2); color:#ff3366;" title="Secret Ludo"><i class="fa-solid fa-gamepad"></i></a>
+            <div class="circle-icon-btn" onclick="switchTab('matches-tab', document.getElementById('nav-matches'))"><i class="fa-solid fa-comment"></i></div>
             <img class="header-avatar" src="https://via.placeholder.com/40" onclick="switchTab('profile-tab', document.getElementById('nav-profile'))" alt="Avatar">
+            <a href="index.html" class="circle-icon-btn" style="background: rgba(255, 0, 85, 0.2); color: #ff3366;"><i class="fa-solid fa-right-from-bracket"></i></a>
         </div>
     </header>
 
     <div class="main-grid">
 
-        <!-- LEFT SIDEBAR -->
+        <!-- 1. LEFT SIDEBAR -->
         <aside class="left-sidebar">
-            <!-- DAILY LOVE QUOTE -->
+            
+            <!-- LUDO SPECIAL BUTTON -->
+            <a href="ludo.html" class="game-btn ludo-special-btn" style="margin-bottom:15px; padding:12px;">
+                <i class="fa-solid fa-dice" style="font-size:1.3rem;"></i> 
+                <span>Secret Couple Ludo 🎲</span>
+            </a>
+
+            <!-- MINI GAMES CARD -->
             <div class="sidebar-card">
-                <h5 style="color:#ff3366; margin-bottom:8px;"><i class="fa-solid fa-heart"></i> Daily Love Quote</h5>
-                <p style="font-size:0.88rem; color:#e0e0e0; font-style:italic;">"Love grows where trust lives." ❤️</p>
+                <div class="sidebar-title"><i class="fa-solid fa-gamepad" style="color:#a855f7;"></i> Mini Love Games</div>
+                
+                <button class="game-btn" onclick="playCalc()"><i class="fa-solid fa-heart-pulse" style="color:#ff3366;"></i> Love Calculator</button>
+                <div id="out-calc" class="game-output"></div>
+
+                <button class="game-btn" onclick="play8Ball()"><i class="fa-solid fa-crystal-ball" style="color:#00e5ff;"></i> Magic Love Ball</button>
+                <div id="out-8ball" class="game-output"></div>
+
+                <button class="game-btn" onclick="playToD()"><i class="fa-solid fa-masks-theater" style="color:#f59e0b;"></i> Couple Truth or Dare</button>
+                <div id="out-tod" class="game-output"></div>
+            </div>
+
+            <!-- DAILY LOVE QUOTE -->
+            <div class="sidebar-card" style="border-left: 4px solid #ff3366;">
+                <h5 style="color:#ff3366; font-size:0.85rem;"><i class="fa-solid fa-heart"></i> Daily Love Quote</h5>
+                <p style="font-size:0.85rem; color:#e0e0e0; font-style:italic; margin-top:6px;">"Love grows where trust lives." ❤️</p>
             </div>
 
             <!-- SECRET DATE COUNTER -->
-            <div class="sidebar-card" style="text-align:center;">
+            <div class="sidebar-card" style="text-align:center; background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(255, 51, 102, 0.15));">
                 <h5 style="color:#a855f7; font-size:0.85rem;"><i class="fa-solid fa-hourglass-half"></i> Next Secret Date</h5>
-                <div style="font-size: 2rem; font-weight:800; color:#00e5ff; margin:6px 0;">5 Days</div>
+                <div style="font-size: 2rem; font-weight:800; color:#00e5ff; margin:4px 0;">5 Days</div>
                 <span style="font-size:0.75rem; color:#aaa;">Remaining</span>
             </div>
 
-            <!-- LUDO GAME BUTTON -->
-            <a href="ludo.html" style="display:flex; align-items:center; justify-content:center; gap:10px; background:linear-gradient(45deg, #ff3366, #a855f7); color:#fff; padding:14px; border-radius:16px; text-decoration:none; font-weight:bold; font-size:0.95rem; box-shadow:0 4px 15px rgba(255,51,102,0.4);">
-                <i class="fa-solid fa-dice" style="font-size:1.3rem;"></i> Secret Couple Ludo 🎲
-            </a>
+            <!-- LOVE, CARE & RESPECT BANNER -->
+            <div class="sidebar-card" style="text-align:center; background:linear-gradient(135deg, rgba(255,51,102,0.1), rgba(0,229,255,0.1));">
+                <h5 style="color:#ff3366; margin-bottom:6px;">🕊️ Love, Care & Respect</h5>
+                <p style="font-size:0.8rem; color:#ccc; font-style:italic;">"In this secret world, we cherish kindness and respect." 🌈</p>
+            </div>
         </aside>
 
-        <!-- MIDDLE CONTENT -->
+        <!-- 2. MIDDLE CONTENT -->
         <main class="middle-content">
+            
             <!-- FEED TAB -->
             <div id="feed-tab" class="tab-content active">
                 <div class="fb-post-creator">
                     <div class="creator-top">
                         <img class="creator-avatar" src="https://via.placeholder.com/45" alt="Avatar">
-                        <div class="creator-input-trigger" onclick="alert('Post creator modal is ready!')">What's on your secret mind?</div>
+                        <div class="creator-input-trigger" onclick="openPostModal()">What's on your secret mind?</div>
+                    </div>
+                    <div class="creator-options">
+                        <div class="opt-btn" style="color: #f3425f;" onclick="openPostModal()"><i class="fa-solid fa-video"></i> Live video</div>
+                        <div class="opt-btn" style="color: #45bd62;" onclick="openPostModal()"><i class="fa-solid fa-images"></i> Photo/video</div>
+                        <div class="opt-btn" style="color: #f7b928;" onclick="openPostModal()"><i class="fa-solid fa-clapperboard"></i> Reel</div>
                     </div>
                 </div>
 
-                <div class="post-card">
-                    <div class="post-header">
-                        <img src="https://via.placeholder.com/48">
-                        <div>
-                            <h4>Secret Member</h4>
-                            <span style="color:#00e5ff; font-size:0.75rem;">SDNP-USER</span>
+                <div id="feed-posts-container">
+                    <div class="post-card">
+                        <div class="post-header">
+                            <img src="https://via.placeholder.com/48">
+                            <div>
+                                <h4>Secret Admin</h4>
+                                <span style="color:#00e5ff; font-size:0.75rem;">SDNP-OFFICIAL</span>
+                            </div>
                         </div>
+                        <p style="font-size:0.95rem; color:#e0e0e0; line-height:1.5;">Welcome to Secret Date Nepal! Share your secret thoughts, play Couple Ludo, and connect with live members privately. 💖✨</p>
                     </div>
-                    <p>Welcome to Secret Date Nepal! Share your romantic thoughts freely. 💖</p>
                 </div>
             </div>
 
             <!-- MATCHES TAB -->
             <div id="matches-tab" class="tab-content">
                 <h3 style="margin-bottom: 15px; color: #ff3366;">💕 Secret Matches</h3>
-                <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(180px, 1fr)); gap:15px;">
+                <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:15px;">
                     <div style="background:rgba(20,21,31,0.8); padding:18px; border-radius:20px; text-align:center;">
                         <img src="https://via.placeholder.com/85" style="width:80px; height:80px; border-radius:50%; border:3px solid #ff3366; object-fit:cover;">
                         <h4 style="font-size:0.95rem; margin-top:10px;">Sita, 24</h4>
                         <p style="font-size:0.75rem; color:#ff3366;">SDNP-Sita</p>
-                        <a href="ludo.html" style="display:block; margin-top:10px; background:rgba(255,51,102,0.2); color:#ff3366; padding:6px; border-radius:8px; text-decoration:none; font-size:0.8rem; font-weight:bold;">Play Ludo 🎲</a>
+                        <a href="ludo.html" style="display:block; margin-top:12px; background:linear-gradient(45deg, #ff3366, #ff0055); color:#fff; padding:8px; border-radius:10px; text-decoration:none; font-size:0.85rem; font-weight:bold;">Play Ludo 🎲</a>
                     </div>
                 </div>
             </div>
@@ -143,25 +211,85 @@
                     <h3 style="margin-top:10px;">My Profile</h3>
                     <p style="color:#ff3366; font-size:0.85rem; font-weight:bold;">SDNP-MYID</p>
                 </div>
+                <h3 style="color:#ff3366; margin-bottom: 15px; font-size:1.1rem;">📸 My Published Posts</h3>
+                <div id="my-posts-container">
+                    <p style="font-size:0.85rem; color:#aaa;">Your posts will appear here.</p>
+                </div>
             </div>
         </main>
 
-        <!-- RIGHT SIDEBAR -->
+        <!-- 3. RIGHT SIDEBAR -->
         <aside class="right-sidebar">
             <div class="sidebar-card">
-                <h5 style="color:#ff3366; margin-bottom:12px;"><i class="fa-solid fa-circle" style="color:#22c55e; font-size:0.7rem;"></i> Live Active Members</h5>
-                <p style="font-size:0.85rem; color:#aaa;">🟢 Online: Sita (SDNP-Sita)</p>
+                <div class="sidebar-title"><i class="fa-solid fa-circle" style="color:#22c55e; font-size:0.75rem;"></i> Live Active Members</div>
+                <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <img src="https://via.placeholder.com/40" style="width:38px; height:38px; border-radius:50%; border:2px solid #22c55e;">
+                        <div><h5 style="font-size:0.85rem; color:#fff;">Sita</h5><span style="font-size:0.7rem; color:#aaa;">SDNP-Sita</span></div>
+                    </div>
+                    <i class="fa-solid fa-paper-plane" style="color:#ff3366; font-size:0.9rem; cursor:pointer;"></i>
+                </div>
+            </div>
+
+            <div class="sidebar-card">
+                <div class="sidebar-title"><i class="fa-solid fa-chart-pie" style="color:#00e5ff;"></i> Romantic Poll</div>
+                <p style="font-size:0.85rem; color:#ccc; margin-bottom:10px;">Ideal Romantic Evening?</p>
+                <button onclick="alert('Voted for Rainy Drive!')" style="width:100%; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); padding:8px; border-radius:10px; color:#fff; margin-bottom:6px; cursor:pointer; text-align:left; font-size:0.8rem;">🌧️ Long Rainy Drive</button>
+                <button onclick="alert('Voted for Sunset Walk!')" style="width:100%; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); padding:8px; border-radius:10px; color:#fff; cursor:pointer; text-align:left; font-size:0.8rem;">🌅 Sunset Beach Walk</button>
             </div>
         </aside>
 
     </div>
 
+    <!-- POST CREATOR POPUP MODAL -->
+    <div id="post-modal" class="post-modal">
+        <div class="post-modal-box">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px; margin-bottom:15px;">
+                <h3>Create Post 📝</h3>
+                <span style="cursor:pointer; font-size:1.4rem; color:#aaa;" onclick="closePostModal()">&times;</span>
+            </div>
+            <textarea id="post-text" rows="4" style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:12px; color:#fff; outline:none; resize:none;" placeholder="Share your romantic thoughts..."></textarea>
+            
+            <button id="publish-post-btn" style="width:100%; margin-top:15px; background:linear-gradient(45deg, #ff3366, #ff0055); border:none; color:white; padding:12px; border-radius:12px; font-weight:bold; cursor:pointer;" onclick="addNewPost()">Publish Post 🚀</button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
     <script>
         function switchTab(tabId, btnElement) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.nav-icon-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             if(btnElement) btnElement.classList.add('active');
+        }
+
+        function openPostModal() { document.getElementById('post-modal').style.display = 'flex'; }
+        function closePostModal() { document.getElementById('post-modal').style.display = 'none'; }
+
+        function playCalc() { document.getElementById('out-calc').innerText = `🔥 Secret Match: ${Math.floor(Math.random() * 30) + 70}% Perfect!`; }
+        function play8Ball() { document.getElementById('out-8ball').innerText = `🔮 Yes, they love you! 💖`; }
+        function playToD() { document.getElementById('out-tod').innerText = `🎭 Truth: Who was your first secret crush?`; }
+
+        function addNewPost() {
+            const text = document.getElementById('post-text').value.trim();
+            if(!text) return alert("Write something!");
+
+            const container = document.getElementById('feed-posts-container');
+            const newCard = document.createElement('div');
+            newCard.className = 'post-card';
+            newCard.innerHTML = `
+                <div class="post-header">
+                    <img src="https://via.placeholder.com/48">
+                    <div>
+                        <h4>You</h4>
+                        <span style="color:#00e5ff; font-size:0.75rem;">SDNP-MYID</span>
+                    </div>
+                </div>
+                <p style="font-size:0.95rem; color:#e0e0e0;">${text}</p>
+            `;
+            container.prepend(newCard);
+            document.getElementById('post-text').value = '';
+            closePostModal();
         }
     </script>
 </body>
