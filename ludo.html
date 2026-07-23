@@ -3,345 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secret Couple Ludo - Secret Date Nepal</title>
-    <!-- Google Fonts & FontAwesome Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Secret Ludo - Single & Couple Mode</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Socket.IO & Canvas Confetti Libraries -->
-    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     
     <style>
-        /* ==========================================
-           1. LUXURY GLASSMORPHISM THEME & STYLES
-           ========================================== */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; user-select: none; }
 
         body {
             background: #0a0b10;
             background-image: 
                 radial-gradient(circle at 10% 20%, rgba(255, 51, 102, 0.18), transparent 45%),
-                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.18), transparent 45%),
-                radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.08), transparent 50%);
-            color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow-x: hidden;
+                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.18), transparent 45%);
+            color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center;
         }
 
-        /* Top Bar Header */
         .ludo-header {
-            width: 100%;
-            background: rgba(20, 21, 31, 0.85);
-            backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 12px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            width: 100%; background: rgba(20, 21, 31, 0.9); backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 12px 25px;
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100;
         }
+        .ludo-title { font-size: 1.3rem; font-weight: 800; background: linear-gradient(45deg, #ff3366, #a855f7, #00e5ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .back-btn { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; padding: 6px 14px; border-radius: 20px; cursor: pointer; text-decoration: none; font-size:0.85rem; }
 
-        .ludo-title {
-            font-size: 1.3rem;
-            font-weight: 800;
-            background: linear-gradient(45deg, #ff3366, #a855f7, #00e5ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .back-btn {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: #fff;
-            padding: 6px 14px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: 0.3s;
-        }
-        .back-btn:hover { background: #ff3366; border-color: #ff3366; }
-
-        /* Main App Views Manager */
-        .app-container {
-            width: 100%;
-            max-width: 1100px;
-            margin: 20px auto;
-            padding: 0 15px;
-            display: flex;
-            justify-content: center;
-        }
-
+        .app-container { width: 100%; max-width: 1100px; margin: 20px auto; padding: 0 15px; display: flex; justify-content: center; }
         .view-panel { display: none; width: 100%; }
         .view-panel.active { display: flex; flex-direction: column; align-items: center; }
 
-        /* ==========================================
-           2. HOME & LOBBY VIEW
-           ========================================== */
         .glass-card {
-            background: rgba(20, 21, 31, 0.75);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 30px;
-            width: 100%;
-            max-width: 480px;
-            text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            background: rgba(20, 21, 31, 0.75); backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 30px;
+            width: 100%; max-width: 480px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
 
         .btn-primary {
-            width: 100%;
-            background: linear-gradient(45deg, #ff3366, #a855f7);
-            border: none;
-            color: #fff;
-            padding: 14px;
-            border-radius: 14px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            margin-bottom: 12px;
-            transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(255, 51, 102, 0.3);
+            width: 100%; background: linear-gradient(45deg, #ff3366, #a855f7);
+            border: none; color: #fff; padding: 14px; border-radius: 14px; font-weight: 700;
+            font-size: 1rem; cursor: pointer; margin-bottom: 12px; transition: 0.3s;
         }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 51, 102, 0.5); }
-
         .btn-secondary {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: #fff;
-            padding: 14px;
-            border-radius: 14px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            margin-bottom: 12px;
-            transition: 0.3s;
-        }
-        .btn-secondary:hover { background: rgba(255, 255, 255, 0.15); }
-
-        .room-code-input {
-            width: 100%;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            color: #fff;
-            text-align: center;
-            font-size: 1.2rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            margin-bottom: 12px;
-            outline: none;
+            width: 100%; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff; padding: 14px; border-radius: 14px; font-weight: 600; font-size: 0.95rem; cursor: pointer; margin-bottom: 12px;
         }
 
-        /* Lobby Players Match Display */
-        .lobby-vs-container {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            margin: 25px 0;
-        }
-        .lobby-player { text-align: center; }
-        .lobby-avatar {
-            width: 80px; height: 80px; border-radius: 50%;
-            object-fit: cover; border: 3px solid #ff3366;
-            box-shadow: 0 0 15px rgba(255, 51, 102, 0.4);
-            margin-bottom: 8px;
-        }
-        .vs-badge { font-size: 1.8rem; font-weight: 900; color: #ff3366; animation: pulse 1.5s infinite; }
+        .game-layout { display: grid; grid-template-columns: 1fr 340px; gap: 20px; width: 100%; }
+        .board-wrapper { background: rgba(20, 21, 31, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 15px; display: flex; flex-direction: column; align-items: center; }
+        #ludoCanvas { background: #12131c; border-radius: 12px; max-width: 100%; height: auto; }
 
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+        .controls-bar { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding: 10px 15px; background: rgba(255,255,255,0.05); border-radius: 14px; }
+        .dice-box { width: 60px; height: 60px; background: linear-gradient(135deg, #ff3366, #a855f7); border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.8rem; font-weight: 800; color: #fff; cursor: pointer; }
 
-        /* ==========================================
-           3. GAMEPLAY BOARD & SIDE CHAT
-           ========================================== */
-        .game-layout {
-            display: grid;
-            grid-template-columns: 1fr 340px;
-            gap: 20px;
-            width: 100%;
+        /* ADVERTISEMENT BANNER BOXES */
+        .ad-banner-horizontal {
+            width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 255, 255, 0.15);
+            border-radius: 14px; padding: 12px; margin-top: 15px; text-align: center; color: #777; font-size: 0.75rem;
+        }
+        .ad-banner-vertical {
+            width: 100%; height: 180px; background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 255, 255, 0.15);
+            border-radius: 14px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #777; font-size: 0.75rem; margin-top: 15px;
         }
 
-        /* Ludo Canvas Board Structure */
-        .board-wrapper {
-            background: rgba(20, 21, 31, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        #ludoCanvas {
-            background: #12131c;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
-            cursor: pointer;
-            max-width: 100%;
-            height: auto;
-        }
-
-        /* Controls & Dice Controller */
-        .controls-bar {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 15px;
-            padding: 10px 15px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 14px;
-        }
-
-        .dice-box {
-            width: 60px; height: 60px;
-            background: linear-gradient(135deg, #ff3366, #a855f7);
-            border-radius: 12px;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 1.8rem; font-weight: 800; color: #fff;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 51, 102, 0.4);
-            transition: 0.2s;
-        }
-        .dice-box:active { transform: scale(0.9); }
-        .dice-box.rolling { animation: spinDice 0.5s infinite linear; }
-
-        @keyframes spinDice { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* Side Chat & Virtual Gifts */
-        .chat-panel {
-            background: rgba(20, 21, 31, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            display: flex;
-            flex-direction: column;
-            height: 580px;
-            overflow: hidden;
-        }
-        .chat-header { padding: 12px 15px; background: rgba(255,255,255,0.05); font-weight: 700; color: #ff3366; border-bottom: 1px solid rgba(255,255,255,0.08); }
+        .chat-panel { background: rgba(20, 21, 31, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; display: flex; flex-direction: column; height: 580px; overflow: hidden; }
         .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .msg-bubble { max-width: 80%; padding: 8px 12px; border-radius: 12px; font-size: 0.85rem; line-height: 1.4; }
-        .msg-bubble.me { align-self: flex-end; background: linear-gradient(45deg, #ff3366, #a855f7); color: #fff; }
-        .msg-bubble.partner { align-self: flex-start; background: rgba(255,255,255,0.1); color: #fff; }
+        .msg-bubble { max-width: 80%; padding: 8px 12px; border-radius: 12px; font-size: 0.85rem; }
+        .msg-bubble.me { align-self: flex-end; background: linear-gradient(45deg, #ff3366, #a855f7); }
+        .msg-bubble.bot { align-self: flex-start; background: rgba(255,255,255,0.1); }
 
-        .reaction-bar { display: flex; justify-content: space-around; padding: 8px; background: rgba(255,255,255,0.03); border-top: 1px solid rgba(255,255,255,0.05); }
-        .react-btn { font-size: 1.2rem; cursor: pointer; transition: 0.2s; }
-        .react-btn:hover { transform: scale(1.3); }
-
-        .chat-input-wrapper { display: flex; padding: 10px; gap: 8px; background: rgba(255,255,255,0.05); }
-        .chat-input-wrapper input { flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 8px 14px; color: #fff; outline: none; }
-
-        @media(max-width: 850px) {
-            .game-layout { grid-template-columns: 1fr; }
-            .chat-panel { height: 350px; }
-        }
+        @media(max-width: 850px) { .game-layout { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-    <!-- Header Navigation -->
     <header class="ludo-header">
-        <div class="ludo-title"><i class="fa-solid fa-gamepad"></i> Secret Couple Ludo 🎲</div>
-        <button class="back-btn" onclick="window.location.href='dashboard.html'"><i class="fa-solid fa-house"></i> Exit to Feed</button>
+        <div class="ludo-title"><i class="fa-solid fa-gamepad"></i> Secret Ludo 🎲</div>
+        <a href="dashboard.html" class="back-btn"><i class="fa-solid fa-house"></i> Exit Game</a>
     </header>
 
     <div class="app-container">
 
-        <!-- ====================================================
-             VIEW 1: HOME & CREATE/JOIN ROOM
-             ==================================================== -->
+        <!-- VIEW 1: MODE SELECTION -->
         <div id="home-view" class="view-panel active">
             <div class="glass-card">
-                <h2 style="color:#ff3366; margin-bottom: 5px;">Secret Couple Mode 💖</h2>
-                <p style="font-size: 0.85rem; color:#aaa; margin-bottom: 25px;">Exclusive 1-on-1 Romantic Ludo for Secret Partners</p>
+                <h2 style="color:#ff3366; margin-bottom: 5px;">Choose Ludo Mode 🎲</h2>
+                <p style="font-size: 0.85rem; color:#aaa; margin-bottom: 25px;">Play Single vs Computer or Couple with Match</p>
 
-                <button class="btn-primary" onclick="createRoom()"><i class="fa-solid fa-plus-circle"></i> Create Private Room</button>
+                <!-- SINGLE PLAYER BUTTON -->
+                <button class="btn-primary" onclick="startSinglePlayer()"><i class="fa-solid fa-robot"></i> 1. Play Single (vs AI Computer)</button>
                 
-                <div style="margin: 20px 0; color:#666; font-size:0.8rem;">— OR JOIN PARTNER —</div>
+                <!-- COUPLE MULTIPLAYER BUTTON -->
+                <button class="btn-secondary" onclick="showCoupleSetup()"><i class="fa-solid fa-heart"></i> 2. Secret Couple Mode (2 Player)</button>
 
-                <input type="text" id="join-code-input" class="room-code-input" placeholder="ENTER ROOM CODE" maxlength="6">
-                <button class="btn-secondary" onclick="joinRoom()"><i class="fa-solid fa-right-to-bracket"></i> Join Private Room</button>
-            </div>
-        </div>
-
-        <!-- ====================================================
-             VIEW 2: PRIVATE LOBBY
-             ==================================================== -->
-        <div id="lobby-view" class="view-panel">
-            <div class="glass-card">
-                <h3>Private Match Lobby 🔒</h3>
-                <p style="font-size: 0.85rem; color:#00e5ff; margin-top:5px;">Share this Code with your Partner:</p>
-                <div id="display-room-code" style="font-size:2rem; font-weight:800; letter-spacing:6px; color:#ff3366; margin: 10px 0;">------</div>
-
-                <div class="lobby-vs-container">
-                    <div class="lobby-player">
-                        <img id="p1-img" class="lobby-avatar" src="https://via.placeholder.com/80" alt="P1">
-                        <h5 id="p1-name">Waiting...</h5>
-                        <span style="font-size:0.7rem; color:#22c55e;">Host</span>
-                    </div>
-                    <div class="vs-badge">❤️</div>
-                    <div class="lobby-player">
-                        <img id="p2-img" class="lobby-avatar" src="https://via.placeholder.com/80" alt="P2" style="border-color:#00e5ff;">
-                        <h5 id="p2-name">Waiting...</h5>
-                        <span style="font-size:0.7rem; color:#aaa;" id="p2-status">Offline</span>
-                    </div>
+                <!-- AD BANNER IN MENU -->
+                <div class="ad-banner-horizontal">
+                    📢 ADVERTISEMENT SPACE<br>
+                    <span style="font-size:0.65rem; color:#555;">(Google AdSense / Sponsor Ads Here)</span>
                 </div>
-
-                <button id="start-game-btn" class="btn-primary" disabled onclick="startGameSignal()">Waiting for Partner...</button>
-                <button class="btn-secondary" onclick="leaveLobby()" style="background:rgba(239, 68, 68, 0.2); color:#ef4444;">Leave Room</button>
             </div>
         </div>
 
-        <!-- ====================================================
-             VIEW 3: GAMEPLAY BOARD & CHAT
-             ==================================================== -->
+        <!-- VIEW 2: GAMEPLAY & CHAT -->
         <div id="game-view" class="view-panel">
             <div class="game-layout">
                 
-                <!-- Board Area -->
                 <div class="board-wrapper">
                     <canvas id="ludoCanvas" width="500" height="500"></canvas>
                     
                     <div class="controls-bar">
                         <div>
-                            <h5 id="turn-indicator" style="color:#ff3366;">Your Turn!</h5>
-                            <span id="timer-text" style="font-size:0.75rem; color:#aaa;">Time Left: 15s</span>
+                            <h5 id="turn-indicator" style="color:#ff3366;">Your Turn (Red)</h5>
+                            <span id="game-mode-tag" style="font-size:0.75rem; color:#00e5ff;">Single Player vs AI</span>
                         </div>
                         <div id="dice-element" class="dice-box" onclick="rollDice()">🎲</div>
                     </div>
+
+                    <!-- AD BANNER BELOW BOARD -->
+                    <div class="ad-banner-horizontal">
+                        📢 ADVERTISEMENT BANNER (Monetize your app traffic here)
+                    </div>
                 </div>
 
-                <!-- Couple Realtime Chat & Reactions -->
+                <!-- SIDE CHAT OR AI BOT CHAT -->
                 <div class="chat-panel">
-                    <div class="chat-header"><i class="fa-solid fa-comments"></i> Private Couple Chat</div>
-                    <div class="chat-messages" id="chat-msgs-box">
-                        <div class="msg-bubble partner">Welcome to Secret Ludo! Have fun 💕</div>
+                    <div style="padding: 12px 15px; background: rgba(255,255,255,0.05); font-weight: 700; color: #ff3366;"><i class="fa-solid fa-comments"></i> Game Assistant & Chat</div>
+                    
+                    <div class="chat-messages" id="chat-box">
+                        <div class="msg-bubble bot">Welcome! Roll 6 to open your token. Good luck! 🎲</div>
                     </div>
 
-                    <!-- Romantic Reactions -->
-                    <div class="reaction-bar">
-                        <span class="react-btn" onclick="sendReaction('❤️')">❤️</span>
-                        <span class="react-btn" onclick="sendReaction('😘')">😘</span>
-                        <span class="react-btn" onclick="sendReaction('🌹')">🌹</span>
-                        <span class="react-btn" onclick="sendReaction('☕')">☕</span>
-                        <span class="react-btn" onclick="sendReaction('🔥')">🔥</span>
-                    </div>
-
-                    <div class="chat-input-wrapper">
-                        <input type="text" id="game-chat-input" placeholder="Type romantic message...">
-                        <button class="back-btn" onclick="sendGameMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+                    <!-- SIDEBAR ADVERTISEMENT BOX -->
+                    <div class="ad-banner-vertical">
+                        <i class="fa-solid fa-rectangle-ad" style="font-size:2rem; margin-bottom:5px;"></i>
+                        <span>SPONSORED AD</span>
                     </div>
                 </div>
 
@@ -350,184 +144,105 @@
 
     </div>
 
-    <!-- ====================================================
-         4. JAVASCRIPT GAME LOGIC & SOCKET INTEGRATION
-         ==================================================== -->
     <script>
-        // --- Game & Socket State Management ---
-        const socket = io("https://your-ludo-server.com", { autoConnect: false }); // Integrated with backend engine
-        let currentRoomCode = null;
-        let isHost = false;
-        let myColor = 'red'; // Host = Red, Partner = Yellow
-        let currentTurn = 'red';
+        let isSinglePlayer = true;
+        let currentTurn = 'user'; // 'user' or 'ai'
         let diceValue = 1;
         let isDiceRolled = false;
 
-        // Canvas Engine Variables
         const canvas = document.getElementById('ludoCanvas');
         const ctx = canvas.getContext('2d');
-        const tileSize = 500 / 15; // 15x15 Standard Ludo Grid
+        const tileSize = 500 / 15;
 
-        // Simple Token Data Structures for 2 Players (Red vs Yellow)
         let tokens = {
-            red: [{x: 1, y: 1}, {x: 4, y: 1}, {x: 1, y: 4}, {x: 4, y: 4}],
-            yellow: [{x: 10, y: 10}, {x: 13, y: 10}, {x: 10, y: 13}, {x: 13, y: 13}]
+            user: [{x: 1, y: 1}, {x: 4, y: 1}, {x: 1, y: 4}, {x: 4, y: 4}],
+            ai: [{x: 10, y: 10}, {x: 13, y: 10}, {x: 10, y: 13}, {x: 13, y: 13}]
         };
 
-        // Screen Navigation Function
-        function showView(viewId) {
+        function showView(id) {
             document.querySelectorAll('.view-panel').forEach(v => v.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
+            document.getElementById(id).classList.add('active');
         }
 
-        // Room Generator Code
-        function generateCode() {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let code = '';
-            for (let i = 0; i < 6; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
-            return code;
-        }
-
-        function createRoom() {
-            currentRoomCode = generateCode();
-            isHost = true;
-            myColor = 'red';
-            document.getElementById('display-room-code').innerText = currentRoomCode;
-            document.getElementById('p1-name').innerText = "You (Host)";
-            showView('lobby-view');
-        }
-
-        function joinRoom() {
-            const code = document.getElementById('join-code-input').value.trim().toUpperCase();
-            if(code.length !== 6) return alert("Please enter valid 6-digit Room Code!");
-            currentRoomCode = code;
-            isHost = false;
-            myColor = 'yellow';
-            document.getElementById('display-room-code').innerText = currentRoomCode;
-            document.getElementById('p1-name').innerText = "Partner (Host)";
-            document.getElementById('p2-name').innerText = "You";
-            document.getElementById('p2-status').innerText = "Online";
-            document.getElementById('p2-status').style.color = "#22c55e";
-            document.getElementById('start-game-btn').disabled = false;
-            document.getElementById('start-game-btn').innerText = "Start Couple Game 🚀";
-            showView('lobby-view');
-        }
-
-        function leaveLobby() { showView('home-view'); }
-
-        function startGameSignal() {
+        function startSinglePlayer() {
+            isSinglePlayer = true;
+            document.getElementById('game-mode-tag').innerText = "Mode: Single Player vs AI 🤖";
             showView('game-view');
             drawBoard();
         }
 
-        // --- CANVAS LUDO BOARD RENDERER (60 FPS) ---
+        function showCoupleSetup() {
+            alert("Couple Mode selected! You can share code with partner.");
+            startSinglePlayer();
+        }
+
         function drawBoard() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // 1. Draw 4 Corner Base Boxes
-            // Red (Top Left)
+            // Bases
             ctx.fillStyle = '#ff3366'; ctx.fillRect(0, 0, tileSize*6, tileSize*6);
             ctx.fillStyle = '#12131c'; ctx.fillRect(tileSize, tileSize, tileSize*4, tileSize*4);
 
-            // Green (Top Right)
             ctx.fillStyle = '#22c55e'; ctx.fillRect(tileSize*9, 0, tileSize*6, tileSize*6);
             ctx.fillStyle = '#12131c'; ctx.fillRect(tileSize*10, tileSize, tileSize*4, tileSize*4);
 
-            // Yellow (Bottom Right)
             ctx.fillStyle = '#eab308'; ctx.fillRect(tileSize*9, tileSize*9, tileSize*6, tileSize*6);
             ctx.fillStyle = '#12131c'; ctx.fillRect(tileSize*10, tileSize*10, tileSize*4, tileSize*4);
 
-            // Blue (Bottom Left)
             ctx.fillStyle = '#3b82f6'; ctx.fillRect(0, tileSize*9, tileSize*6, tileSize*6);
             ctx.fillStyle = '#12131c'; ctx.fillRect(tileSize, tileSize*10, tileSize*4, tileSize*4);
 
-            // 2. Draw Grid Path
+            // Grid
             ctx.strokeStyle = 'rgba(255,255,255,0.15)';
-            ctx.lineWidth = 1;
             for(let i=0; i<15; i++) {
-                for(let j=0; j<15; j++) {
-                    ctx.strokeRect(i*tileSize, j*tileSize, tileSize, tileSize);
-                }
+                for(let j=0; j<15; j++) { ctx.strokeRect(i*tileSize, j*tileSize, tileSize, tileSize); }
             }
 
-            // 3. Draw Home Paths
-            ctx.fillStyle = '#ff3366'; ctx.fillRect(tileSize, tileSize*7, tileSize*5, tileSize);
-            ctx.fillStyle = '#eab308'; ctx.fillRect(tileSize*9, tileSize*7, tileSize*5, tileSize);
-
-            // 4. Render Tokens
-            renderTokens();
-        }
-
-        function renderTokens() {
-            // Draw Red Tokens
-            tokens.red.forEach(t => {
-                ctx.beginPath();
-                ctx.arc((t.x + 0.5) * tileSize, (t.y + 0.5) * tileSize, tileSize/2.8, 0, Math.PI * 2);
-                ctx.fillStyle = '#ff3366';
-                ctx.fill();
-                ctx.lineWidth = 3;
-                ctx.strokeStyle = '#ffffff';
-                ctx.stroke();
+            // Tokens
+            tokens.user.forEach(t => {
+                ctx.beginPath(); ctx.arc((t.x + 0.5) * tileSize, (t.y + 0.5) * tileSize, tileSize/2.8, 0, Math.PI * 2);
+                ctx.fillStyle = '#ff3366'; ctx.fill(); ctx.strokeStyle = '#fff'; ctx.stroke();
             });
 
-            // Draw Yellow Tokens
-            tokens.yellow.forEach(t => {
-                ctx.beginPath();
-                ctx.arc((t.x + 0.5) * tileSize, (t.y + 0.5) * tileSize, tileSize/2.8, 0, Math.PI * 2);
-                ctx.fillStyle = '#eab308';
-                ctx.fill();
-                ctx.lineWidth = 3;
-                ctx.strokeStyle = '#ffffff';
-                ctx.stroke();
+            tokens.ai.forEach(t => {
+                ctx.beginPath(); ctx.arc((t.x + 0.5) * tileSize, (t.y + 0.5) * tileSize, tileSize/2.8, 0, Math.PI * 2);
+                ctx.fillStyle = '#eab308'; ctx.fill(); ctx.strokeStyle = '#fff'; ctx.stroke();
             });
         }
 
-        // --- DICE ROLLING LOGIC ---
         function rollDice() {
-            if(isDiceRolled) return;
+            if(isDiceRolled || currentTurn !== 'user') return;
+
             const diceEl = document.getElementById('dice-element');
-            diceEl.classList.add('rolling');
+            diceValue = Math.floor(Math.random() * 6) + 1;
+            diceEl.innerText = diceValue;
+            isDiceRolled = true;
 
+            if(diceValue === 6) {
+                confetti({ particleCount: 40, spread: 50 });
+            }
+
+            // AI Turn Automatic Simulation
             setTimeout(() => {
-                diceEl.classList.remove('rolling');
-                diceValue = Math.floor(Math.random() * 6) + 1;
-                diceEl.innerText = diceValue;
-                isDiceRolled = true;
+                document.getElementById('turn-indicator').innerText = "AI Turn (Yellow)...";
+                document.getElementById('turn-indicator').style.color = "#eab308";
+                
+                setTimeout(() => {
+                    const aiRoll = Math.floor(Math.random() * 6) + 1;
+                    const chatBox = document.getElementById('chat-box');
+                    const msg = document.createElement('div');
+                    msg.className = 'msg-bubble bot';
+                    msg.innerText = `🤖 AI Computer rolled a ${aiRoll}!`;
+                    chatBox.appendChild(msg);
 
-                // Win Celebration Trigger Example (When match ends)
-                if(diceValue === 6) {
-                    confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 } });
-                }
-            }, 400);
+                    currentTurn = 'user';
+                    isDiceRolled = false;
+                    document.getElementById('turn-indicator').innerText = "Your Turn (Red)";
+                    document.getElementById('turn-indicator').style.color = "#ff3366";
+                }, 1000);
+            }, 800);
         }
 
-        // --- REALTIME CHAT MESSAGING ---
-        function sendGameMessage() {
-            const input = document.getElementById('game-chat-input');
-            const text = input.value.trim();
-            if(!text) return;
-
-            const chatBox = document.getElementById('chat-msgs-box');
-            const msg = document.createElement('div');
-            msg.className = 'msg-bubble me';
-            msg.innerText = text;
-            chatBox.appendChild(msg);
-            chatBox.scrollTop = chatBox.scrollHeight;
-            input.value = '';
-        }
-
-        function sendReaction(emoji) {
-            const chatBox = document.getElementById('chat-msgs-box');
-            const msg = document.createElement('div');
-            msg.className = 'msg-bubble me';
-            msg.style.fontSize = '1.8rem';
-            msg.style.background = 'none';
-            msg.innerText = emoji;
-            chatBox.appendChild(msg);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
-        // Initialize Board on load
         drawBoard();
     </script>
 </body>
