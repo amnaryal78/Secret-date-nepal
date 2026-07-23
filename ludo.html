@@ -1,348 +1,339 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ne">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nepali Secret Dating Ludo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-    
+    <title>Couple Ludo - Romantic Dating Game</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; user-select: none; }
+        :root {
+            --red: #ff4757;
+            --yellow: #ffa502;
+            --blue: #1e90ff;
+            --pink: #ff6b81;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
         body {
-            background: #0d0614;
-            background-image: radial-gradient(circle at 50% 50%, rgba(255, 51, 102, 0.2), #090a10 80%);
-            color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
 
-        .ludo-header {
-            width: 100%; background: rgba(20, 10, 30, 0.95); backdrop-filter: blur(15px);
-            border-bottom: 2px solid rgba(255, 51, 102, 0.4); padding: 12px 25px;
-            display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
-        }
-        .ludo-title { font-size: 1.4rem; font-weight: 800; background: linear-gradient(45deg, #ff3366, #ff758c, #00e5ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .back-btn { background: rgba(255, 51, 102, 0.2); border: 1px solid rgba(255, 51, 102, 0.5); color: #fff; padding: 8px 18px; border-radius: 20px; cursor: pointer; text-decoration: none; font-size:0.85rem; font-weight:bold; }
-
-        .app-container { width: 100%; max-width: 1200px; margin: 15px auto; padding: 0 15px; display: flex; justify-content: center; }
-        .view-panel { display: none; width: 100%; }
-        .view-panel.active { display: flex; flex-direction: column; align-items: center; }
-
-        .game-layout { display: grid; grid-template-columns: 1fr 360px; gap: 20px; width: 100%; }
-        .board-wrapper { 
-            background: rgba(25, 12, 38, 0.9); border: 2px solid rgba(255, 51, 102, 0.4); 
-            border-radius: 28px; padding: 18px; display: flex; flex-direction: column; align-items: center; 
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8); 
+        .header-title {
+            color: #d63031;
+            margin-bottom: 10px;
+            text-align: center;
         }
 
-        /* NEPALI AVATAR BANNER */
-        .couple-bar {
-            width: 100%; display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 15px; padding: 12px 20px; background: rgba(255,255,255,0.05);
-            border-radius: 20px; border: 1px solid rgba(255,51,102,0.3);
-        }
-        .profile-box { display: flex; align-items: center; gap: 12px; }
-        .avatar-img {
-            width: 55px; height: 55px; border-radius: 50%; object-fit: cover;
-            border: 3px solid #ff3366; box-shadow: 0 0 15px rgba(255, 51, 102, 0.5);
-        }
-
-        #ludoCanvas { background: #12091c; border-radius: 20px; border: 3px solid rgba(255, 51, 102, 0.4); cursor: pointer; max-width: 100%; height: auto; }
-
-        .controls-bar { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding: 12px 20px; background: rgba(255,51,102,0.12); border: 1px solid rgba(255,51,102,0.3); border-radius: 18px; }
-
-        .dice-box { 
-            width: 70px; height: 70px; 
-            background: linear-gradient(135deg, #ff3366, #ff007f); 
-            border: 2.5px solid #fff; border-radius: 18px; 
-            display: flex; justify-content: center; align-items: center; 
-            font-size: 2.2rem; font-weight: 800; color: #fff; cursor: pointer; 
-            box-shadow: 0 8px 25px rgba(255, 51, 102, 0.6);
+        .game-container {
+            position: relative;
+            background: #fff;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 500px;
+            width: 100%;
         }
 
-        .chat-panel { background: rgba(25, 12, 38, 0.9); border: 1px solid rgba(255, 51, 102, 0.3); border-radius: 28px; display: flex; flex-direction: column; height: 600px; overflow: hidden; }
-        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .msg-bubble { max-width: 85%; padding: 10px 14px; border-radius: 16px; font-size: 0.88rem; }
-        .msg-bubble.lady { align-self: flex-start; background: rgba(255, 51, 102, 0.2); border: 1px solid #ff3366; color: #ff758c; }
-        .msg-bubble.man { align-self: flex-end; background: rgba(0, 229, 255, 0.2); border: 1px solid #00e5ff; color: #00e5ff; }
+        .status-bar {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            background: #ffeaa7;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #2d3436;
+            margin-bottom: 15px;
+        }
 
-        @media(max-width: 850px) { .game-layout { grid-template-columns: 1fr; } }
+        .ludo-board {
+            width: 420px;
+            height: 420px;
+            display: grid;
+            grid-template-columns: 180px 60px 180px;
+            grid-template-rows: 180px 60px 180px;
+            border: 4px solid #2d3436;
+            border-radius: 12px;
+            background: #fff;
+            position: relative;
+        }
+
+        .zone {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #2d3436;
+        }
+
+        .zone.red-home { background: var(--red); grid-column: 1; grid-row: 1; }
+        .zone.yellow-home { background: var(--yellow); grid-column: 3; grid-row: 3; }
+        .zone.blue-home { background: var(--blue); grid-column: 1; grid-row: 3; }
+        .zone.pink-home { background: var(--pink); grid-column: 3; grid-row: 1; }
+
+        .inner-box {
+            width: 120px;
+            height: 120px;
+            background: #ffffff;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .avatar { font-size: 2.8rem; cursor: pointer; }
+        .avatar-label { font-size: 0.75rem; font-weight: bold; margin-top: 4px; text-align: center; }
+
+        .bubble {
+            position: absolute;
+            top: -35px;
+            background: #fff;
+            border: 2px solid #2d3436;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            display: none;
+            z-index: 20;
+            white-space: nowrap;
+        }
+
+        .center-home {
+            grid-column: 2; grid-row: 2;
+            background: linear-gradient(45deg, var(--red), var(--yellow), var(--pink), var(--blue));
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .center-home::after { content: "❤️"; font-size: 1.8rem; }
+
+        .token {
+            width: 30px; height: 30px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem; cursor: pointer;
+            border: 2px solid #fff; position: absolute;
+            transition: all 0.4s ease; z-index: 10;
+        }
+
+        .token.red-token { background: var(--red); }
+        .token.yellow-token { background: var(--yellow); }
+
+        .controls {
+            margin-top: 20px;
+            display: flex; align-items: center; justify-content: space-around; width: 100%;
+        }
+
+        .dice-container {
+            perspective: 600px; width: 60px; height: 60px;
+            transition: transform 0.5s ease;
+        }
+
+        .dice {
+            width: 100%; height: 100%; position: relative;
+            transform-style: preserve-3d; transition: transform 0.8s ease-out;
+        }
+
+        .dice-face {
+            width: 60px; height: 60px; background: #fff;
+            border: 2px solid #2d3436; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem; font-weight: bold; color: #d63031;
+        }
+
+        .roll-btn {
+            padding: 10px 24px; font-size: 1rem; font-weight: bold;
+            color: #fff; background: #6c5ce7; border: none;
+            border-radius: 25px; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+        }
+
+        .finale-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.88); display: none;
+            flex-direction: column; align-items: center; justify-content: center;
+            border-radius: 20px; z-index: 100; color: #fff; text-align: center; padding: 20px;
+        }
+
+        .finale-couple { font-size: 5rem; margin: 15px 0; animation: pulse 1.5s infinite alternate; }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.15); }
+        }
+
+        .restart-btn {
+            margin-top: 15px; padding: 8px 20px; background: #ff4757;
+            color: white; border: none; border-radius: 15px; font-weight: bold; cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
-    <header class="ludo-header">
-        <div class="ludo-title"><i class="fa-solid fa-heart"></i> Nepali Secret Dating Ludo 🇳🇵💖</div>
-        <a href="dashboard.html" class="back-btn"><i class="fa-solid fa-house"></i> Exit Game</a>
-    </header>
+    <h2 class="header-title">💕 Nepali Date Ludo 💕</h2>
 
-    <div class="app-container">
+    <div class="game-container">
+        <div class="status-bar" id="status">केटाको पालो (Red 🕺) - पासा घुमाउनुहोस्!</div>
 
-        <div id="game-view" class="view-panel active">
-            <div class="game-layout">
-                
-                <div class="board-wrapper">
-                    
-                    <!-- NEPALI PROFILE BANNER WITH REAL POSHAK PICTURES -->
-                    <div class="couple-bar">
-                        <!-- PINK LADY PROFILE -->
-                        <div class="profile-box">
-                            <img src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=150" class="avatar-circle" style="border-color:#ff3366;" alt="Nepali Lady">
-                            <div>
-                                <h5 style="color:#ff3366; font-size:0.9rem;">Sita (Nepali Lady 💖)</h5>
-                                <span style="font-size:0.72rem; color:#aaa;">Pink & Yellow (💃)</span>
-                            </div>
-                        </div>
-
-                        <div style="font-size:1.1rem; font-weight:800; color:#a855f7;">VS</div>
-
-                        <!-- BLUE MAN PROFILE -->
-                        <div class="profile-box" style="flex-direction:row-reverse; text-align:right;">
-                            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150" class="avatar-circle" style="border-color:#00e5ff;" alt="Nepali Man">
-                            <div>
-                                <h5 style="color:#00e5ff; font-size:0.9rem;">Ram (Nepali Man 🇳🇵)</h5>
-                                <span style="font-size:0.72rem; color:#aaa;">Blue & Red (🕺)</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <canvas id="ludoCanvas" width="510" height="510"></canvas>
-                    
-                    <div class="controls-bar">
-                        <div>
-                            <h5 id="turn-indicator" style="color:#ff3366; font-size:1rem;">Tap 🎲 to Roll! (Sita's Turn)</h5>
-                            <span id="game-mode-tag" style="font-size:0.72rem; color:#00e5ff;">Nepali Couple Match 🇳🇵</span>
-                        </div>
-                        <div id="dice-element" class="dice-box" onclick="rollDice()">🎲</div>
-                    </div>
-
+        <div class="ludo-board">
+            <div class="zone red-home">
+                <div class="inner-box">
+                    <div class="avatar">🕺</div>
+                    <div class="avatar-label">केटा (Red)</div>
                 </div>
+            </div>
 
-                <!-- LIVE CHAT PANEL -->
-                <div class="chat-panel">
-                    <div style="padding: 14px 18px; background: rgba(255,51,102,0.15); font-weight: 700; color: #ff3366;"><i class="fa-solid fa-comments"></i> Live Couple Chat</div>
-                    
-                    <div class="chat-messages" id="chat-box">
-                        <div class="msg-bubble lady">💃 Sita: "नमस्ते! पासा गुडाएर ६ वा १ ल्याउनुहोस्! 😉"</div>
-                        <div class="msg-bubble man">🕺 Ram: "हेरौँ कसले जित्छ! Tap 🎲"</div>
-                    </div>
+            <div class="zone pink-home">
+                <div class="inner-box">
+                    <div class="bubble" id="pink-bubble">जिस्काइदिऊँ? 😉</div>
+                    <div class="avatar">👩‍💼</div>
+                    <div class="avatar-label">नेपाली सुन्दरी (Pink)</div>
                 </div>
+            </div>
 
+            <div class="zone blue-home">
+                <div class="inner-box">
+                    <div class="bubble" id="blue-bubble">उफ्! 😡</div>
+                    <div class="avatar">👨‍💼</div>
+                    <div class="avatar-label">नेपाली युवा (Blue)</div>
+                </div>
+            </div>
+
+            <div class="zone yellow-home">
+                <div class="inner-box">
+                    <div class="avatar">💃</div>
+                    <div class="avatar-label">केटी (Yellow)</div>
+                </div>
+            </div>
+
+            <div class="center-home"></div>
+
+            <div class="token red-token" id="red-token" style="top: 75px; left: 75px;">🕺</div>
+            <div class="token yellow-token" id="yellow-token" style="bottom: 75px; right: 75px;">💃</div>
+        </div>
+
+        <div class="controls">
+            <button class="roll-btn" onclick="rollDice()">पासा घुमाउनुहोस् 🎲</button>
+            <div class="dice-container" id="dice-container">
+                <div class="dice" id="dice">
+                    <div class="dice-face" id="dice-val">1</div>
+                </div>
             </div>
         </div>
 
+        <div class="finale-overlay" id="finale">
+            <h2>🎉 बधाई छ! प्रेमको विजय भयो! 💕</h2>
+            <div class="finale-couple">👩‍❤️‍💋‍👨</div>
+            <p id="winner-text"></p>
+            <button class="restart-btn" onclick="resetGame()">फेरि खेल्नुहोस् 🔄</button>
+        </div>
     </div>
 
     <script>
-        let currentTurn = 'lady'; // 'lady' (💃) or 'man' (🕺)
-        let diceValue = 0;
-        let isDiceRolled = false;
-        let canMove = false;
+        let turn = 'red';
+        let redPos = 0;
+        let yellowPos = 0;
+        let isRolling = false;
 
-        const canvas = document.getElementById('ludoCanvas');
-        const ctx = canvas.getContext('2d');
-        const size = 510;
-        const cell = size / 15;
+        const statusEl = document.getElementById('status');
+        const diceEl = document.getElementById('dice');
+        const diceValEl = document.getElementById('dice-val');
+        const pinkBubble = document.getElementById('pink-bubble');
+        const blueBubble = document.getElementById('blue-bubble');
+        const finaleEl = document.getElementById('finale');
+        const winnerText = document.getElementById('winner-text');
 
-        // GOTIS: Lady (💃) vs Man (🕺)
-        const ladyGoti = '💃';
-        const manGoti = '🕺';
-
-        let tokens = {
-            lady: [0, 0, 0, 0], // Pink Side
-            man: [0, 0, 0, 0]    // Blue Side
-        };
-
-        const ladyPath = [
-            {x:1, y:6}, {x:2, y:6}, {x:3, y:6}, {x:4, y:6}, {x:5, y:6},
-            {x:6, y:5}, {x:6, y:4}, {x:6, y:3}, {x:6, y:2}, {x:6, y:1}, {x:6, y:0},
-            {x:7, y:0}, {x:8, y:0},
-            {x:8, y:1}, {x:8, y:2}, {x:8, y:3}, {x:8, y:4}, {x:8, y:5},
-            {x:9, y:6}, {x:10, y:6}, {x:11, y:6}, {x:12, y:6}, {x:13, y:6}, {x:14, y:6},
-            {x:14, y:7}, {x:14, y:8},
-            {x:13, y:8}, {x:12, y:8}, {x:11, y:8}, {x:10, y:8}, {x:9, y:8},
-            {x:8, y:9}, {x:8, y:10}, {x:8, y:11}, {x:8, y:12}, {x:8, y:13}, {x:8, y:14},
-            {x:7, y:14}, {x:6, y:14},
-            {x:6, y:13}, {x:6, y:12}, {x:6, y:11}, {x:6, y:10}, {x:6, y:9},
-            {x:5, y:8}, {x:4, y:8}, {x:3, y:8}, {x:2, y:8}, {x:1, y:8}, {x:0, y:8},
-            {x:0, y:7},
-            {x:1, y:7}, {x:2, y:7}, {x:3, y:7}, {x:4, y:7}, {x:5, y:7}, {x:6, y:7}
-        ];
-
-        function drawBoard() {
-            ctx.clearRect(0, 0, size, size);
-
-            // 4 REAL LUDO BASES
-            drawBase(0, 0, '#ff3366'); // Pink Base (Lady)
-            drawBase(9*cell, 0, '#00e5ff'); // Blue Base (Man)
-            drawBase(9*cell, 9*cell, '#ff0055'); // Red Base (Man)
-            drawBase(0, 9*cell, '#f59e0b'); // Yellow Base (Lady)
-
-            // GRID
-            ctx.strokeStyle = 'rgba(255, 51, 102, 0.3)';
-            ctx.lineWidth = 1;
-            for(let i=0; i<15; i++){
-                for(let j=0; j<15; j++){
-                    if((i<6 || i>8) && (j<6 || j>8)) continue;
-                    ctx.fillStyle = '#180d26';
-                    ctx.fillRect(i*cell, j*cell, cell, cell);
-                    ctx.strokeRect(i*cell, j*cell, cell, cell);
-                }
-            }
-
-            // HOME PATHS
-            for(let i=1; i<6; i++) {
-                fillCell(i*cell, 7*cell, '#ff3366'); // Lady Pink Path
-                fillCell(7*cell, i*cell, '#00e5ff'); // Man Blue Path
-            }
-
-            fillCell(1*cell, 6*cell, '#ff3366');
-            fillCell(8*cell, 1*cell, '#00e5ff');
-
-            // Center Triangle
-            ctx.fillStyle = '#ff3366'; ctx.beginPath(); ctx.moveTo(6*cell, 6*cell); ctx.lineTo(7.5*cell, 7.5*cell); ctx.lineTo(6*cell, 9*cell); ctx.fill();
-            ctx.fillStyle = '#00e5ff'; ctx.beginPath(); ctx.moveTo(6*cell, 6*cell); ctx.lineTo(7.5*cell, 7.5*cell); ctx.lineTo(9*cell, 6*cell); ctx.fill();
-
-            ctx.font = '24px Poppins'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-            ctx.fillText('💖', 7.5*cell, 7.5*cell);
-
-            drawGotis();
+        function showBubble(element, text) {
+            element.innerText = text;
+            element.style.display = 'block';
+            setTimeout(() => { element.style.display = 'none'; }, 2500);
         }
 
-        function fillCell(x, y, color) {
-            ctx.fillStyle = color;
-            ctx.fillRect(x+1, y+1, cell-2, cell-2);
-        }
-
-        function drawBase(x, y, color) {
-            ctx.fillStyle = color;
-            ctx.fillRect(x, y, 6*cell, 6*cell);
-            ctx.fillStyle = '#12081f';
-            ctx.fillRect(x+cell, y+cell, 4*cell, 4*cell);
-
-            ctx.fillStyle = 'rgba(255,255,255,0.15)';
-            const spots = [{cx: x+2*cell, cy: y+2*cell}, {cx: x+4*cell, cy: y+2*cell}, {cx: x+2*cell, cy: y+4*cell}, {cx: x+4*cell, cy: y+4*cell}];
-            spots.forEach(s => { ctx.beginPath(); ctx.arc(s.cx, s.cy, cell*0.65, 0, Math.PI*2); ctx.fill(); });
-        }
-
-        const ladyBaseSpots = [{x: 2*cell, y: 2*cell}, {x: 4*cell, y: 2*cell}, {x: 2*cell, y: 4*cell}, {x: 4*cell, y: 4*cell}];
-        const manBaseSpots = [{x: 11*cell, y: 2*cell}, {x: 13*cell, y: 2*cell}, {x: 11*cell, y: 4*cell}, {x: 13*cell, y: 4*cell}];
-
-        function drawGotis() {
-            // LADY GOTI (💃)
-            tokens.lady.forEach((step, idx) => {
-                let coords = step === 0 ? ladyBaseSpots[idx] : {x: (ladyPath[step-1].x + 0.5)*cell, y: (ladyPath[step-1].y + 0.5)*cell};
-                drawGotiPiece(coords.x, coords.y, ladyGoti, '#ff3366');
-            });
-
-            // MAN GOTI (🕺)
-            tokens.man.forEach((step, idx) => {
-                let coords = manBaseSpots[idx];
-                drawGotiPiece(coords.x, coords.y, manGoti, '#00e5ff');
-            });
-        }
-
-        function drawGotiPiece(x, y, icon, glowColor) {
-            ctx.shadowBlur = 10; ctx.shadowColor = glowColor;
-            ctx.beginPath(); ctx.arc(x, y, cell*0.55, 0, Math.PI*2);
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)'; ctx.fill();
-            ctx.lineWidth = 2; ctx.strokeStyle = glowColor; ctx.stroke(); ctx.shadowBlur = 0;
-
-            ctx.font = '22px Poppins'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-            ctx.fillText(icon, x, y + 2);
-        }
-
-        // ROLL DICE REAL LOGIC
         function rollDice() {
-            if(isDiceRolled || currentTurn !== 'lady') return;
+            if (isRolling) return;
+            isRolling = true;
 
-            diceValue = Math.floor(Math.random() * 6) + 1;
-            document.getElementById('dice-element').innerText = diceValue;
-            isDiceRolled = true;
-
-            addMsg(`💃 Sita rolled a ${diceValue}! 🎲`, 'lady');
-
-            if(diceValue === 6) {
-                confetti({ particleCount: 50, spread: 60 });
-            }
-
-            const hasUnlocked = tokens.lady.some(p => p > 0);
-            if(!hasUnlocked && diceValue !== 6 && diceValue !== 1) {
-                addMsg("६ वा १ नआएसम्म गोटी निस्कँदैन। पालो गयो!", 'lady');
-                setTimeout(nextTurnMan, 1200);
+            const diceContainer = document.getElementById('dice-container');
+            if(turn === 'red') {
+                diceContainer.style.transform = 'translateX(-100px)';
             } else {
-                canMove = true;
-                document.getElementById('turn-indicator').innerText = "Tap Sita's Goti (💃) to Move!";
+                diceContainer.style.transform = 'translateX(100px)';
             }
-        }
 
-        // CLICK CANVAS TO MOVE GOTI
-        canvas.addEventListener('click', (e) => {
-            if(!canMove || currentTurn !== 'lady') return;
-
-            const rect = canvas.getBoundingClientRect();
-            const clickX = e.clientX - rect.left;
-            const clickY = e.clientY - rect.top;
-
-            for(let i=0; i<4; i++) {
-                let pos = tokens.lady[i];
-                let coords = pos === 0 ? ladyBaseSpots[i] : {x: (ladyPath[pos-1].x + 0.5)*cell, y: (ladyPath[pos-1].y + 0.5)*cell};
-                
-                let dist = Math.hypot(clickX - coords.x, clickY - coords.y);
-                if(dist < cell) {
-                    if(pos === 0) {
-                        if(diceValue === 6 || diceValue === 1) {
-                            tokens.lady[i] = 1; // Unlock to path
-                            addMsg(`💃 Sita's Goti (💃) Unlocked!`, 'lady');
-                        } else return;
-                    } else {
-                        tokens.lady[i] = Math.min(57, tokens.lady[i] + diceValue);
-                        addMsg(`💃 Moved ${diceValue} steps! 🚀`, 'lady');
-                    }
-
-                    drawBoard();
-                    canMove = false;
-
-                    if(diceValue === 6) {
-                        addMsg("६ आयो! Bonus Roll! 🎉", 'lady');
-                        isDiceRolled = false;
-                        document.getElementById('turn-indicator').innerText = "Bonus Roll! Tap 🎲";
-                    } else {
-                        setTimeout(nextTurnMan, 1000);
-                    }
-                    break;
+            let rolls = 0;
+            let interval = setInterval(() => {
+                let randomVal = Math.floor(Math.random() * 6) + 1;
+                diceValEl.innerText = randomVal;
+                diceEl.style.transform = `rotateX(${rolls * 90}deg) rotateY(${rolls * 90}deg)`;
+                rolls++;
+                if (rolls > 10) {
+                    clearInterval(interval);
+                    let finalVal = Math.floor(Math.random() * 6) + 1;
+                    diceValEl.innerText = finalVal;
+                    isRolling = false;
+                    handleTurn(finalVal);
                 }
+            }, 70);
+        }
+
+        function handleTurn(diceValue) {
+            if (turn === 'red') {
+                if (diceValue === 6) {
+                    showBubble(blueBubble, "केटाको ६ आयो! 🔥");
+                    showBubble(pinkBubble, "वाह कान्छा! 😉");
+                }
+                redPos += diceValue;
+                document.getElementById('red-token').style.transform = `translate(${redPos * 12}px, ${redPos * 8}px)`;
+
+                if (redPos >= 20) {
+                    triggerFinale("केटा (Red 🕺)");
+                    return;
+                }
+                turn = 'yellow';
+                statusEl.innerText = "केटीको पालो (Yellow 💃) - पासा घुमाउनुहोस्!";
+            } else {
+                if (diceValue === 6) {
+                    showBubble(pinkBubble, "६ आयो! नीलो बक्सको केटालाई जिस्काएँ 😜");
+                    showBubble(blueBubble, "उफ्, मलाई जिस्काउने? 😡");
+                }
+                yellowPos += diceValue;
+                document.getElementById('yellow-token').style.transform = `translate(-${yellowPos * 12}px, -${yellowPos * 8}px)`;
+
+                if (yellowPos >= 20) {
+                    triggerFinale("केटी (Yellow 💃)");
+                    return;
+                }
+                turn = 'red';
+                statusEl.innerText = "केटाको पालो (Red 🕺) - पासा घुमाउनुहोस्!";
             }
-        });
-
-        function nextTurnMan() {
-            currentTurn = 'man';
-            document.getElementById('turn-indicator').innerText = "Ram's Turn... 🕺";
-            document.getElementById('turn-indicator').style.color = "#00e5ff";
-
-            setTimeout(() => {
-                const manRoll = Math.floor(Math.random() * 6) + 1;
-                addMsg(`🕺 Ram rolled a ${manRoll}! 🎲`, 'man');
-
-                currentTurn = 'lady';
-                isDiceRolled = false;
-                canMove = false;
-                document.getElementById('turn-indicator').innerText = "Sita's Turn! Tap 🎲";
-                document.getElementById('turn-indicator').style.color = "#ff3366";
-            }, 1200);
         }
 
-        function addMsg(text, sender) {
-            const chatBox = document.getElementById('chat-box');
-            const msg = document.createElement('div');
-            msg.className = `msg-bubble ${sender}`;
-            msg.innerText = text;
-            chatBox.appendChild(msg);
-            chatBox.scrollTop = chatBox.scrollHeight;
+        function triggerFinale(winner) {
+            winnerText.innerText = `${winner} ले गेम जिते पनि, नीलो र पिंक बक्सका प्रेमीहरूले बीचमा आएर मीठो Hug र Kiss गरेर गेम समाप्त भयो! ❤️`;
+            finaleEl.style.display = 'flex';
         }
 
-        drawBoard();
+        function resetGame() {
+            redPos = 0; yellowPos = 0; turn = 'red';
+            document.getElementById('red-token').style.transform = 'none';
+            document.getElementById('yellow-token').style.transform = 'none';
+            finaleEl.style.display = 'none';
+            statusEl.innerText = "केटाको पालो (Red 🕺) - पासा घुमाउनुहोस्!";
+        }
     </script>
 </body>
 </html>
