@@ -20,11 +20,16 @@
             color: #ffffff; min-height: 100vh; padding-bottom: 50px;
         }
 
+        .dev-banner {
+            background: #f59e0b; color: #000; font-size: 0.8rem; font-weight: bold;
+            text-align: center; padding: 4px; position: sticky; top: 0; z-index: 200;
+        }
+
         .fb-header {
             display: flex; justify-content: space-between; align-items: center;
             background: rgba(20, 21, 31, 0.95); backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 25px;
-            position: sticky; top: 0; z-index: 100;
+            position: sticky; top: 25px; z-index: 100;
         }
         .fb-logo { font-weight: 800; font-size: 1.4rem; background: linear-gradient(45deg, #ff3366, #00e5ff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .fb-center { display: flex; gap: 15px; }
@@ -43,7 +48,6 @@
         .post-card { background: rgba(20, 21, 31, 0.8); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
         .post-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
         .post-header img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid #a855f7; }
-        .post-card img.post-img { width: 100%; max-height: 450px; object-fit: cover; border-radius: 16px; margin-top: 12px; }
 
         .post-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); justify-content: center; align-items: center; z-index: 1000; }
         .post-modal-box { background: #181920; border: 1px solid rgba(255, 51, 102, 0.4); width: 500px; max-width: 92%; border-radius: 24px; padding: 22px; }
@@ -56,6 +60,8 @@
 </head>
 <body>
 
+    <div class="dev-banner">🛠️ DEVELOPMENT MODE: Login Requirement Temporarily Disabled for Testing</div>
+
     <!-- NAVBAR -->
     <header class="fb-header">
         <div class="fb-logo" onclick="switchTab('feed-tab', document.getElementById('nav-feed'))">SDN 💖</div>
@@ -67,16 +73,13 @@
         <div class="fb-right">
             <a href="ludo.html" class="circle-icon-btn" style="background:rgba(255, 51, 102, 0.2); color:#ff3366;" title="Secret Ludo"><i class="fa-solid fa-gamepad"></i></a>
             <img id="nav-user-avatar" class="header-avatar" src="https://via.placeholder.com/40" onclick="switchTab('profile-tab', document.getElementById('nav-profile'))" alt="Avatar">
-            <div class="circle-icon-btn" id="logout-btn" style="background: rgba(255, 0, 85, 0.2); color: #ff3366;"><i class="fa-solid fa-right-from-bracket"></i></div>
         </div>
     </header>
 
     <div class="main-grid">
 
-        <!-- 1. LEFT SIDEBAR (NEW MODULAR WIDGETS) -->
+        <!-- LEFT SIDEBAR -->
         <aside class="left-sidebar">
-            
-            <!-- WIDGET 1: BACKGROUND MUSIC -->
             <div class="music-widget">
                 <div class="music-info" id="music-info-box">
                     <i class="fa-solid fa-compact-disc"></i>
@@ -91,13 +94,11 @@
                 </label>
             </div>
 
-            <!-- WIDGET 2: DAILY LOVE QUOTE -->
             <div class="quote-card">
                 <h5 style="color:#ff3366; font-size:0.85rem;"><i class="fa-solid fa-heart"></i> Daily Love Quote</h5>
-                <p id="daily-quote-text">Loading daily quote...</p>
+                <p id="daily-quote-text">Love grows where trust lives. ❤️</p>
             </div>
 
-            <!-- WIDGET 3: AI LOVE ASSISTANT -->
             <div class="ai-card">
                 <h5 style="color:#00e5ff; font-size:0.85rem; margin-bottom:8px;"><i class="fa-solid fa-robot"></i> AI Love Assistant 🤖</h5>
                 <div class="ai-chat-box" id="ai-chat-box">
@@ -109,20 +110,12 @@
                 </div>
             </div>
 
-            <!-- WIDGET 4: SECRET DATE COUNTER -->
-            <div class="counter-card">
-                <h5 style="color:#a855f7; font-size:0.85rem;"><i class="fa-solid fa-hourglass-half"></i> Secret Date Counter</h5>
-                <div class="counter-days" id="secret-days-count">5 Days</div>
-                <span style="font-size:0.72rem; color:#ccc;">Remaining for Next Meetup</span>
-            </div>
-
-            <!-- LUDO GAME BUTTON -->
             <a href="ludo.html" style="display:flex; align-items:center; gap:10px; background:linear-gradient(45deg, #ff3366, #a855f7); color:#fff; padding:12px; border-radius:14px; text-decoration:none; font-weight:bold; font-size:0.9rem;">
                 <i class="fa-solid fa-dice" style="font-size:1.2rem;"></i> Secret Couple Ludo 🎲
             </a>
         </aside>
 
-        <!-- 2. MIDDLE CONTENT -->
+        <!-- MIDDLE CONTENT -->
         <main class="middle-content">
             <div id="feed-tab" class="tab-content active">
                 <div class="fb-post-creator">
@@ -131,30 +124,47 @@
                         <div class="creator-input-trigger" onclick="openPostModal()">What's on your secret mind?</div>
                     </div>
                 </div>
-                <div id="feed-posts-container"></div>
+                <div id="feed-posts-container">
+                    <div class="post-card">
+                        <div class="post-header">
+                            <img src="https://via.placeholder.com/48">
+                            <div>
+                                <h4>Demo User</h4>
+                                <span style="color:#00e5ff; font-size:0.75rem;">SDNP-DEMO</span>
+                            </div>
+                        </div>
+                        <p>Welcome to Secret Date Nepal Test Mode! 💖</p>
+                    </div>
+                </div>
             </div>
 
             <div id="matches-tab" class="tab-content">
                 <h3 style="margin-bottom: 15px; color: #ff3366;">💕 Secret Matches</h3>
-                <div id="matches-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:15px;"></div>
+                <div id="matches-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:15px;">
+                    <div style="background:rgba(20,21,31,0.8); padding:18px; border-radius:20px; text-align:center;">
+                        <img src="https://via.placeholder.com/85" style="width:80px; height:80px; border-radius:50%; border:3px solid #ff3366; object-fit:cover;">
+                        <h4 style="font-size:0.95rem; margin-top:10px;">Sita, 24</h4>
+                        <p style="font-size:0.75rem; color:#ff3366;">SDNP-Sita</p>
+                    </div>
+                </div>
             </div>
 
             <div id="profile-tab" class="tab-content">
                 <div style="background:rgba(20, 21, 31, 0.8); border-radius:20px; padding:20px; text-align:center; margin-bottom:20px;">
                     <img id="my-photo" style="width:110px; height:110px; border-radius:50%; border:4px solid #ff3366; object-fit:cover;" src="https://via.placeholder.com/100" alt="Profile">
-                    <h3 id="my-name" style="margin-top:10px;">Loading...</h3>
-                    <p id="my-sdnp-id" style="color:#ff3366; font-size:0.85rem; font-weight:bold;">SDNP-ID</p>
+                    <h3 id="my-name" style="margin-top:10px;">Dev Admin</h3>
+                    <p id="my-sdnp-id" style="color:#ff3366; font-size:0.85rem; font-weight:bold;">SDNP-ADMIN</p>
                 </div>
-                <h3 style="color:#ff3366; margin-bottom: 15px; font-size:1.1rem;">📸 My Published Posts</h3>
-                <div id="my-posts-container"></div>
             </div>
         </main>
 
-        <!-- 3. RIGHT SIDEBAR -->
+        <!-- RIGHT SIDEBAR -->
         <aside class="right-sidebar">
             <div style="background:rgba(20, 21, 31, 0.7); border-radius:20px; padding:20px; border:1px solid rgba(255,255,255,0.08);">
                 <h5 style="color:#ff3366; margin-bottom:12px;"><i class="fa-solid fa-circle" style="color:#22c55e; font-size:0.7rem;"></i> Live Active Members</h5>
-                <div id="online-users-container"></div>
+                <div id="online-users-container">
+                    <p style="font-size:0.8rem; color:#aaa;">Demo Active User 1</p>
+                </div>
             </div>
         </aside>
 
@@ -168,31 +178,14 @@
                 <span style="cursor:pointer; font-size:1.4rem; color:#aaa;" onclick="closePostModal()">&times;</span>
             </div>
             <textarea id="post-text" rows="4" style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:12px; color:#fff; outline:none; resize:none;" placeholder="Share your romantic thoughts..."></textarea>
-            <div style="margin: 15px 0;">
-                <label style="background:rgba(255,255,255,0.08); padding:8px 15px; border-radius:10px; cursor:pointer; font-size:0.85rem; border:1px solid rgba(255,255,255,0.15);">
-                    📷 Choose Photo
-                    <input type="file" id="post-photo-upload" accept="image/*" style="display:none;">
-                </label>
-                <span id="file-name-display" style="font-size:0.8rem; color:#ff3366; margin-left:10px;"></span>
-            </div>
-            <button id="publish-post-btn" style="width:100%; background:linear-gradient(45deg, #ff3366, #ff0055); border:none; color:white; padding:12px; border-radius:12px; font-weight:bold; cursor:pointer;">Publish Post 🚀</button>
+            <button id="publish-post-btn" style="width:100%; margin-top:10px; background:linear-gradient(45deg, #ff3366, #ff0055); border:none; color:white; padding:12px; border-radius:12px; font-weight:bold; cursor:pointer;" onclick="closePostModal()">Publish Post 🚀</button>
         </div>
     </div>
 
-    <!-- JS MODULE IMPORTS -->
     <script type="module">
-        import { auth, db } from './firebase-config.js';
-        import { doc, getDoc, collection, query, where, getDocs, addDoc, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-        // Import modular JS features
         import { initMusicToggle } from './js/bg-music.js';
         import { renderDailyQuote } from './js/daily-quotes.js';
         import { initAiAssistant } from './js/ai-assistant.js';
-        import { initDateCounter } from './js/date-counter.js';
-
-        let currentUserId = null;
-        let currentUserData = null;
 
         window.switchTab = function(tabId, btnElement) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -204,78 +197,10 @@
         window.openPostModal = () => document.getElementById('post-modal').style.display = 'flex';
         window.closePostModal = () => document.getElementById('post-modal').style.display = 'none';
 
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                currentUserId = user.uid;
-                const userDoc = await getDoc(doc(db, "users", user.uid));
-                if (userDoc.exists()) {
-                    currentUserData = userDoc.data();
-                    renderHeaderAndProfile();
-                    loadMyPosts();
-                    loadPosts();
-                    
-                    // Init Widgets
-                    initMusicToggle();
-                    renderDailyQuote();
-                    initAiAssistant();
-                    initDateCounter();
-                } else { window.location.href = 'profile-setup.html'; }
-            } else { window.location.href = 'index.html'; }
-        });
-
-        function renderHeaderAndProfile() {
-            const photo = currentUserData.photoUrl || 'https://via.placeholder.com/100';
-            document.getElementById('nav-user-avatar').src = photo;
-            document.getElementById('creator-avatar').src = photo;
-            document.getElementById('my-photo').src = photo;
-            document.getElementById('my-name').innerText = currentUserData.fullName || 'User';
-            document.getElementById('my-sdnp-id').innerText = currentUserData.sdnpId || "SDNP-User";
-        }
-
-        // Post Publishing
-        document.getElementById('publish-post-btn').addEventListener('click', async () => {
-            const text = document.getElementById('post-text').value.trim();
-            if(!text) return alert("Write something!");
-            await addDoc(collection(db, "posts"), {
-                userId: currentUserId, userName: currentUserData.fullName || 'User',
-                userPhoto: currentUserData.photoUrl || '', sdnpId: currentUserData.sdnpId || 'SDNP',
-                text: text, createdAt: new Date()
-            });
-            document.getElementById('post-text').value = '';
-            closePostModal();
-        });
-
-        function loadPosts() {
-            const container = document.getElementById('feed-posts-container');
-            onSnapshot(query(collection(db, "posts"), orderBy("createdAt", "desc")), (snap) => {
-                container.innerHTML = "";
-                snap.forEach(docSnap => {
-                    const p = docSnap.data();
-                    const card = document.createElement('div');
-                    card.className = 'post-card';
-                    card.innerHTML = `<div class="post-header"><img src="${p.userPhoto || 'https://via.placeholder.com/48'}"><div><h4>${p.userName}</h4><span style="color:#00e5ff; font-size:0.75rem;">${p.sdnpId}</span></div></div><p>${p.text}</p>`;
-                    container.appendChild(card);
-                });
-            });
-        }
-
-        function loadMyPosts() {
-            const container = document.getElementById('my-posts-container');
-            onSnapshot(query(collection(db, "posts"), where("userId", "==", currentUserId)), (snap) => {
-                container.innerHTML = "";
-                snap.forEach(docSnap => {
-                    const p = docSnap.data();
-                    const card = document.createElement('div');
-                    card.className = 'post-card';
-                    card.innerHTML = `<p>${p.text}</p>`;
-                    container.appendChild(card);
-                });
-            });
-        }
-
-        document.getElementById('logout-btn').addEventListener('click', () => {
-            signOut(auth).then(() => window.location.href = 'index.html');
-        });
+        // Initialize UI Elements without Auth Enforcement
+        initMusicToggle();
+        renderDailyQuote();
+        initAiAssistant();
     </script>
 </body>
 </html>
