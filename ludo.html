@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Romantic Secret Ludo - Couple Special</title>
+    <title>Nepali Secret Dating Ludo - Couple Special</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
@@ -24,10 +24,10 @@
             border-bottom: 1px solid rgba(255, 51, 102, 0.3); padding: 12px 25px;
             display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
         }
-        .ludo-title { font-size: 1.4rem; font-weight: 800; background: linear-gradient(45deg, #ff3366, #ff758c, #00e5ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .ludo-title { font-size: 1.3rem; font-weight: 800; background: linear-gradient(45deg, #ff3366, #ff758c, #00e5ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .back-btn { background: rgba(255, 51, 102, 0.2); border: 1px solid rgba(255, 51, 102, 0.4); color: #fff; padding: 6px 16px; border-radius: 20px; cursor: pointer; text-decoration: none; font-size:0.85rem; font-weight:bold; }
 
-        .app-container { width: 100%; max-width: 1150px; margin: 20px auto; padding: 0 15px; display: flex; justify-content: center; }
+        .app-container { width: 100%; max-width: 1200px; margin: 15px auto; padding: 0 15px; display: flex; justify-content: center; }
         .view-panel { display: none; width: 100%; }
         .view-panel.active { display: flex; flex-direction: column; align-items: center; }
 
@@ -44,29 +44,35 @@
             box-shadow: 0 5px 20px rgba(255, 51, 102, 0.5);
         }
 
-        .game-layout { display: grid; grid-template-columns: 1fr 340px; gap: 20px; width: 100%; }
+        .game-layout { display: grid; grid-template-columns: 1fr 360px; gap: 20px; width: 100%; }
         .board-wrapper { 
             background: rgba(25, 12, 38, 0.9); border: 2px solid rgba(255, 51, 102, 0.3); 
-            border-radius: 28px; padding: 20px; display: flex; flex-direction: column; align-items: center; 
+            border-radius: 28px; padding: 15px; display: flex; flex-direction: column; align-items: center; 
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 51, 102, 0.2); 
         }
 
-        #ludoCanvas { background: #12091c; border-radius: 20px; border: 3px solid rgba(255, 51, 102, 0.4); max-width: 100%; height: auto; }
+        /* NEPALI COUPLE PROFILE BANNERS */
+        .couple-header-bar {
+            width: 100%; display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 12px; padding: 10px 15px; background: rgba(255,255,255,0.04);
+            border-radius: 18px; border: 1px solid rgba(255,51,102,0.2);
+        }
+        .profile-card { display: flex; align-items: center; gap: 10px; }
+        .avatar-img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid #ff3366; background: #222; }
 
-        .controls-bar { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 18px; padding: 12px 20px; background: rgba(255,51,102,0.1); border: 1px solid rgba(255,51,102,0.2); border-radius: 18px; }
+        #ludoCanvas { background: #12091c; border-radius: 20px; border: 3px solid rgba(255, 51, 102, 0.4); cursor: pointer; max-width: 100%; height: auto; }
 
-        /* ANIMATED SPINNING ROMANTIC DICE */
+        .controls-bar { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding: 12px 20px; background: rgba(255,51,102,0.1); border: 1px solid rgba(255,51,102,0.2); border-radius: 18px; }
+
         .dice-box { 
-            width: 70px; height: 70px; 
+            width: 65px; height: 65px; 
             background: linear-gradient(135deg, #ff3366, #ff007f); 
             border: 2px solid #fff; border-radius: 18px; 
             display: flex; justify-content: center; align-items: center; 
-            font-size: 2.2rem; font-weight: 800; color: #fff; cursor: pointer; 
+            font-size: 2rem; font-weight: 800; color: #fff; cursor: pointer; 
             box-shadow: 0 8px 25px rgba(255, 51, 102, 0.6); transition: 0.3s; 
         }
-        .dice-box.spinning {
-            animation: spinDice 0.6s ease-in-out infinite;
-        }
+        .dice-box.spinning { animation: spinDice 0.6s ease-in-out infinite; }
 
         @keyframes spinDice {
             0% { transform: rotate(0deg) scale(1); }
@@ -74,14 +80,13 @@
             100% { transform: rotate(360deg) scale(1); }
         }
 
-        .chat-panel { background: rgba(25, 12, 38, 0.9); border: 1px solid rgba(255, 51, 102, 0.3); border-radius: 28px; display: flex; flex-direction: column; height: 580px; overflow: hidden; }
+        .chat-panel { background: rgba(25, 12, 38, 0.9); border: 1px solid rgba(255, 51, 102, 0.3); border-radius: 28px; display: flex; flex-direction: column; height: 620px; overflow: hidden; }
         .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
         .msg-bubble { max-width: 85%; padding: 10px 14px; border-radius: 16px; font-size: 0.88rem; line-height: 1.4; }
-        .msg-bubble.me { align-self: flex-end; background: linear-gradient(45deg, #ff3366, #a855f7); }
-        .msg-bubble.bot { align-self: flex-start; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,51,102,0.2); }
+        .msg-bubble.lady { align-self: flex-start; background: rgba(255, 51, 102, 0.2); border: 1px solid #ff3366; color: #ff758c; }
+        .msg-bubble.man { align-self: flex-end; background: rgba(0, 229, 255, 0.2); border: 1px solid #00e5ff; color: #00e5ff; }
 
-        .ad-banner-horizontal { width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 51, 102, 0.3); border-radius: 14px; padding: 10px; margin-top: 15px; text-align: center; color: #aaa; font-size: 0.75rem; }
-        .ad-banner-vertical { width: 100%; height: 150px; background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 51, 102, 0.3); border-radius: 14px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #aaa; font-size: 0.75rem; margin-top: 12px; }
+        .ad-banner-horizontal { width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 51, 102, 0.3); border-radius: 14px; padding: 10px; margin-top: 12px; text-align: center; color: #aaa; font-size: 0.75rem; }
 
         @media(max-width: 850px) { .game-layout { grid-template-columns: 1fr; } }
     </style>
@@ -89,7 +94,7 @@
 <body>
 
     <header class="ludo-header">
-        <div class="ludo-title"><i class="fa-solid fa-heart"></i> Romantic Secret Ludo 💖</div>
+        <div class="ludo-title"><i class="fa-solid fa-heart"></i> Nepali Secret Dating Ludo 🇳🇵💖</div>
         <a href="dashboard.html" class="back-btn"><i class="fa-solid fa-house"></i> Exit Game</a>
     </header>
 
@@ -98,10 +103,10 @@
         <!-- MENU VIEW -->
         <div id="home-view" class="view-panel active">
             <div class="glass-card">
-                <h2 style="color:#ff3366; margin-bottom: 8px;">💕 Romantic Couple Ludo</h2>
-                <p style="font-size: 0.88rem; color:#ccc; margin-bottom: 25px;">Play with Love, Kiss, Hug & Rose Tokens!</p>
+                <h2 style="color:#ff3366; margin-bottom: 8px;">🇳🇵 Nepali Romantic Couple Ludo</h2>
+                <p style="font-size: 0.88rem; color:#ccc; margin-bottom: 25px;">Play as Nepali Lady (Gunyocholi) vs Handsome Man (Daura Suruwal)</p>
 
-                <button class="btn-primary" onclick="startRomanticGame()"><i class="fa-solid fa-gamepad"></i> Start Romantic Game 🎲</button>
+                <button class="btn-primary" onclick="startRomanticGame()"><i class="fa-solid fa-gamepad"></i> Enter Dating Ludo Board 🎲</button>
 
                 <div class="ad-banner-horizontal">📢 ADVERTISEMENT SPACE (Google AdSense)</div>
             </div>
@@ -112,12 +117,32 @@
             <div class="game-layout">
                 
                 <div class="board-wrapper">
+                    
+                    <!-- NEPALI COUPLE BANNER -->
+                    <div class="couple-header-bar">
+                        <div class="profile-card">
+                            <div style="font-size:1.8rem;">👩‍🦰</div>
+                            <div>
+                                <h5 style="color:#ff3366; font-size:0.85rem;">Sita (Lady)</h5>
+                                <span id="lady-mood" style="font-size:0.7rem; color:#aaa;">Mood: Happy 💖</span>
+                            </div>
+                        </div>
+                        <div style="font-size:1.2rem; color:#a855f7;">VS</div>
+                        <div class="profile-card" style="text-align:right;">
+                            <div>
+                                <h5 style="color:#00e5ff; font-size:0.85rem;">Ram (Handsome Man)</h5>
+                                <span id="man-mood" style="font-size:0.7rem; color:#aaa;">Mood: Ready 😎</span>
+                            </div>
+                            <div style="font-size:1.8rem;">👨‍🦱</div>
+                        </div>
+                    </div>
+
                     <canvas id="ludoCanvas" width="510" height="510"></canvas>
                     
                     <div class="controls-bar">
                         <div>
-                            <h5 id="turn-indicator" style="color:#ff3366; font-size:1.05rem;">Your Turn (Love & Kiss) ❤️</h5>
-                            <span id="game-mode-tag" style="font-size:0.75rem; color:#00e5ff;">Single vs Romantic AI Bot 🤖</span>
+                            <h5 id="turn-indicator" style="color:#ff3366; font-size:1rem;">Tap 🎲 to Roll! (Sita's Turn)</h5>
+                            <span id="game-mode-tag" style="font-size:0.72rem; color:#00e5ff;">Nepali Couple Match 🇳🇵</span>
                         </div>
                         <div id="dice-element" class="dice-box" onclick="rollRomanticDice()">🎲</div>
                     </div>
@@ -125,17 +150,13 @@
                     <div class="ad-banner-horizontal">📢 ADVERTISEMENT BANNER</div>
                 </div>
 
-                <!-- CHAT & TASKS PANEL -->
+                <!-- CHAT & TEASING REACTION PANEL -->
                 <div class="chat-panel">
-                    <div style="padding: 14px 18px; background: rgba(255,51,102,0.15); font-weight: 700; color: #ff3366;"><i class="fa-solid fa-wand-magic-sparkles"></i> Couple Chat & Love Tasks</div>
+                    <div style="padding: 14px 18px; background: rgba(255,51,102,0.15); font-weight: 700; color: #ff3366;"><i class="fa-solid fa-comments"></i> Live Couple Teasing & Chat</div>
                     
                     <div class="chat-messages" id="chat-box">
-                        <div class="msg-bubble bot">💖 Welcome to Romantic Ludo! Touch the 🎲 Dice to spin and reveal your lucky move!</div>
-                    </div>
-
-                    <div class="ad-banner-vertical">
-                        <i class="fa-solid fa-rectangle-ad" style="font-size:1.8rem; margin-bottom:4px; color:#ff3366;"></i>
-                        <span>SPONSORED AD</span>
+                        <div class="msg-bubble lady">👩‍🦰 Sita: "Namaste! Timile मलाई जित्न सक्दैनौ होला नि 😉"</div>
+                        <div class="msg-bubble man">👨‍🦱 Ram: "हेरौँ कसले जित्छ! Roll the dice 🎲"</div>
                     </div>
                 </div>
 
@@ -145,17 +166,40 @@
     </div>
 
     <script>
-        let currentTurn = 'user';
+        let currentTurn = 'lady'; // 'lady' (Pink/Yellow) or 'man' (Blue/Red)
+        let diceValue = 0;
         let isDiceRolled = false;
+        let canMoveGoti = false;
 
         const canvas = document.getElementById('ludoCanvas');
         const ctx = canvas.getContext('2d');
         const size = 510;
         const cell = size / 15;
 
-        // ROMANTIC TOKENS: Love, Kiss, Hug, Rose
-        const userEmojis = ['❤️', '💋', '🫂', '🌹'];
-        const aiEmojis = ['💖', '😘', '🌺', '💌'];
+        // DOLL GOTIS: Cute Nepali Lady Doll (👧) vs Handsome Man Doll (👦)
+        const ladyDoll = '👧';
+        const manDoll = '👦';
+
+        let tokens = {
+            lady: [0, 0, 0, 0], // Lady (Pink/Yellow)
+            man: [0, 0, 0, 0]    // Man (Blue/Red)
+        };
+
+        const ladyPath = [
+            {x:1, y:6}, {x:2, y:6}, {x:3, y:6}, {x:4, y:6}, {x:5, y:6},
+            {x:6, y:5}, {x:6, y:4}, {x:6, y:3}, {x:6, y:2}, {x:6, y:1}, {x:6, y:0},
+            {x:7, y:0}, {x:8, y:0},
+            {x:8, y:1}, {x:8, y:2}, {x:8, y:3}, {x:8, y:4}, {x:8, y:5},
+            {x:9, y:6}, {x:10, y:6}, {x:11, y:6}, {x:12, y:6}, {x:13, y:6}, {x:14, y:6},
+            {x:14, y:7}, {x:14, y:8},
+            {x:13, y:8}, {x:12, y:8}, {x:11, y:8}, {x:10, y:8}, {x:9, y:8},
+            {x:8, y:9}, {x:8, y:10}, {x:8, y:11}, {x:8, y:12}, {x:8, y:13}, {x:8, y:14},
+            {x:7, y:14}, {x:6, y:14},
+            {x:6, y:13}, {x:6, y:12}, {x:6, y:11}, {x:6, y:10}, {x:6, y:9},
+            {x:5, y:8}, {x:4, y:8}, {x:3, y:8}, {x:2, y:8}, {x:1, y:8}, {x:0, y:8},
+            {x:0, y:7},
+            {x:1, y:7}, {x:2, y:7}, {x:3, y:7}, {x:4, y:7}, {x:5, y:7}, {x:6, y:7}
+        ];
 
         function showView(id) {
             document.querySelectorAll('.view-panel').forEach(v => v.classList.remove('active'));
@@ -170,16 +214,15 @@
         function drawRomanticLudoBoard() {
             ctx.clearRect(0, 0, size, size);
 
-            // 1. ROMANTIC COLORED BASES
-            drawBase(0, 0, '#ff3366', 'LOVE'); // Red/Pink Base
-            drawBase(9*cell, 0, '#00e5ff', 'SWEET'); // Cyan Base
-            drawBase(9*cell, 9*cell, '#a855f7', 'PASSION'); // Purple Base
-            drawBase(0, 9*cell, '#ff007f', 'ROMANCE'); // Deep Pink Base
+            // 1. NEPALI THEME BASES
+            drawBase(0, 0, '#ff3366', '👩‍🦰 PINK LADY'); // Pink/Red Lady Base
+            drawBase(9*cell, 0, '#00e5ff', 'SWEET');
+            drawBase(9*cell, 9*cell, '#3b82f6', '👨‍🦱 BLUE MAN'); // Blue Handsome Man Base
+            drawBase(0, 9*cell, '#f59e0b', 'YELLOW');
 
-            // 2. PATHWAY GRID WITH GLOW
+            // 2. GRID
             ctx.strokeStyle = 'rgba(255, 51, 102, 0.25)';
             ctx.lineWidth = 1;
-
             for(let i=0; i<15; i++){
                 for(let j=0; j<15; j++){
                     if((i<6 || i>8) && (j<6 || j>8)) continue;
@@ -189,32 +232,24 @@
                 }
             }
 
-            // 3. HOME PATHWAYS
+            // 3. HOME PATHS
             for(let i=1; i<6; i++) {
-                fillCell(i*cell, 7*cell, '#ff3366');
-                fillCell(7*cell, i*cell, '#00e5ff');
-                fillCell((14-i)*cell, 7*cell, '#a855f7');
-                fillCell(7*cell, (14-i)*cell, '#ff007f');
+                fillCell(i*cell, 7*cell, '#ff3366'); // Lady Path
+                fillCell((14-i)*cell, 7*cell, '#3b82f6'); // Man Path
             }
 
-            // Starting Safe Spots (Heart Marked)
             fillCell(1*cell, 6*cell, '#ff3366');
-            fillCell(8*cell, 1*cell, '#00e5ff');
-            fillCell(13*cell, 8*cell, '#a855f7');
-            fillCell(6*cell, 13*cell, '#ff007f');
+            fillCell(13*cell, 8*cell, '#3b82f6');
 
-            // 4. CENTER HEART HOME
+            // Center Romantic Triangle
             ctx.fillStyle = '#ff3366'; ctx.beginPath(); ctx.moveTo(6*cell, 6*cell); ctx.lineTo(7.5*cell, 7.5*cell); ctx.lineTo(6*cell, 9*cell); ctx.fill();
-            ctx.fillStyle = '#00e5ff'; ctx.beginPath(); ctx.moveTo(6*cell, 6*cell); ctx.lineTo(7.5*cell, 7.5*cell); ctx.lineTo(9*cell, 6*cell); ctx.fill();
-            ctx.fillStyle = '#a855f7'; ctx.beginPath(); ctx.moveTo(9*cell, 6*cell); ctx.lineTo(7.5*cell, 7.5*cell); ctx.lineTo(9*cell, 9*cell); ctx.fill();
-            ctx.fillStyle = '#ff007f'; ctx.beginPath(); ctx.moveTo(6*cell, 9*cell); ctx.lineTo(7.5*cell, 7.5*cell); ctx.lineTo(9*cell, 9*cell); ctx.fill();
+            ctx.fillStyle = '#3b82f6'; ctx.beginPath(); ctx.moveTo(9*cell, 6*cell); ctx.lineTo(7.5*cell, 7.5*cell); ctx.lineTo(9*cell, 9*cell); ctx.fill();
 
-            // Center Heart Symbol
             ctx.font = '24px Poppins'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
             ctx.fillText('💖', 7.5*cell, 7.5*cell);
 
-            // 5. DRAW ROMANTIC EMOJI TOKENS
-            drawRomanticTokens();
+            // 4. DRAW DOLL GOTIS
+            drawDollTokens();
         }
 
         function fillCell(x, y, color) {
@@ -222,91 +257,141 @@
             ctx.fillRect(x+1, y+1, cell-2, cell-2);
         }
 
-        function drawBase(x, y, color, label) {
+        function drawBase(x, y, color, title) {
             ctx.fillStyle = color;
             ctx.fillRect(x, y, 6*cell, 6*cell);
             ctx.fillStyle = '#12081f';
             ctx.fillRect(x+cell, y+cell, 4*cell, 4*cell);
 
-            ctx.fillStyle = 'rgba(255,51,102,0.2)';
-            const spots = [
-                {cx: x+2*cell, cy: y+2*cell}, {cx: x+4*cell, cy: y+2*cell},
-                {cx: x+2*cell, cy: y+4*cell}, {cx: x+4*cell, cy: y+4*cell}
-            ];
-            spots.forEach(s => {
-                ctx.beginPath(); ctx.arc(s.cx, s.cy, cell*0.65, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = 'rgba(255,255,255,0.15)';
+            const spots = [{cx: x+2*cell, cy: y+2*cell}, {cx: x+4*cell, cy: y+2*cell}, {cx: x+2*cell, cy: y+4*cell}, {cx: x+4*cell, cy: y+4*cell}];
+            spots.forEach(s => { ctx.beginPath(); ctx.arc(s.cx, s.cy, cell*0.65, 0, Math.PI*2); ctx.fill(); });
+        }
+
+        const ladyBaseSpots = [{x: 2*cell, y: 2*cell}, {x: 4*cell, y: 2*cell}, {x: 2*cell, y: 4*cell}, {x: 4*cell, y: 4*cell}];
+        const manBaseSpots = [{x: 11*cell, y: 11*cell}, {x: 13*cell, y: 11*cell}, {x: 11*cell, y: 13*cell}, {x: 13*cell, y: 13*cell}];
+
+        function drawDollTokens() {
+            // LADY DOLL GOTIS (👧)
+            tokens.lady.forEach((step, idx) => {
+                let coords = step === 0 ? ladyBaseSpots[idx] : {x: (ladyPath[step-1].x + 0.5)*cell, y: (ladyPath[step-1].y + 0.5)*cell};
+                drawDollPiece(coords.x, coords.y, ladyDoll, '#ff3366');
+            });
+
+            // MAN DOLL GOTIS (👦)
+            tokens.man.forEach((step, idx) => {
+                let coords = manBaseSpots[idx];
+                drawDollPiece(coords.x, coords.y, manDoll, '#00e5ff');
             });
         }
 
-        function drawRomanticTokens() {
-            // USER TOKENS (Love, Kiss, Hug, Rose)
-            const userSpots = [{x: 2*cell, y: 2*cell}, {x: 4*cell, y: 2*cell}, {x: 2*cell, y: 4*cell}, {x: 4*cell, y: 4*cell}];
-            userEmojis.forEach((emoji, idx) => {
-                let p = userSpots[idx];
-                drawEmojiPiece(p.x, p.y, emoji, '#ff3366');
-            });
-
-            // AI TOKENS
-            const aiSpots = [{x: 11*cell, y: 11*cell}, {x: 13*cell, y: 11*cell}, {x: 11*cell, y: 13*cell}, {x: 13*cell, y: 13*cell}];
-            aiEmojis.forEach((emoji, idx) => {
-                let p = aiSpots[idx];
-                drawEmojiPiece(p.x, p.y, emoji, '#a855f7');
-            });
-        }
-
-        function drawEmojiPiece(x, y, emoji, glowColor) {
+        function drawDollPiece(x, y, doll, glowColor) {
             ctx.shadowBlur = 12; ctx.shadowColor = glowColor;
             ctx.beginPath(); ctx.arc(x, y, cell*0.55, 0, Math.PI*2);
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.15)'; ctx.fill();
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)'; ctx.fill();
             ctx.lineWidth = 2; ctx.strokeStyle = glowColor; ctx.stroke(); ctx.shadowBlur = 0;
 
-            ctx.font = '20px Poppins'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-            ctx.fillText(emoji, x, y + 2);
+            ctx.font = '22px Poppins'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText(doll, x, y + 2);
         }
 
-        // ANIMATED SPINNING DICE LOGIC
+        // ROLL DICE LOGIC WITH TEASING REACTIONS
         function rollRomanticDice() {
-            if(isDiceRolled || currentTurn !== 'user') return;
+            if(isDiceRolled || currentTurn !== 'lady') return;
 
             const diceEl = document.getElementById('dice-element');
             diceEl.classList.add('spinning');
             isDiceRolled = true;
 
-            // Roll Animation Delay
             setTimeout(() => {
                 diceEl.classList.remove('spinning');
-                const roll = Math.floor(Math.random() * 6) + 1;
-                diceEl.innerText = roll;
+                diceValue = Math.floor(Math.random() * 6) + 1;
+                diceEl.innerText = diceValue;
 
-                const chatBox = document.getElementById('chat-box');
-                const msg = document.createElement('div');
-                msg.className = 'msg-bubble me';
-                msg.innerText = `You rolled a ${roll}! 🎲`;
-                chatBox.appendChild(msg);
-                chatBox.scrollTop = chatBox.scrollHeight;
+                addMsg(`👩‍🦰 Sita rolled a ${diceValue}! 🎲`, 'lady');
 
-                if(roll === 6) confetti({ particleCount: 70, spread: 80 });
+                // LADY TEASING REACTION WHEN GETTING 6 OR 5
+                if(diceValue === 6 || diceValue === 5) {
+                    confetti({ particleCount: 60, spread: 70 });
+                    document.getElementById('man-mood').innerText = "Mood: Jealous/Sad 🥺";
+                    document.getElementById('lady-mood').innerText = "Mood: Teasing Hehe! 😜";
+                    addMsg(`👩‍🦰 Sita: "Hehe! मेरो ${diceValue} आयो, तिमी त हार्यौ अब! 😜🙈"`, 'lady');
+                    addMsg(`👨‍🦱 Ram: "छिट्टै थाहा हुन्छ कसले जित्छ! 😤"`, 'man');
+                }
 
-                // AI TURN
-                setTimeout(() => {
-                    document.getElementById('turn-indicator').innerText = "AI Partner's Turn... 💖";
-                    document.getElementById('turn-indicator').style.color = "#a855f7";
-                    
-                    setTimeout(() => {
-                        const aiRoll = Math.floor(Math.random() * 6) + 1;
-                        const aiMsg = document.createElement('div');
-                        aiMsg.className = 'msg-bubble bot';
-                        aiMsg.innerText = `🤖 Partner rolled a ${aiRoll}!`;
-                        chatBox.appendChild(aiMsg);
-                        chatBox.scrollTop = chatBox.scrollHeight;
-
-                        currentTurn = 'user';
-                        isDiceRolled = false;
-                        document.getElementById('turn-indicator').innerText = "Your Turn (Love & Kiss) ❤️";
-                        document.getElementById('turn-indicator').style.color = "#ff3366";
-                    }, 1200);
-                }, 1000);
+                canMoveGoti = true;
+                document.getElementById('turn-indicator').innerText = "Tap Sita's Doll (👧) to Move!";
             }, 600);
+        }
+
+        // CLICK CANVAS TO MOVE LADY DOLL
+        canvas.addEventListener('click', (e) => {
+            if(!canMoveGoti || currentTurn !== 'lady') return;
+
+            const rect = canvas.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const clickY = e.clientY - rect.top;
+
+            for(let i=0; i<4; i++) {
+                let pos = tokens.lady[i];
+                let coords = pos === 0 ? ladyBaseSpots[i] : {x: (ladyPath[pos-1].x + 0.5)*cell, y: (ladyPath[pos-1].y + 0.5)*cell};
+                
+                let dist = Math.hypot(clickX - coords.x, clickY - coords.y);
+                if(dist < cell) {
+                    if(pos === 0) {
+                        if(diceValue === 6 || diceValue === 1) {
+                            tokens.lady[i] = 1;
+                            addMsg(`👩‍🦰 Sita: "मेरो 👧 Goodiya बाहिर निस्कियो! ❤️"`, 'lady');
+                        } else return;
+                    } else {
+                        tokens.lady[i] = Math.min(57, tokens.lady[i] + diceValue);
+                        addMsg(`👩‍🦰 Sita: "Goodiya moved ${diceValue} steps! 🚀"`, 'lady');
+                    }
+
+                    drawRomanticLudoBoard();
+                    canMoveGoti = false;
+
+                    if(diceValue === 6) {
+                        addMsg("👩‍🦰 Sita got Bonus Roll! 🎉", 'lady');
+                        isDiceRolled = false;
+                        document.getElementById('turn-indicator').innerText = "Bonus Roll! Tap 🎲";
+                    } else {
+                        setTimeout(nextTurnMan, 1000);
+                    }
+                    break;
+                }
+            }
+        });
+
+        function nextTurnMan() {
+            currentTurn = 'man';
+            document.getElementById('turn-indicator').innerText = "Ram's Turn... 👨‍🦱";
+            document.getElementById('turn-indicator').style.color = "#00e5ff";
+
+            setTimeout(() => {
+                const manRoll = Math.floor(Math.random() * 6) + 1;
+                addMsg(`👨‍🦱 Ram rolled a ${manRoll}! 🎲`, 'man');
+
+                if(manRoll === 6) {
+                    document.getElementById('lady-mood').innerText = "Mood: Oh No! 😯";
+                    addMsg(`👨‍🦱 Ram: "मेरो पनि ६ आयो! अब हेर Sita 😉"`, 'man');
+                }
+
+                currentTurn = 'lady';
+                isDiceRolled = false;
+                canMoveGoti = false;
+                document.getElementById('turn-indicator').innerText = "Sita's Turn! Tap 🎲";
+                document.getElementById('turn-indicator').style.color = "#ff3366";
+            }, 1200);
+        }
+
+        function addMsg(text, sender) {
+            const chatBox = document.getElementById('chat-box');
+            const msg = document.createElement('div');
+            msg.className = `msg-bubble ${sender}`;
+            msg.innerText = text;
+            chatBox.appendChild(msg);
+            chatBox.scrollTop = chatBox.scrollHeight;
         }
 
         drawRomanticLudoBoard();
