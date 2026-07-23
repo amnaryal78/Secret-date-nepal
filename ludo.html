@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nepali Secret Dating Ludo - Couple Special</title>
+    <title>Nepali Secret Dating Ludo</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
@@ -13,80 +13,59 @@
 
         body {
             background: #0d0614;
-            background-image: 
-                radial-gradient(circle at 20% 20%, rgba(255, 51, 102, 0.25), transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.25), transparent 50%);
+            background-image: radial-gradient(circle at 50% 50%, rgba(255, 51, 102, 0.2), #090a10 80%);
             color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center;
         }
 
         .ludo-header {
             width: 100%; background: rgba(20, 10, 30, 0.95); backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255, 51, 102, 0.3); padding: 12px 25px;
+            border-bottom: 2px solid rgba(255, 51, 102, 0.4); padding: 12px 25px;
             display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
         }
-        .ludo-title { font-size: 1.3rem; font-weight: 800; background: linear-gradient(45deg, #ff3366, #ff758c, #00e5ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .back-btn { background: rgba(255, 51, 102, 0.2); border: 1px solid rgba(255, 51, 102, 0.4); color: #fff; padding: 6px 16px; border-radius: 20px; cursor: pointer; text-decoration: none; font-size:0.85rem; font-weight:bold; }
+        .ludo-title { font-size: 1.4rem; font-weight: 800; background: linear-gradient(45deg, #ff3366, #ff758c, #00e5ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .back-btn { background: rgba(255, 51, 102, 0.2); border: 1px solid rgba(255, 51, 102, 0.5); color: #fff; padding: 8px 18px; border-radius: 20px; cursor: pointer; text-decoration: none; font-size:0.85rem; font-weight:bold; }
 
         .app-container { width: 100%; max-width: 1200px; margin: 15px auto; padding: 0 15px; display: flex; justify-content: center; }
         .view-panel { display: none; width: 100%; }
         .view-panel.active { display: flex; flex-direction: column; align-items: center; }
 
-        .glass-card {
-            background: rgba(25, 12, 38, 0.85); backdrop-filter: blur(25px);
-            border: 2px solid rgba(255, 51, 102, 0.4); border-radius: 28px; padding: 35px;
-            width: 100%; max-width: 500px; text-align: center; box-shadow: 0 20px 50px rgba(255, 51, 102, 0.2);
-        }
-
-        .btn-primary {
-            width: 100%; background: linear-gradient(45deg, #ff3366, #ff007f, #a855f7);
-            border: none; color: #fff; padding: 15px; border-radius: 16px; font-weight: 700;
-            font-size: 1.05rem; cursor: pointer; margin-bottom: 12px; transition: 0.3s;
-            box-shadow: 0 5px 20px rgba(255, 51, 102, 0.5);
-        }
-
         .game-layout { display: grid; grid-template-columns: 1fr 360px; gap: 20px; width: 100%; }
         .board-wrapper { 
-            background: rgba(25, 12, 38, 0.9); border: 2px solid rgba(255, 51, 102, 0.3); 
-            border-radius: 28px; padding: 15px; display: flex; flex-direction: column; align-items: center; 
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 51, 102, 0.2); 
+            background: rgba(25, 12, 38, 0.9); border: 2px solid rgba(255, 51, 102, 0.4); 
+            border-radius: 28px; padding: 18px; display: flex; flex-direction: column; align-items: center; 
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8); 
         }
 
-        /* NEPALI COUPLE PROFILE BANNERS */
-        .couple-header-bar {
+        /* NEPALI AVATAR BANNER */
+        .couple-bar {
             width: 100%; display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 12px; padding: 10px 15px; background: rgba(255,255,255,0.04);
-            border-radius: 18px; border: 1px solid rgba(255,51,102,0.2);
+            margin-bottom: 15px; padding: 12px 20px; background: rgba(255,255,255,0.05);
+            border-radius: 20px; border: 1px solid rgba(255,51,102,0.3);
         }
-        .profile-card { display: flex; align-items: center; gap: 10px; }
-        .avatar-img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid #ff3366; background: #222; }
+        .profile-box { display: flex; align-items: center; gap: 12px; }
+        .avatar-img {
+            width: 55px; height: 55px; border-radius: 50%; object-fit: cover;
+            border: 3px solid #ff3366; box-shadow: 0 0 15px rgba(255, 51, 102, 0.5);
+        }
 
         #ludoCanvas { background: #12091c; border-radius: 20px; border: 3px solid rgba(255, 51, 102, 0.4); cursor: pointer; max-width: 100%; height: auto; }
 
-        .controls-bar { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding: 12px 20px; background: rgba(255,51,102,0.1); border: 1px solid rgba(255,51,102,0.2); border-radius: 18px; }
+        .controls-bar { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding: 12px 20px; background: rgba(255,51,102,0.12); border: 1px solid rgba(255,51,102,0.3); border-radius: 18px; }
 
         .dice-box { 
-            width: 65px; height: 65px; 
+            width: 70px; height: 70px; 
             background: linear-gradient(135deg, #ff3366, #ff007f); 
-            border: 2px solid #fff; border-radius: 18px; 
+            border: 2.5px solid #fff; border-radius: 18px; 
             display: flex; justify-content: center; align-items: center; 
-            font-size: 2rem; font-weight: 800; color: #fff; cursor: pointer; 
-            box-shadow: 0 8px 25px rgba(255, 51, 102, 0.6); transition: 0.3s; 
-        }
-        .dice-box.spinning { animation: spinDice 0.6s ease-in-out infinite; }
-
-        @keyframes spinDice {
-            0% { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(180deg) scale(1.15); }
-            100% { transform: rotate(360deg) scale(1); }
+            font-size: 2.2rem; font-weight: 800; color: #fff; cursor: pointer; 
+            box-shadow: 0 8px 25px rgba(255, 51, 102, 0.6);
         }
 
-        .chat-panel { background: rgba(25, 12, 38, 0.9); border: 1px solid rgba(255, 51, 102, 0.3); border-radius: 28px; display: flex; flex-direction: column; height: 620px; overflow: hidden; }
+        .chat-panel { background: rgba(25, 12, 38, 0.9); border: 1px solid rgba(255, 51, 102, 0.3); border-radius: 28px; display: flex; flex-direction: column; height: 600px; overflow: hidden; }
         .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .msg-bubble { max-width: 85%; padding: 10px 14px; border-radius: 16px; font-size: 0.88rem; line-height: 1.4; }
+        .msg-bubble { max-width: 85%; padding: 10px 14px; border-radius: 16px; font-size: 0.88rem; }
         .msg-bubble.lady { align-self: flex-start; background: rgba(255, 51, 102, 0.2); border: 1px solid #ff3366; color: #ff758c; }
         .msg-bubble.man { align-self: flex-end; background: rgba(0, 229, 255, 0.2); border: 1px solid #00e5ff; color: #00e5ff; }
-
-        .ad-banner-horizontal { width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 51, 102, 0.3); border-radius: 14px; padding: 10px; margin-top: 12px; text-align: center; color: #aaa; font-size: 0.75rem; }
 
         @media(max-width: 850px) { .game-layout { grid-template-columns: 1fr; } }
     </style>
@@ -100,40 +79,31 @@
 
     <div class="app-container">
 
-        <!-- MENU VIEW -->
-        <div id="home-view" class="view-panel active">
-            <div class="glass-card">
-                <h2 style="color:#ff3366; margin-bottom: 8px;">🇳🇵 Nepali Romantic Couple Ludo</h2>
-                <p style="font-size: 0.88rem; color:#ccc; margin-bottom: 25px;">Play as Nepali Lady (Gunyocholi) vs Handsome Man (Daura Suruwal)</p>
-
-                <button class="btn-primary" onclick="startRomanticGame()"><i class="fa-solid fa-gamepad"></i> Enter Dating Ludo Board 🎲</button>
-
-                <div class="ad-banner-horizontal">📢 ADVERTISEMENT SPACE (Google AdSense)</div>
-            </div>
-        </div>
-
-        <!-- GAMEPLAY VIEW -->
-        <div id="game-view" class="view-panel">
+        <div id="game-view" class="view-panel active">
             <div class="game-layout">
                 
                 <div class="board-wrapper">
                     
-                    <!-- NEPALI COUPLE BANNER -->
-                    <div class="couple-header-bar">
-                        <div class="profile-card">
-                            <div style="font-size:1.8rem;">👩‍🦰</div>
+                    <!-- NEPALI PROFILE BANNER WITH REAL POSHAK PICTURES -->
+                    <div class="couple-bar">
+                        <!-- PINK LADY PROFILE -->
+                        <div class="profile-box">
+                            <img src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=150" class="avatar-circle" style="border-color:#ff3366;" alt="Nepali Lady">
                             <div>
-                                <h5 style="color:#ff3366; font-size:0.85rem;">Sita (Lady)</h5>
-                                <span id="lady-mood" style="font-size:0.7rem; color:#aaa;">Mood: Happy 💖</span>
+                                <h5 style="color:#ff3366; font-size:0.9rem;">Sita (Nepali Lady 💖)</h5>
+                                <span style="font-size:0.72rem; color:#aaa;">Pink & Yellow (💃)</span>
                             </div>
                         </div>
-                        <div style="font-size:1.2rem; color:#a855f7;">VS</div>
-                        <div class="profile-card" style="text-align:right;">
+
+                        <div style="font-size:1.1rem; font-weight:800; color:#a855f7;">VS</div>
+
+                        <!-- BLUE MAN PROFILE -->
+                        <div class="profile-box" style="flex-direction:row-reverse; text-align:right;">
+                            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150" class="avatar-circle" style="border-color:#00e5ff;" alt="Nepali Man">
                             <div>
-                                <h5 style="color:#00e5ff; font-size:0.85rem;">Ram (Handsome Man)</h5>
-                                <span id="man-mood" style="font-size:0.7rem; color:#aaa;">Mood: Ready 😎</span>
+                                <h5 style="color:#00e5ff; font-size:0.9rem;">Ram (Nepali Man 🇳🇵)</h5>
+                                <span style="font-size:0.72rem; color:#aaa;">Blue & Red (🕺)</span>
                             </div>
-                            <div style="font-size:1.8rem;">👨‍🦱</div>
                         </div>
                     </div>
 
@@ -144,19 +114,18 @@
                             <h5 id="turn-indicator" style="color:#ff3366; font-size:1rem;">Tap 🎲 to Roll! (Sita's Turn)</h5>
                             <span id="game-mode-tag" style="font-size:0.72rem; color:#00e5ff;">Nepali Couple Match 🇳🇵</span>
                         </div>
-                        <div id="dice-element" class="dice-box" onclick="rollRomanticDice()">🎲</div>
+                        <div id="dice-element" class="dice-box" onclick="rollDice()">🎲</div>
                     </div>
 
-                    <div class="ad-banner-horizontal">📢 ADVERTISEMENT BANNER</div>
                 </div>
 
-                <!-- CHAT & TEASING REACTION PANEL -->
+                <!-- LIVE CHAT PANEL -->
                 <div class="chat-panel">
-                    <div style="padding: 14px 18px; background: rgba(255,51,102,0.15); font-weight: 700; color: #ff3366;"><i class="fa-solid fa-comments"></i> Live Couple Teasing & Chat</div>
+                    <div style="padding: 14px 18px; background: rgba(255,51,102,0.15); font-weight: 700; color: #ff3366;"><i class="fa-solid fa-comments"></i> Live Couple Chat</div>
                     
                     <div class="chat-messages" id="chat-box">
-                        <div class="msg-bubble lady">👩‍🦰 Sita: "Namaste! Timile मलाई जित्न सक्दैनौ होला नि 😉"</div>
-                        <div class="msg-bubble man">👨‍🦱 Ram: "हेरौँ कसले जित्छ! Roll the dice 🎲"</div>
+                        <div class="msg-bubble lady">💃 Sita: "नमस्ते! पासा गुडाएर ६ वा १ ल्याउनुहोस्! 😉"</div>
+                        <div class="msg-bubble man">🕺 Ram: "हेरौँ कसले जित्छ! Tap 🎲"</div>
                     </div>
                 </div>
 
@@ -166,23 +135,23 @@
     </div>
 
     <script>
-        let currentTurn = 'lady'; // 'lady' (Pink/Yellow) or 'man' (Blue/Red)
+        let currentTurn = 'lady'; // 'lady' (💃) or 'man' (🕺)
         let diceValue = 0;
         let isDiceRolled = false;
-        let canMoveGoti = false;
+        let canMove = false;
 
         const canvas = document.getElementById('ludoCanvas');
         const ctx = canvas.getContext('2d');
         const size = 510;
         const cell = size / 15;
 
-        // DOLL GOTIS: Cute Nepali Lady Doll (👧) vs Handsome Man Doll (👦)
-        const ladyDoll = '👧';
-        const manDoll = '👦';
+        // GOTIS: Lady (💃) vs Man (🕺)
+        const ladyGoti = '💃';
+        const manGoti = '🕺';
 
         let tokens = {
-            lady: [0, 0, 0, 0], // Lady (Pink/Yellow)
-            man: [0, 0, 0, 0]    // Man (Blue/Red)
+            lady: [0, 0, 0, 0], // Pink Side
+            man: [0, 0, 0, 0]    // Blue Side
         };
 
         const ladyPath = [
@@ -201,27 +170,17 @@
             {x:1, y:7}, {x:2, y:7}, {x:3, y:7}, {x:4, y:7}, {x:5, y:7}, {x:6, y:7}
         ];
 
-        function showView(id) {
-            document.querySelectorAll('.view-panel').forEach(v => v.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-        }
-
-        function startRomanticGame() {
-            showView('game-view');
-            drawRomanticLudoBoard();
-        }
-
-        function drawRomanticLudoBoard() {
+        function drawBoard() {
             ctx.clearRect(0, 0, size, size);
 
-            // 1. NEPALI THEME BASES
-            drawBase(0, 0, '#ff3366', '👩‍🦰 PINK LADY'); // Pink/Red Lady Base
-            drawBase(9*cell, 0, '#00e5ff', 'SWEET');
-            drawBase(9*cell, 9*cell, '#3b82f6', '👨‍🦱 BLUE MAN'); // Blue Handsome Man Base
-            drawBase(0, 9*cell, '#f59e0b', 'YELLOW');
+            // 4 REAL LUDO BASES
+            drawBase(0, 0, '#ff3366'); // Pink Base (Lady)
+            drawBase(9*cell, 0, '#00e5ff'); // Blue Base (Man)
+            drawBase(9*cell, 9*cell, '#ff0055'); // Red Base (Man)
+            drawBase(0, 9*cell, '#f59e0b'); // Yellow Base (Lady)
 
-            // 2. GRID
-            ctx.strokeStyle = 'rgba(255, 51, 102, 0.25)';
+            // GRID
+            ctx.strokeStyle = 'rgba(255, 51, 102, 0.3)';
             ctx.lineWidth = 1;
             for(let i=0; i<15; i++){
                 for(let j=0; j<15; j++){
@@ -232,24 +191,23 @@
                 }
             }
 
-            // 3. HOME PATHS
+            // HOME PATHS
             for(let i=1; i<6; i++) {
-                fillCell(i*cell, 7*cell, '#ff3366'); // Lady Path
-                fillCell((14-i)*cell, 7*cell, '#3b82f6'); // Man Path
+                fillCell(i*cell, 7*cell, '#ff3366'); // Lady Pink Path
+                fillCell(7*cell, i*cell, '#00e5ff'); // Man Blue Path
             }
 
             fillCell(1*cell, 6*cell, '#ff3366');
-            fillCell(13*cell, 8*cell, '#3b82f6');
+            fillCell(8*cell, 1*cell, '#00e5ff');
 
-            // Center Romantic Triangle
+            // Center Triangle
             ctx.fillStyle = '#ff3366'; ctx.beginPath(); ctx.moveTo(6*cell, 6*cell); ctx.lineTo(7.5*cell, 7.5*cell); ctx.lineTo(6*cell, 9*cell); ctx.fill();
-            ctx.fillStyle = '#3b82f6'; ctx.beginPath(); ctx.moveTo(9*cell, 6*cell); ctx.lineTo(7.5*cell, 7.5*cell); ctx.lineTo(9*cell, 9*cell); ctx.fill();
+            ctx.fillStyle = '#00e5ff'; ctx.beginPath(); ctx.moveTo(6*cell, 6*cell); ctx.lineTo(7.5*cell, 7.5*cell); ctx.lineTo(9*cell, 6*cell); ctx.fill();
 
             ctx.font = '24px Poppins'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
             ctx.fillText('💖', 7.5*cell, 7.5*cell);
 
-            // 4. DRAW DOLL GOTIS
-            drawDollTokens();
+            drawGotis();
         }
 
         function fillCell(x, y, color) {
@@ -257,7 +215,7 @@
             ctx.fillRect(x+1, y+1, cell-2, cell-2);
         }
 
-        function drawBase(x, y, color, title) {
+        function drawBase(x, y, color) {
             ctx.fillStyle = color;
             ctx.fillRect(x, y, 6*cell, 6*cell);
             ctx.fillStyle = '#12081f';
@@ -269,64 +227,59 @@
         }
 
         const ladyBaseSpots = [{x: 2*cell, y: 2*cell}, {x: 4*cell, y: 2*cell}, {x: 2*cell, y: 4*cell}, {x: 4*cell, y: 4*cell}];
-        const manBaseSpots = [{x: 11*cell, y: 11*cell}, {x: 13*cell, y: 11*cell}, {x: 11*cell, y: 13*cell}, {x: 13*cell, y: 13*cell}];
+        const manBaseSpots = [{x: 11*cell, y: 2*cell}, {x: 13*cell, y: 2*cell}, {x: 11*cell, y: 4*cell}, {x: 13*cell, y: 4*cell}];
 
-        function drawDollTokens() {
-            // LADY DOLL GOTIS (👧)
+        function drawGotis() {
+            // LADY GOTI (💃)
             tokens.lady.forEach((step, idx) => {
                 let coords = step === 0 ? ladyBaseSpots[idx] : {x: (ladyPath[step-1].x + 0.5)*cell, y: (ladyPath[step-1].y + 0.5)*cell};
-                drawDollPiece(coords.x, coords.y, ladyDoll, '#ff3366');
+                drawGotiPiece(coords.x, coords.y, ladyGoti, '#ff3366');
             });
 
-            // MAN DOLL GOTIS (👦)
+            // MAN GOTI (🕺)
             tokens.man.forEach((step, idx) => {
                 let coords = manBaseSpots[idx];
-                drawDollPiece(coords.x, coords.y, manDoll, '#00e5ff');
+                drawGotiPiece(coords.x, coords.y, manGoti, '#00e5ff');
             });
         }
 
-        function drawDollPiece(x, y, doll, glowColor) {
-            ctx.shadowBlur = 12; ctx.shadowColor = glowColor;
+        function drawGotiPiece(x, y, icon, glowColor) {
+            ctx.shadowBlur = 10; ctx.shadowColor = glowColor;
             ctx.beginPath(); ctx.arc(x, y, cell*0.55, 0, Math.PI*2);
             ctx.fillStyle = 'rgba(255, 255, 255, 0.2)'; ctx.fill();
             ctx.lineWidth = 2; ctx.strokeStyle = glowColor; ctx.stroke(); ctx.shadowBlur = 0;
 
             ctx.font = '22px Poppins'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-            ctx.fillText(doll, x, y + 2);
+            ctx.fillText(icon, x, y + 2);
         }
 
-        // ROLL DICE LOGIC WITH TEASING REACTIONS
-        function rollRomanticDice() {
+        // ROLL DICE REAL LOGIC
+        function rollDice() {
             if(isDiceRolled || currentTurn !== 'lady') return;
 
-            const diceEl = document.getElementById('dice-element');
-            diceEl.classList.add('spinning');
+            diceValue = Math.floor(Math.random() * 6) + 1;
+            document.getElementById('dice-element').innerText = diceValue;
             isDiceRolled = true;
 
-            setTimeout(() => {
-                diceEl.classList.remove('spinning');
-                diceValue = Math.floor(Math.random() * 6) + 1;
-                diceEl.innerText = diceValue;
+            addMsg(`💃 Sita rolled a ${diceValue}! 🎲`, 'lady');
 
-                addMsg(`👩‍🦰 Sita rolled a ${diceValue}! 🎲`, 'lady');
+            if(diceValue === 6) {
+                confetti({ particleCount: 50, spread: 60 });
+            }
 
-                // LADY TEASING REACTION WHEN GETTING 6 OR 5
-                if(diceValue === 6 || diceValue === 5) {
-                    confetti({ particleCount: 60, spread: 70 });
-                    document.getElementById('man-mood').innerText = "Mood: Jealous/Sad 🥺";
-                    document.getElementById('lady-mood').innerText = "Mood: Teasing Hehe! 😜";
-                    addMsg(`👩‍🦰 Sita: "Hehe! मेरो ${diceValue} आयो, तिमी त हार्यौ अब! 😜🙈"`, 'lady');
-                    addMsg(`👨‍🦱 Ram: "छिट्टै थाहा हुन्छ कसले जित्छ! 😤"`, 'man');
-                }
-
-                canMoveGoti = true;
-                document.getElementById('turn-indicator').innerText = "Tap Sita's Doll (👧) to Move!";
-            }, 600);
+            const hasUnlocked = tokens.lady.some(p => p > 0);
+            if(!hasUnlocked && diceValue !== 6 && diceValue !== 1) {
+                addMsg("६ वा १ नआएसम्म गोटी निस्कँदैन। पालो गयो!", 'lady');
+                setTimeout(nextTurnMan, 1200);
+            } else {
+                canMove = true;
+                document.getElementById('turn-indicator').innerText = "Tap Sita's Goti (💃) to Move!";
+            }
         }
 
-        // CLICK CANVAS TO MOVE LADY DOLL
+        // CLICK CANVAS TO MOVE GOTI
         canvas.addEventListener('click', (e) => {
-            if(!canMoveGoti || currentTurn !== 'lady') return;
+            if(!canMove || currentTurn !== 'lady') return;
 
             const rect = canvas.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
@@ -340,19 +293,19 @@
                 if(dist < cell) {
                     if(pos === 0) {
                         if(diceValue === 6 || diceValue === 1) {
-                            tokens.lady[i] = 1;
-                            addMsg(`👩‍🦰 Sita: "मेरो 👧 Goodiya बाहिर निस्कियो! ❤️"`, 'lady');
+                            tokens.lady[i] = 1; // Unlock to path
+                            addMsg(`💃 Sita's Goti (💃) Unlocked!`, 'lady');
                         } else return;
                     } else {
                         tokens.lady[i] = Math.min(57, tokens.lady[i] + diceValue);
-                        addMsg(`👩‍🦰 Sita: "Goodiya moved ${diceValue} steps! 🚀"`, 'lady');
+                        addMsg(`💃 Moved ${diceValue} steps! 🚀`, 'lady');
                     }
 
-                    drawRomanticLudoBoard();
-                    canMoveGoti = false;
+                    drawBoard();
+                    canMove = false;
 
                     if(diceValue === 6) {
-                        addMsg("👩‍🦰 Sita got Bonus Roll! 🎉", 'lady');
+                        addMsg("६ आयो! Bonus Roll! 🎉", 'lady');
                         isDiceRolled = false;
                         document.getElementById('turn-indicator').innerText = "Bonus Roll! Tap 🎲";
                     } else {
@@ -365,21 +318,16 @@
 
         function nextTurnMan() {
             currentTurn = 'man';
-            document.getElementById('turn-indicator').innerText = "Ram's Turn... 👨‍🦱";
+            document.getElementById('turn-indicator').innerText = "Ram's Turn... 🕺";
             document.getElementById('turn-indicator').style.color = "#00e5ff";
 
             setTimeout(() => {
                 const manRoll = Math.floor(Math.random() * 6) + 1;
-                addMsg(`👨‍🦱 Ram rolled a ${manRoll}! 🎲`, 'man');
-
-                if(manRoll === 6) {
-                    document.getElementById('lady-mood').innerText = "Mood: Oh No! 😯";
-                    addMsg(`👨‍🦱 Ram: "मेरो पनि ६ आयो! अब हेर Sita 😉"`, 'man');
-                }
+                addMsg(`🕺 Ram rolled a ${manRoll}! 🎲`, 'man');
 
                 currentTurn = 'lady';
                 isDiceRolled = false;
-                canMoveGoti = false;
+                canMove = false;
                 document.getElementById('turn-indicator').innerText = "Sita's Turn! Tap 🎲";
                 document.getElementById('turn-indicator').style.color = "#ff3366";
             }, 1200);
@@ -394,7 +342,7 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        drawRomanticLudoBoard();
+        drawBoard();
     </script>
 </body>
 </html>
